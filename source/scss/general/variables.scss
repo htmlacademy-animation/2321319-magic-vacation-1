@@ -19,3 +19,11 @@ $retina-dpi: 144dpi;
 $retina-dppx: 1.5dppx;
 
 $index: 1.38871;
+
+$short-duration: 0.2s;
+$standart-duration: 0.3s;
+$middle-duration: 0.4s;
+$long-duration: 0.5s;
+$extra-long-duration: 0.6s;
+
+$custom-timing-fast-progress: cubic-bezier(0.07, 0.99, 0.98, 1);
