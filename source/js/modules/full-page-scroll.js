@@ -1,5 +1,15 @@
 import throttle from 'lodash/throttle';
 
+const Screen = {
+  INTRO: 0,
+  STORY: 1,
+  PRIZES: 2,
+  RULES: 3,
+  GAME: 4
+};
+
+const cssTransitionClass = `screen--background-transitioned`;
+
 export default class FullPageScroll {
   constructor() {
     this.THROTTLE_TIMEOUT = 1000;
@@ -8,8 +18,10 @@ export default class FullPageScroll {
 
     this.screenElements = document.querySelectorAll(`.screen:not(.screen--result)`);
     this.menuElements = document.querySelectorAll(`.page-header__menu .js-menu-link`);
+    this.transitionedBackground = document.querySelector(`.screen--background`);
 
     this.activeScreen = 0;
+    this.prevScreen = 0;
     this.onScrollHandler = this.onScroll.bind(this);
     this.onUrlHashChengedHandler = this.onUrlHashChanged.bind(this);
   }
@@ -26,6 +38,7 @@ export default class FullPageScroll {
       const currentPosition = this.activeScreen;
       this.reCalculateActiveScreenPosition(evt.deltaY);
       if (currentPosition !== this.activeScreen) {
+        this.prevScreen = currentPosition;
         this.changePageDisplay();
       }
     }
@@ -41,14 +54,32 @@ export default class FullPageScroll {
 
   onUrlHashChanged() {
     const newIndex = Array.from(this.screenElements).findIndex((screen) => location.hash.slice(1) === screen.id);
+    this.prevScreen = this.activeScreen;
     this.activeScreen = (newIndex < 0) ? 0 : newIndex;
     this.changePageDisplay();
   }
 
   changePageDisplay() {
-    this.changeVisibilityDisplay();
     this.changeActiveMenuItem();
-    this.emitChangeDisplayEvent();
+    this.showTransitionedBackground().then(() => {
+      this.changeVisibilityDisplay();
+      this.emitChangeDisplayEvent();
+    });
+  }
+
+  showTransitionedBackground() {
+    return new Promise((resolve, _reject) => {
+      const isShowBackground = (this.activeScreen === Screen.PRIZES || this.activeScreen === Screen.RULES || this.activeScreen === Screen.GAME) && (this.prevScreen === Screen.INTRO || this.prevScreen === Screen.STORY);
+      if (this.transitionedBackground && isShowBackground) {
+        this.transitionedBackground.classList.add(cssTransitionClass);
+        setTimeout(() => {
+          this.transitionedBackground.classList.remove(cssTransitionClass);
+          resolve();
+        }, 500);
+      } else {
+        resolve();
+      }
+    });
   }
 
   changeVisibilityDisplay() {

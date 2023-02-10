@@ -37,7 +37,8 @@
   color: $c-light;
   opacity: 0;
   transform: translateX(-3rem);
-  transition: opacity $short-duration $custom-timing-fast-progress, transform $short-duration $custom-timing-fast-progress;
+  transition: opacity $short-duration $custom-timing-fast-progress,
+              transform $short-duration $custom-timing-fast-progress;
 
   body.is-dom-loaded & {
     opacity: 1;
@@ -265,7 +266,8 @@
       height: 2px;
       background-color: $c-light;
       right: 0;
-      transition: width $standart-duration ease-in-out, background-color $standart-duration ease-in-out;
+      transition: width $standart-duration ease-in-out,
+                  background-color $standart-duration ease-in-out;
       transition-delay: 0s;
 
       body:not(.is-dom-loaded) & {

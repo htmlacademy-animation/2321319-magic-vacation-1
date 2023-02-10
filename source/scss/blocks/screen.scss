@@ -72,7 +72,8 @@
   z-index: 1;
   opacity: 0;
   transform: translateY(4rem);
-  transition: opacity $standart-duration $custom-timing-fast-progress, transform $standart-duration $custom-timing-fast-progress;
+  transition: opacity $standart-duration $custom-timing-fast-progress,
+              transform $standart-duration $custom-timing-fast-progress;
 
   body.is-dom-loaded & {
     opacity: 1;
@@ -385,4 +386,26 @@
 
 .screen--rules {
   background-color: $c-dark;
+}
+
+.screen--background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: $c-dark;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: -1;
+  transform: translateY(100vh);
+  transition: transform $long-duration ease-in;
+
+  &-transitioned {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    z-index: 1;
+  }
 }
