@@ -12,25 +12,25 @@
 
   .fade-in-top {
     opacity: 0;
-    transform: translateY(15px);
+    transform: translateY(1rem);
   }
 
   .fade-in-left {
     opacity: 0;
-    transform: translateX(35px);
+    transform: translateX(2.5rem);
   }
 
   &.active {
     & .fade-in-top {
       opacity: 1;
       transform: translateY(0);
-      transition: all 0.6s ease-out 0.2s;
+      transition: all $extra-long-duration ease-out $short-duration;
     }
 
     & .fade-in-left {
       opacity: 1;
       transform: translateX(0);
-      transition: all 0.3s ease-out 0.2s;
+      transition: all $standart-duration ease-out $short-duration;
     }
   }
 
@@ -70,6 +70,14 @@
   color: $c-dark;
   background-color: $c-light;
   z-index: 1;
+  opacity: 0;
+  transform: translateY(4rem);
+  transition: opacity $standart-duration $custom-timing-fast-progress, transform $standart-duration $custom-timing-fast-progress;
+
+  body.is-dom-loaded & {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
   @media (max-width: $tablet) and (orientation: portrait) {
     width: 3.5rem;

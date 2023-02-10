@@ -31,11 +31,16 @@
     content: "";
     width: 100%;
     height: 100%;
-    transition: width 0.5s ease, height 0.5s ease;
+    transform: translate(-50%, -50%) scale(1);
+    border: 2px solid $c-light;
+    transition: transform $long-duration cubic-bezier(0.175, 0.85, 0.5, 1.5);
     border-radius: 50%;
     background-color: $c-light;
-    border: 2px solid $c-light;
     z-index: -1;
+
+    body:not(.is-dom-loaded) & {
+      transform: translate(-50%, -50%) scale(0);
+    }
   }
 
   svg {
@@ -50,8 +55,8 @@
     color: $c-purple;
 
     &::before {
-      width: 112.5%;
-      height: 112.5%;
+      transform: translate(-50%, -50%) scale(1.12);
+      transition-timing-function: ease;
     }
   }
 
@@ -90,8 +95,8 @@
   margin-top: 1.5rem;
   opacity: 0;
   pointer-events: none;
-  transform: translateY(-15px);
-  transition: opacity 0.4s ease;
+  transform: translateY(-1rem);
+  transition: opacity $middle-duration ease;
 
   .social-block--active & {
     transform: translateY(0);
@@ -173,12 +178,12 @@
   border: 2px solid transparent;
   border-radius: 50%;
   opacity: 0;
-  transform: translateY(15px);
-  transition: opacity 0.4s ease;
+  transform: translateY(1rem);
+  transition: opacity $middle-duration ease;
 
   .social-block--active & {
     opacity: 1;
-    transition: color 0.4s ease, transform 0.4s ease, opacity 0.4s ease;
+    transition: color $middle-duration ease, transform $middle-duration ease, opacity $middle-duration ease;
     transform: translateY(0);
   }
 
@@ -237,7 +242,7 @@
 
   &--insta {
     .social-block--active & {
-      transition-delay: 0s, 0.2s, 0.2s;
+      transition-delay: 0s, $short-duration, $short-duration;
     }
 
     svg {
@@ -253,7 +258,7 @@
 
   &--vk {
     .social-block--active & {
-      transition-delay: 0s, 0.4s, 0.4s;
+      transition-delay: 0s, $middle-duration, $middle-duration;
     }
 
     svg {

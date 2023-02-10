@@ -97,17 +97,17 @@
   font-size: 1.8rem;
   line-height: 2rem;
   opacity: 0;
-  transform: translateX(35px);
+  transform: translateX(2.5rem);
 
   .swiper-slide-active &,
   .swiper-slide-next & {
     opacity: 1;
     transform: translateX(0);
-    transition: all 0.3s ease-out 0.2s;
+    transition: all $standart-duration ease-out $short-duration;
   }
 
   .swiper-slide-next & {
-    transition: all 0.4s ease-out 0.5s;
+    transition: all $middle-duration ease-out $long-duration;
   }
 
   @media (min-width: $stop-scaling) {
@@ -128,8 +128,8 @@
 
     .swiper-slide-next & {
       opacity: 0;
-      transform: translateX(35px);
-      transition: all 0.3s ease-out 0.2s;
+      transform: translateX(2.5rem);
+      transition: all $standart-duration ease-out $short-duration;
     }
   }
 
