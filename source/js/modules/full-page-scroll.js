@@ -69,7 +69,8 @@ export default class FullPageScroll {
 
   showTransitionedBackground() {
     return new Promise((resolve, _reject) => {
-      const isShowBackground = (this.activeScreen === Screen.PRIZES || this.activeScreen === Screen.RULES || this.activeScreen === Screen.GAME) && (this.prevScreen === Screen.INTRO || this.prevScreen === Screen.STORY);
+      const isShowBackground = [Screen.PRIZES, Screen.RULES, Screen.GAME].indexOf(this.activeScreen) !== -1
+                              && [Screen.INTRO, Screen.STORY].indexOf(this.prevScreen) !== -1;
       if (this.transitionedBackground && isShowBackground) {
         this.transitionedBackground.classList.add(cssTransitionClass);
         setTimeout(() => {
