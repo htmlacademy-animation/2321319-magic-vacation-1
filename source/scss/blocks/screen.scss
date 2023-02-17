@@ -11,26 +11,22 @@
   }
 
   .fade-in-top {
-    opacity: 0;
-    transform: translateY(1rem);
+    animation: fade-in-top $extra-long-duration ease-out $short-duration 1 both;
+    animation-play-state: paused;
   }
 
   .fade-in-left {
-    opacity: 0;
-    transform: translateX(2.5rem);
+    animation: fade-in-left $standart-duration ease-out $short-duration 1 both;
+    animation-play-state: paused;
   }
 
   &.active {
     & .fade-in-top {
-      opacity: 1;
-      transform: translateY(0);
-      transition: all $extra-long-duration ease-out $short-duration;
+      animation-play-state: running;
     }
 
     & .fade-in-left {
-      opacity: 1;
-      transform: translateX(0);
-      transition: all $standart-duration ease-out $short-duration;
+      animation-play-state: running;
     }
   }
 
@@ -72,8 +68,8 @@
   z-index: 1;
   opacity: 0;
   transform: translateY(4rem);
-  transition: opacity $standart-duration $custom-timing-fast-progress,
-              transform $standart-duration $custom-timing-fast-progress;
+  transition: opacity $standart-duration $timing-fast-progress,
+              transform $standart-duration $timing-fast-progress;
 
   body.is-dom-loaded & {
     opacity: 1;

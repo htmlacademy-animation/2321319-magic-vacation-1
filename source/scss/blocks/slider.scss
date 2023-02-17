@@ -96,18 +96,15 @@
   max-width: 34rem;
   font-size: 1.8rem;
   line-height: 2rem;
-  opacity: 0;
-  transform: translateX(2.5rem);
 
   .swiper-slide-active &,
   .swiper-slide-next & {
-    opacity: 1;
-    transform: translateX(0);
-    transition: all $standart-duration ease-out $short-duration;
+    animation: fade-in-left $standart-duration ease-out $short-duration 1 both;
   }
 
   .swiper-slide-next & {
-    transition: all $middle-duration ease-out $long-duration;
+    animation-duration: $middle-duration;
+    animation-delay: $long-duration;
   }
 
   @media (min-width: $stop-scaling) {
@@ -127,9 +124,7 @@
     line-height: 1.5rem;
 
     .swiper-slide-next & {
-      opacity: 0;
-      transform: translateX(2.5rem);
-      transition: all $standart-duration ease-out $short-duration;
+      animation: none;
     }
   }
 
