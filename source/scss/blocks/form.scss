@@ -31,6 +31,7 @@
 
 .form__field {
   $focusBoder: 1px solid $c-purple;
+
   &__wrapper {
     flex: none;
     margin-right: 3rem;
@@ -46,11 +47,13 @@
           border-left: $focusBoder;
           border-bottom: $focusBoder;
         }
+
         &__right {
           border-top: $focusBoder;
           border-right: $focusBoder;
           border-bottom: $focusBoder;
         }
+
         &__center {
           border-top: $focusBoder;
           border-bottom: $focusBoder;
@@ -65,7 +68,7 @@
     width: $widthOfSideWithIncrement;
     top: 0;
     bottom: 0;
-    background-color: #fff;
+    background-color: #ffffff;
     transition: transform $long-duration ease-in-out;
   }
 
@@ -109,10 +112,12 @@
   .screen.active & {
     &__left {
       transform: translateX(0);
+
       .form__field__side {
         transform: translateX(0);
       }
     }
+
     &__center {
       transform: scaleX(1);
     }
@@ -145,13 +150,16 @@
       height: 4rem;
       width: calc(100% - 5rem);
     }
+
     &__side {
       $widthOfSideWithIncrement: calc(2.5rem + 1px);
       width: $widthOfSideWithIncrement;
     }
+
     &__left {
       transform: translateX(calc(100% - 5rem));
     }
+
     &__center {
       right: 2.5rem;
       padding: 0;
@@ -172,13 +180,16 @@
       height: 4rem;
       width: calc(100% - 5rem);
     }
+
     &__side {
       $widthOfSideWithIncrement: calc(2.5rem + 1px);
       width: $widthOfSideWithIncrement;
     }
+
     &__left {
       transform: translateX(calc(100% - 5rem));
     }
+
     &__center {
       right: 2.5rem;
       padding: 0;
