@@ -37,8 +37,8 @@
   color: $c-light;
   opacity: 0;
   transform: translateX(-3rem);
-  transition: opacity $short-duration $custom-timing-fast-progress,
-              transform $short-duration $custom-timing-fast-progress;
+  transition: opacity $short-duration $timing-fast-progress,
+              transform $short-duration $timing-fast-progress;
 
   body.is-dom-loaded & {
     opacity: 1;
@@ -140,7 +140,7 @@
   display: flex;
   align-items: center;
   opacity: 0;
-  transition: opacity $long-duration $custom-timing-fast-progress;
+  transition: opacity $long-duration $timing-fast-progress;
 
   body.is-dom-loaded & {
     opacity: 1;
