@@ -107,6 +107,14 @@
     animation-delay: $long-duration;
   }
 
+  .swiper-slide-active &.fade--delayed {
+    animation-delay: $long-duration;
+  }
+
+  .swiper-slide-next &.fade--delayed {
+    animation-delay: $extra-long-duration;
+  }
+
   @media (min-width: $stop-scaling) {
     margin-top: 36px;
     max-width: 340px;
