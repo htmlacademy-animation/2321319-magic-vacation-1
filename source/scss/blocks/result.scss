@@ -23,34 +23,126 @@
 }
 
 .result__image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  position: relative;
+  width: 57.3rem;
+  max-height: 26rem;
+  margin-left: auto;
+  margin-right: auto;
+  flex-grow: 1;
   z-index: -1;
 
+  &-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+  }
+
+  &--leaf_blue_left {
+    position: absolute;
+    left: -10%;
+    bottom: -2%;
+    width: 49%;
+    height: auto;
+    transform-origin: right center;
+    animation: leaf_blue_left-up 2s ease-out 1 both $standart-duration;
+    animation-play-state: paused;
+    backface-visibility: hidden;
+
+    .screen--transitioned & {
+      animation-play-state: running;
+    }
+  }
+
+  &--leaf_blue_right {
+    position: absolute;
+    right: 1%;
+    bottom: 28%;
+    width: 49%;
+    height: auto;
+    animation: leaf_blue_right-up 1.7s ease-out 1 both $standart-duration;
+    animation-play-state: paused;
+    transform-origin: left center;
+    backface-visibility: hidden;
+
+    .screen--transitioned & {
+      animation-play-state: running;
+    }
+  }
+
+  &--leaf_green {
+    position: absolute;
+    right: -1%;
+    bottom: 18%;
+    width: 57%;
+    height: auto;
+    animation: leaf_green-up 2s ease-out 1 both $middle-duration;
+    animation-play-state: paused;
+    transform-origin: left center;
+    backface-visibility: hidden;
+
+    .screen--transitioned & {
+      animation-play-state: running;
+    }
+  }
+
+  &--suitcase {
+    position: absolute;
+    right: 26%;
+    bottom: -3%;
+    width: 60%;
+    height: auto;
+    animation: suitcase-up $long-duration 1 both $short-duration;
+    animation-play-state: paused;
+    backface-visibility: hidden;
+
+    .screen--transitioned & {
+      animation-play-state: running;
+    }
+  }
+
+  &--flamingo {
+    position: absolute;
+    left: 8%;
+    bottom: -2%;
+    width: 46%;
+    height: auto;
+    animation: flamingo-up $middle-duration 1 both $short-duration,
+               flamingo-dance 2s infinite backwards $extra-long-duration;
+    animation-play-state: paused;
+    transform-origin: center center;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+
+    .screen--transitioned & {
+      animation-play-state: running;
+    }
+  }
+
+  @media (min-width: $stop-scaling) {
+    max-height: 35rem;
+
+    &--leaf_blue_right {
+      bottom: 18%;
+    }
+
+    &--leaf_green {
+      bottom: 8%;
+    }
+  }
+
   @media (orientation: portrait) {
-    left: -1rem;
-    right: -1rem;
+    width: 45rem;
+    transform: translate(-2rem, -2rem);
   }
 
-  picture {
-    display: block;
-    width: 100%;
-    height: 100%;
+  @media (max-width: $tablet) and (orientation: landscape) {
+    width: 40rem;
   }
 
-  img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
+  @media (max-width: $mobile) and (orientation: landscape) {
+    width: 35rem;
   }
 }
 

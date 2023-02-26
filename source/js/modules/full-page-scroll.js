@@ -11,12 +11,12 @@ const Screen = {
 const cssTransitionClass = `screen--background-transitioned`;
 
 export default class FullPageScroll {
-  constructor() {
+  constructor(screens) {
     this.THROTTLE_TIMEOUT = 1000;
     this.scrollFlag = true;
     this.timeout = null;
 
-    this.screenElements = document.querySelectorAll(`.screen:not(.screen--result)`);
+    this.screenElements = screens;
     this.menuElements = document.querySelectorAll(`.page-header__menu .js-menu-link`);
     this.transitionedBackground = document.querySelector(`.screen--background`);
 
@@ -62,8 +62,8 @@ export default class FullPageScroll {
   changePageDisplay() {
     this.changeActiveMenuItem();
     this.showTransitionedBackground().then(() => {
-      this.changeVisibilityDisplay();
       this.emitChangeDisplayEvent();
+      this.changeVisibilityDisplay();
     });
   }
 
@@ -107,7 +107,9 @@ export default class FullPageScroll {
       detail: {
         'screenId': this.activeScreen,
         'screenName': this.screenElements[this.activeScreen].id,
-        'screenElement': this.screenElements[this.activeScreen]
+        'screenElement': this.screenElements[this.activeScreen],
+        'prevScreen': this.prevScreen,
+        'prevScreenName': this.screenElements[this.prevScreen].id,
       }
     });
 

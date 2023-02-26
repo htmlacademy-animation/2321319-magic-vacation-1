@@ -7,6 +7,7 @@ export default () => {
         let target = showResultEls[i].getAttribute(`data-target`);
         [].slice.call(results).forEach(function (el) {
           el.classList.remove(`screen--show`);
+          el.classList.remove(`screen--transitioned`);
           el.classList.add(`screen--hidden`);
         });
         let targetEl = [].slice.call(results).filter(function (el) {
@@ -14,6 +15,9 @@ export default () => {
         });
         targetEl[0].classList.add(`screen--show`);
         targetEl[0].classList.remove(`screen--hidden`);
+        setTimeout(function () {
+          targetEl[0].classList.add(`screen--transitioned`);
+        }, 150);
       });
     }
 
@@ -22,6 +26,7 @@ export default () => {
       playBtn.addEventListener(`click`, function () {
         [].slice.call(results).forEach(function (el) {
           el.classList.remove(`screen--show`);
+          el.classList.remove(`screen--transitioned`);
           el.classList.add(`screen--hidden`);
         });
         document.getElementById(`messages`).innerHTML = ``;

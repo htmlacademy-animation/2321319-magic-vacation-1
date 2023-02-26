@@ -30,140 +30,72 @@
 }
 
 .form__field {
-  $focusBoder: 1px solid $c-purple;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  padding: 0 5.6rem;
+  text-transform: uppercase;
+  font: inherit;
+  font-size: 2.4rem;
+  line-height: 1.2;
+  color: $c-dark;
+  border: 0;
+  border-radius: 3rem 0 0 3rem;
+  transform: translateX(101%);
+  transform-origin: left;
+  outline: none;
+  transition: transform $standart-duration ease-in-out $middle-duration;
+
+  &:focus {
+    border: 1px solid $c-purple;
+  }
+
+  &::placeholder {
+    color: transparent;
+    transition: color $standart-duration ease-in-out $long-delay;
+  }
 
   &__wrapper {
     flex: none;
     margin-right: 3rem;
     height: 6rem;
     width: calc(100% - 21rem);
+    border-radius: 0 3rem 3rem 0;
     margin-left: auto;
     position: relative;
-
-    &:focus-within {
-      .form__field {
-        &__left .form__field__side {
-          border-top: $focusBoder;
-          border-left: $focusBoder;
-          border-bottom: $focusBoder;
-        }
-
-        &__right {
-          border-top: $focusBoder;
-          border-right: $focusBoder;
-          border-bottom: $focusBoder;
-        }
-
-        &__center {
-          border-top: $focusBoder;
-          border-bottom: $focusBoder;
-        }
-      }
-    }
+    overflow: hidden;
   }
 
-  &__side {
-    $widthOfSideWithIncrement: calc(3rem + 1px);
-    position: absolute;
-    width: $widthOfSideWithIncrement;
-    top: 0;
-    bottom: 0;
-    background-color: #ffffff;
-    transition: transform $long-duration ease-in-out;
-  }
+  .screen.active &,
+  .screen--transitioned & {
+    transform: translateX(0);
 
-  &__left {
-    position: absolute;
-    width: 100%;
-    top: 0;
-    bottom: 0;
-    transform: translateX(calc(100% - 6rem));
-    transition: transform $long-duration ease-in-out;
-
-    .form__field__side {
-      border-radius: 3rem 0 0 3rem;
-    }
-  }
-
-  &__center {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 3rem;
-    padding: 0 2.6rem;
-    text-transform: uppercase;
-    font: inherit;
-    font-size: 2.4rem;
-    line-height: 1.2;
-    color: $c-dark;
-    border: 0;
-    width: calc(100% - 6rem);
-    transform: scaleX(0);
-    transform-origin: right;
-    outline: none;
-    transition: transform $long-duration ease-in-out;
-  }
-
-  &__right {
-    border-radius: 0 3rem 3rem 0;
-    right: 0;
-  }
-
-  .screen.active & {
-    &__left {
-      transform: translateX(0);
-
-      .form__field__side {
-        transform: translateX(0);
-      }
-    }
-
-    &__center {
-      transform: scaleX(1);
+    &::placeholder {
+      color: $c-dark;
     }
   }
 
   @media (min-width: $stop-scaling) {
+    border-radius: 30px 0 0 30px;
+    font-size: 24px;
+    padding: 0 56px;
+
     &__wrapper {
       margin-right: 30px;
       height: 60px;
       width: calc(100% - 210px);
-    }
-
-    &__left {
-      border-radius: 30px 0 0 30px;
-    }
-
-    &__center {
-      padding: 0 calc(56px - 3rem);
-      font-size: 24px;
-    }
-
-    &__right {
       border-radius: 0 30px 30px 0;
     }
   }
 
   @media (orientation: portrait) {
+    padding: 0 2.5rem;
+    font-size: 1.6rem;
+
     &__wrapper {
       margin-right: 1rem;
       height: 4rem;
-      width: calc(100% - 5rem);
-    }
-
-    &__side {
-      $widthOfSideWithIncrement: calc(2.5rem + 1px);
-      width: $widthOfSideWithIncrement;
-    }
-
-    &__left {
-      transform: translateX(calc(100% - 5rem));
-    }
-
-    &__center {
-      right: 2.5rem;
-      padding: 0;
-      font-size: 1.6rem;
       width: calc(100% - 5rem);
     }
   }
@@ -175,25 +107,12 @@
   }
 
   @media (max-width: $mobile) and (orientation: landscape) {
+    padding: 0 2.5rem;
+    font-size: 1.6rem;
+
     &__wrapper {
       margin-right: 1rem;
       height: 4rem;
-      width: calc(100% - 5rem);
-    }
-
-    &__side {
-      $widthOfSideWithIncrement: calc(2.5rem + 1px);
-      width: $widthOfSideWithIncrement;
-    }
-
-    &__left {
-      transform: translateX(calc(100% - 5rem));
-    }
-
-    &__center {
-      right: 2.5rem;
-      padding: 0;
-      font-size: 1.6rem;
       width: calc(100% - 5rem);
     }
   }
@@ -245,7 +164,7 @@
 }
 
 .form--result {
-  .form__field {
+  .form__field__wrapper {
     width: calc(100% - 31rem);
 
     @media (min-width: $stop-scaling) {
