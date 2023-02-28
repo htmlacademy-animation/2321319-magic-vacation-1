@@ -15,7 +15,7 @@
   display: block;
   width: 4rem;
   height: 4rem;
-  color: $c-dark;
+  color: $c-secondary;
   border-radius: 50%;
 
   @media (max-width: $tablet) and (orientation: portrait) {
@@ -52,7 +52,7 @@
 
   &:hover,
   .social-block--active & {
-    color: $c-purple;
+    color: $c-primary;
 
     &::before {
       transform: translate(-50%, -50%) scale(1.12);
@@ -61,11 +61,11 @@
   }
 
   &:focus {
-    color: $c-purple;
+    color: $c-primary;
     outline: none;
 
     &::before {
-      border-color: $c-purple;
+      border-color: $c-primary;
     }
 
     & + .social-block__list {
@@ -81,8 +81,8 @@
     &::before {
       width: 100%;
       height: 100%;
-      background-color: $c-purple;
-      border-color: $c-purple;
+      background-color: $c-primary;
+      border-color: $c-primary;
     }
   }
 }
@@ -203,19 +203,19 @@
   }
 
   &:hover {
-    color: $c-purple;
+    color: $c-primary;
   }
 
   &:focus {
-    color: $c-purple;
+    color: $c-primary;
     background-color: $c-light;
-    border-color: $c-purple;
+    border-color: $c-primary;
     outline: none;
   }
 
   &:active,
   &:active:focus {
-    color: $c-purple;
+    color: $c-primary;
     background-color: $c-light;
     border-color: $c-light;
   }

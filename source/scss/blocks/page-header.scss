@@ -298,11 +298,27 @@
 
     &:hover,
     &:focus {
-      color: $c-purple;
+      color: $c-primary;
       outline: none;
 
       &::after {
-        background-color: $c-purple;
+        background-color: $c-primary;
+      }
+
+      @media (max-width: $tablet) and (orientation: portrait) {
+        color: $c-dark;
+
+        &::after {
+          background-color: $c-dark;
+        }
+      }
+
+      @media (max-width: $mobile) and (orientation: landscape) {
+        color: $c-dark;
+
+        &::after {
+          background-color: $c-dark;
+        }
       }
     }
   }

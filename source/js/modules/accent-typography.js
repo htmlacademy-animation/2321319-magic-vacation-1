@@ -34,7 +34,7 @@ export default class AccentTypography {
   }
 
   generateTimeOffset(index) {
-    return Math.round(Math.sin(1.5 * index + 0.3) + 2) * 50 + Math.round(Math.random() * this.timeOffsetDelta);
+    return Math.round((Math.sin(1.5 * index + 0.3) + 2) * 50 + Math.random() * this.timeOffsetDelta);
   }
 
   prepareText() {

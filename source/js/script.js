@@ -1,7 +1,6 @@
 // modules
 import Page from './modules/page.js';
 import mobileHeight from './modules/mobile-height-adjust.js';
-import slider from './modules/slider.js';
 import menu from './modules/menu.js';
 import footer from './modules/footer.js';
 import chat from './modules/chat.js';
@@ -13,7 +12,6 @@ import social from './modules/social.js';
 // eslint-disable-next-line no-new
 new Page();
 mobileHeight();
-slider();
 menu();
 footer();
 chat();

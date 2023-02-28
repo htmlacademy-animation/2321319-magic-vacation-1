@@ -176,11 +176,32 @@
   position: relative;
   width: 4rem;
   height: 4rem;
-  color: $c-dark;
+  color: $c-secondary;
+  animation-play-state: paused;
+
+  &:first-child {
+    animation: rolling_out-left $middle-duration ease-out $long-duration 1 both;
+  }
+
+  &:last-child {
+    animation: rolling_out-right $middle-duration ease-out $long-duration 1 both;
+  }
+
+  .screen.active & {
+    animation-play-state: running;
+  }
 
   @media (min-width: $stop-scaling) {
     width: 40px;
     height: 40px;
+
+    &:first-child {
+      animation-name: rolling_out-left--fix;
+    }
+
+    &:last-child {
+      animation-name: rolling_out-right--fix;
+    }
   }
 
   &::before {
@@ -188,6 +209,8 @@
     content: "";
     width: 100%;
     height: 100%;
+    transform: translate(-50%, -50%) scale(1);
+    transition: transform $long-duration $timing-exscess-before-end;
     background-color: $c-light;
     border: 2px solid $c-light;
     border-radius: 50%;
@@ -200,6 +223,12 @@
     width: 1rem;
     height: 2rem;
     pointer-events: none;
+    animation: fade-in $standart-duration ease-out $long-duration 1 both;
+    animation-play-state: paused;
+
+    .screen.active & {
+      animation-play-state: running;
+    }
 
     @media (min-width: $stop-scaling) {
       width: 10px;
@@ -208,20 +237,19 @@
   }
 
   &:hover {
-    color: $c-purple;
+    color: $c-primary;
 
     &::before {
-      width: 112.5%;
-      height: 112.5%;
+      transform: translate(-50%, -50%) scale(1.12);
     }
   }
 
   &:focus {
-    color: $c-purple;
+    color: $c-primary;
     outline: none;
 
     &::before {
-      border-color: $c-purple;
+      border-color: $c-primary;
     }
   }
 
@@ -232,8 +260,8 @@
     &::before {
       width: 100%;
       height: 100%;
-      background-color: $c-purple;
-      border-color: $c-purple;
+      background-color: $c-primary;
+      border-color: $c-primary;
     }
   }
 
@@ -295,6 +323,15 @@
       width: 0.4rem;
       height: 0.4rem;
       background-color: $c-light;
+    }
+  }
+
+  &-fraction {
+    animation: fade-in $standart-duration ease-out $long-duration 1 both;
+    animation-play-state: paused;
+
+    .screen.active & {
+      animation-play-state: running;
     }
   }
 }
