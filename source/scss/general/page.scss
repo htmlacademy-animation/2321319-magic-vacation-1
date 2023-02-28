@@ -1,0 +1,24 @@
+$c-primary: var(--primary-color);
+$c-secondary: var(--secondary-color);
+
+body {
+  &.light-purple {
+    --primary-color: #{$c-dark};
+    --secondary-color: #{$c-purple};
+  }
+
+  &.blue {
+    --primary-color: #{$c-blue};
+    --secondary-color: #{$c-dark-blue};
+  }
+
+  &.light-blue {
+    --primary-color: #{$c-dark-blue};
+    --secondary-color: #{$c-blue};
+  }
+
+  &.purple {
+    --primary-color: #{$c-purple};
+    --secondary-color: #{$c-dark};
+  }
+}

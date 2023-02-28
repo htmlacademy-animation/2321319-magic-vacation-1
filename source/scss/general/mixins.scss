@@ -58,3 +58,13 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+@mixin rolling-transform-by-width($width, $is-clockwise) {
+  @if $is-clockwise {
+    transform: translateX(- $width * 3.14) rotate(-180deg);
+  }
+
+  @else {
+    transform: translateX($width * 3.14) rotate(180deg);
+  }
+}

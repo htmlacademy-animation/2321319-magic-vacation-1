@@ -1,12 +1,5 @@
 import throttle from 'lodash/throttle';
-
-const Screen = {
-  INTRO: 0,
-  STORY: 1,
-  PRIZES: 2,
-  RULES: 3,
-  GAME: 4
-};
+import {Screen} from "../general/consts";
 
 const cssTransitionClass = `screen--background-transitioned`;
 
@@ -61,9 +54,23 @@ export default class FullPageScroll {
 
   changePageDisplay() {
     this.changeActiveMenuItem();
-    this.showTransitionedBackground().then(() => {
+    this.replaceTransitionsForDisclaimer();
+    this.runHiddenScreenTransition()
+    .then(() => this.showTransitionedBackground())
+    .then(() => {
       this.emitChangeDisplayEvent();
       this.changeVisibilityDisplay();
+    });
+  }
+
+  runHiddenScreenTransition() {
+    return new Promise((resolve, _reject) => {
+      this.screenElements[this.prevScreen].classList.add(`screen--hidden-transitioned`);
+      setTimeout(() => {
+        this.screenElements[this.prevScreen].classList.add(`screen--hidden`);
+        this.screenElements[this.prevScreen].classList.remove(`screen--hidden-transitioned`);
+        resolve();
+      }, 200);
     });
   }
 
@@ -92,6 +99,19 @@ export default class FullPageScroll {
     setTimeout(() => {
       this.screenElements[this.activeScreen].classList.add(`active`);
     }, 100);
+  }
+
+  replaceTransitionsForDisclaimer() {
+    if (this.prevScreen === Screen.PRIZES && this.activeScreen === Screen.RULES) {
+      const disclaimerPrizes = document.querySelector(`.screen--prizes .js-footer`);
+      const disclaimerRules = document.querySelector(`.screen--rules .screen__disclaimer`);
+      disclaimerPrizes.classList.add(`no-transform`);
+      disclaimerRules.classList.add(`no-transform`);
+      setTimeout(() => {
+        disclaimerPrizes.classList.remove(`no-transform`);
+        disclaimerRules.classList.remove(`no-transform`);
+      }, 600);
+    }
   }
 
   changeActiveMenuItem() {

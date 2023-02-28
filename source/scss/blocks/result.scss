@@ -239,11 +239,18 @@
     width: 4rem;
     height: 4rem;
     color: $c-dark;
+    animation: rolling_out-right $middle-duration ease-out $long-duration 1 both;
+    animation-play-state: paused;
+
+    .screen--transitioned & {
+      animation-play-state: running;
+    }
 
     @media (min-width: $stop-scaling) {
       margin-left: 15px;
       width: 40px;
       height: 40px;
+      animation-name: rolling_out-left--fix;
     }
 
     &::before {
@@ -263,6 +270,12 @@
     margin-left: 0.3rem;
     width: 2.4rem;
     height: 1.9rem;
+    animation: fade-in $standart-duration ease-out $long-duration 1 both;
+    animation-play-state: paused;
+
+    .screen--transitioned & {
+      animation-play-state: running;
+    }
 
     @media (min-width: $stop-scaling) {
       margin-left: 3px;

@@ -1,14 +1,18 @@
 import FullPageScroll from "./full-page-scroll";
+import Slider from "./slider";
 import AccentTypography from "./accent-typography";
+import {ThemeColor, Screen} from "../general/consts";
 
 const DOM_LOADED_CLASS = `is-dom-loaded`;
 
 export default class Page {
   constructor() {
     this.screenElements = document.querySelectorAll(`.screen:not(.screen--result)`);
-
+    this.bodyElement = document.querySelector(`body`);
     this.fullPageScroll = new FullPageScroll(this.screenElements);
     this.fullPageScroll.init();
+    this.swiper = new Slider();
+    this.setTheme();
 
     this.accentTypographyItems = [];
     [].forEach.call(this.screenElements, (screen) => {
@@ -28,13 +32,19 @@ export default class Page {
     });
 
     window.addEventListener(`load`, () => {
-      const bodyElement = document.querySelector(`body`);
       setTimeout(() => {
-        bodyElement.classList.add(DOM_LOADED_CLASS);
+        this.bodyElement.classList.add(DOM_LOADED_CLASS);
       }, 100);
     });
 
     document.body.addEventListener(`screenChanged`, (event) => {
+      let themeName;
+      this.clearTheme();
+      if (event.detail.screenId === Screen.STORY) {
+        [themeName] = this.swiper.getStylesByActiveSlide();
+      }
+      this.setTheme(themeName);
+
       this.accentTypographyItems.forEach((item) => {
         if (item._screenId === event.detail.prevScreenName) {
           item._element.destroyAnimation();
@@ -48,5 +58,22 @@ export default class Page {
         });
       }, 200);
     });
+
+    document.body.addEventListener(`slideChanged`, (event) => {
+      this.clearTheme();
+      this.setTheme(event.detail.theme);
+    });
+  }
+
+  setTheme(theme = ThemeColor.PURPLE) {
+    this.bodyElement.classList.add(theme);
+  }
+
+  clearTheme() {
+    if (this.bodyElement.classList.contains(DOM_LOADED_CLASS)) {
+      this.bodyElement.classList = DOM_LOADED_CLASS;
+    } else {
+      this.bodyElement.classList = ``;
+    }
   }
 }
