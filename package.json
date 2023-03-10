@@ -55,7 +55,7 @@
     "source/sass/**/*.{sass,scss}"
   ],
   "dependencies": {
-    "markup-inline-loader": "^4.0.0",
+    "markup-inline-loader": "4.0.0",
     "normalize.css": "8.0.1",
     "swiper": "5.3.8",
     "three": "0.115.0"
