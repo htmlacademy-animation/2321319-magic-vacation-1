@@ -31,6 +31,12 @@ export default class Page {
       });
     });
 
+    this.svgAnimations = [];
+    const primaryPrizeStartAnimation = document.getElementById(`airshipShow`);
+    if (primaryPrizeStartAnimation) {
+      this.svgAnimations.push(primaryPrizeStartAnimation);
+    }
+
     window.addEventListener(`load`, () => {
       setTimeout(() => {
         this.bodyElement.classList.add(DOM_LOADED_CLASS);
@@ -56,6 +62,16 @@ export default class Page {
             item._element.runAnimation();
           }
         });
+
+        if (event.detail.screenId === Screen.PRIZES) {
+          [].forEach.call(this.svgAnimations, (animation) => {
+            animation.beginElement();
+          });
+        } else {
+          [].forEach.call(this.svgAnimations, (animation) => {
+            animation.endElement();
+          });
+        }
       }, 200);
     });
 

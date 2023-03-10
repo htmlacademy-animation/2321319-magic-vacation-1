@@ -61,10 +61,10 @@
 
 @mixin rolling-transform-by-width($width, $is-clockwise) {
   @if $is-clockwise {
-    transform: translateX(- $width * 3.14) rotate(-180deg);
+    transform: translateX(- $width / 2 * 3.14) rotate(-180deg);
   }
 
   @else {
-    transform: translateX($width * 3.14) rotate(180deg);
+    transform: translateX($width / 2 * 3.14) rotate(180deg);
   }
 }
