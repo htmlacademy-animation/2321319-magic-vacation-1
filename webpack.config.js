@@ -73,22 +73,22 @@ module.exports = {
               attributes: false
             }
           },
-          {
-            loader: 'markup-inline-loader',
-            options: {
-              svgo: {
-                plugins: [
-                  { removeDoctype: true },
-                  { removeComments: true },
-                  { cleanupIDs: false },
-                  { collapseGroups: false },
-                  { removeTitle: false },
-                  { removeHiddenElems: false },
-                  { convertTransform: false }
-                ],
-              },
-            }
-          },
+          // {
+          //   loader: 'markup-inline-loader',
+          //   options: {
+          //     svgo: {
+          //       plugins: [
+          //         { removeDoctype: true },
+          //         { removeComments: true },
+          //         { cleanupIDs: false },
+          //         { collapseGroups: false },
+          //         { removeTitle: false },
+          //         { removeHiddenElems: false },
+          //         { convertTransform: false }
+          //       ],
+          //     },
+          //   }
+          // },
           {
             loader: 'posthtml-loader',
             options: {
