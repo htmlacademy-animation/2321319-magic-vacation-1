@@ -12,6 +12,7 @@ export default class Page {
     this.fullPageScroll = new FullPageScroll(this.screenElements);
     this.fullPageScroll.init();
     this.swiper = new Slider();
+    this.svgAnimations = [];
     this.setTheme();
 
     this.accentTypographyItems = [];
@@ -31,11 +32,7 @@ export default class Page {
       });
     });
 
-    this.svgAnimations = [];
-    const primaryPrizeStartAnimation = document.getElementById(`airshipShow`);
-    if (primaryPrizeStartAnimation) {
-      this.svgAnimations.push(primaryPrizeStartAnimation);
-    }
+    this.initSvgAnimations();
 
     window.addEventListener(`load`, () => {
       setTimeout(() => {
@@ -44,34 +41,10 @@ export default class Page {
     });
 
     document.body.addEventListener(`screenChanged`, (event) => {
-      let themeName;
-      this.clearTheme();
-      if (event.detail.screenId === Screen.STORY) {
-        [themeName] = this.swiper.getStylesByActiveSlide();
-      }
-      this.setTheme(themeName);
-
-      this.accentTypographyItems.forEach((item) => {
-        if (item._screenId === event.detail.prevScreenName) {
-          item._element.destroyAnimation();
-        }
-      });
+      this.reinitTheme(event);
+      this.destroyAnimationsForPrevScreen(event);
       setTimeout(() => {
-        this.accentTypographyItems.forEach((item) => {
-          if (item._screenId === event.detail.screenName) {
-            item._element.runAnimation();
-          }
-        });
-
-        if (event.detail.screenId === Screen.PRIZES) {
-          [].forEach.call(this.svgAnimations, (animation) => {
-            animation.beginElement();
-          });
-        } else {
-          [].forEach.call(this.svgAnimations, (animation) => {
-            animation.endElement();
-          });
-        }
+        this.runAnimationsForScreen(event);
       }, 200);
     });
 
@@ -91,5 +64,61 @@ export default class Page {
     } else {
       this.bodyElement.classList = ``;
     }
+  }
+
+  reinitTheme(event) {
+    let themeName;
+    this.clearTheme();
+    if (event.detail.screenId === Screen.STORY) {
+      [themeName] = this.swiper.getStylesByActiveSlide();
+    }
+    this.setTheme(themeName);
+  }
+
+  destroyAnimationsForPrevScreen(event) {
+    this.accentTypographyItems.forEach((item) => {
+      if (item._screenId === event.detail.prevScreenName) {
+        item._element.destroyAnimation();
+      }
+    });
+
+    if (event.detail.screenId !== Screen.PRIZES) {
+      [].forEach.call(this.svgAnimations, (animation) => {
+        animation.element.endElement();
+      });
+    }
+  }
+
+  runAnimationsForScreen(event) {
+    this.accentTypographyItems.forEach((item) => {
+      if (item._screenId === event.detail.screenName) {
+        item._element.runAnimation();
+      }
+    });
+
+    if (event.detail.screenId === Screen.PRIZES) {
+      [].forEach.call(this.svgAnimations, (animation) => {
+        setTimeout(() => animation.element.beginElement(), animation.delay);
+      });
+    }
+  }
+
+  initSvgAnimations() {
+    const svgAnimationsSettings = [
+      {
+        title: `airshipShow`,
+        delay: 0
+      },
+      {
+        title: `backgroundShow`,
+        delay: 3000
+      }
+    ];
+    svgAnimationsSettings.forEach((el) => {
+      let svgAnimationElement = document.getElementById(el.title);
+      if (svgAnimationElement) {
+        this.svgAnimations.push({element: svgAnimationElement, delay: el.delay});
+      }
+    });
   }
 }
