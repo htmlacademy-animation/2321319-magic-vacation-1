@@ -84,7 +84,8 @@ module.exports = {
           //         { collapseGroups: false },
           //         { removeTitle: false },
           //         { removeHiddenElems: false },
-          //         { convertTransform: false }
+          //         { convertTransform: false },
+          //         { convertShapeToPath: false }
           //       ],
           //     },
           //   }
