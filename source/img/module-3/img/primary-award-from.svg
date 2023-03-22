@@ -5,7 +5,8 @@
     </clipPath>
   </defs>
     <g id="airshipScene" style="opacity:0">
-      <animate attributeType="CSS"
+      <animate
+        attributeType="CSS"
         id="airshipShow"
         attributeName="opacity"
         values="0; 1"
@@ -16,7 +17,8 @@
         restart="never"
       />
       <g id="airship" style="opacity:0">
-        <animate attributeType="CSS"
+        <animate
+          attributeType="CSS"
           attributeName="opacity"
           values="0; 1"
           begin="airshipShow.end +0.05s"
@@ -24,7 +26,8 @@
           calcMode="discrete"
           fill="freeze"
         />
-        <animate attributeType="CSS"
+        <animate
+          attributeType="CSS"
           id="airshipHide"
           attributeName="opacity"
           values="1; 0"
@@ -78,7 +81,8 @@
             <path d="M175.44,249.28h48.36a13.27,13.27,0,0,0,13-10.65l3.74-18.32H172.36v25.89A3.09,3.09,0,0,0,175.44,249.28Z" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
             <path d="M235.79,241.69h-9.22a8.31,8.31,0,0,1-8.28-8.31V220.31" fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
             <g id="windowCabineInsideGroup">
-              <animate attributeType="CSS"
+              <animate
+                attributeType="CSS"
                 id="windowMoveHide"
                 attributeName="opacity"
                 values="1; 0"
@@ -161,7 +165,8 @@
           </g>
         </g>
         <g id="windowCabineOutside"  transform="translate(197, 230)" style="opacity:0">
-          <animate attributeType="CSS"
+          <animate
+            attributeType="CSS"
             id="windowMoveShow"
             attributeName="opacity"
             values="0; 1; 0"
@@ -214,7 +219,8 @@
         </g>
       </g>
       <g id="bottomCloud" style="opacity:0">
-        <animate attributeType="CSS"
+        <animate
+          attributeType="CSS"
           attributeName="opacity"
           values="1; 0.8; 0"
           keyTimes="0; 0.9; 1"
@@ -252,7 +258,8 @@
         </g>
       </g>
       <g id="topCloud" style="opacity:0">
-        <animate attributeType="CSS"
+        <animate
+          attributeType="CSS"
           attributeName="opacity"
           values="1; 0.6; 0"
           keyTimes="0; 0.9; 1"
@@ -291,7 +298,8 @@
         </g>
       </g>
       <g id="smoge">
-        <animate attributeType="CSS"
+        <animate
+          attributeType="CSS"
           attributeName="opacity"
           values="1; 0"
           keySplines="0 0.32 0.41 1"
@@ -301,7 +309,8 @@
           fill="freeze"
         />
         <line x1="106.25" y1="179.49" x2="84.05" y2="179.49" fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2">
-          <animate attributeName="x2"
+          <animate
+            attributeName="x2"
             values="84.05;88.05;84.05"
             dur="0.2s"
             repeatCount="indefinite"
@@ -310,7 +319,8 @@
           />
         </line>
         <line x1="106.25" y1="201.23" x2="84.05" y2="201.23" fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2">
-          <animate attributeName="x2"
+          <animate
+            attributeName="x2"
             values="84.05;88.55;84.05"
             dur="0.18s"
             repeatCount="indefinite"
@@ -319,7 +329,8 @@
           />
         </line>
         <line x1="106.25" y1="190.98" x2="68.77" y2="190.98" fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2">
-          <animate attributeName="x2"
+          <animate
+            attributeName="x2"
             values="68.77;72.05;68.77"
             dur="0.25s"
             repeatCount="indefinite"
@@ -347,7 +358,8 @@
     </g>
     <g id="armchairScene">
       <g id="ski" style="opacity:0" transform="translate(-50, 0)">
-        <animate attributeType="CSS"
+        <animate
+          attributeType="CSS"
           attributeName="opacity"
           values="0; 1"
           keySplines="0 0.32 0.41 1"
@@ -372,7 +384,8 @@
         <path d="M124.5,328.17a2.2,2.2,0,0,1-2.17-2.23l2.24-193.63c0.19-15.53-6.07-21.61-10.16-23.91a1.35,1.35,0,0,1,.39-2.47c8.36-1.9,27.49-3,27.15,27.28l-2.25,192.93a2.2,2.2,0,0,1-2.22,2.18Z" fill="#fff"/>
       </g>
       <g id="window" transform="translate(197, 230)" style="opacity:0">
-        <animate attributeType="CSS"
+        <animate
+          attributeType="CSS"
           attributeName="opacity"
           values="0; 1"
           begin="windowMoveShow.end"
@@ -405,7 +418,8 @@
         <path transform="translate(-197, -230)" d="M275,225.43H257.87a17.6,17.6,0,0,1-17.52-17.58V170a17.6,17.6,0,0,1,17.52-17.58H275A17.6,17.6,0,0,1,292.51,170v37.83A17.61,17.61,0,0,1,275,225.43Z" fill="none" stroke="#fff" stroke-width="2"/>
       </g>
       <g clip-path="url(#window)" style="opacity:0">
-        <animate attributeType="CSS"
+        <animate
+          attributeType="CSS"
           attributeName="opacity"
           values="0; 1"
           begin="airshipHide.begin-0.1s"
@@ -414,7 +428,8 @@
           fill="freeze"
         />
         <g transform="scale(0.5 0.5) translate(295 170)">
-          <animate attributeType="CSS"
+          <animate
+            attributeType="CSS"
             attributeName="opacity"
             values="1; 1; 0"
             keyTimes="0; 0.7; 1"
@@ -443,7 +458,8 @@
         </g>
       </g>
       <g id="chair" style="opacity:0" transform="translate(-50, 0)">
-        <animate attributeType="CSS"
+        <animate
+          attributeType="CSS"
           attributeName="opacity"
           values="0; 1"
           keySplines="0 0.32 0.41 1"
@@ -479,7 +495,8 @@
         <line x1="151.57" y1="195.44" x2="209.05" y2="195.44" fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
       </g>
       <g id="plant" style="opacity:0" transform="translate(-50, 0)">
-        <animate attributeType="CSS"
+        <animate
+          attributeType="CSS"
           attributeName="opacity"
           values="0; 1"
           keySplines="0 0.32 0.41 1"

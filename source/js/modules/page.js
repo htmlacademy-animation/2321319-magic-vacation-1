@@ -112,6 +112,10 @@ export default class Page {
       {
         title: `backgroundShow`,
         delay: 3000
+      },
+      {
+        title: `suitcaseShow`,
+        delay: 5000
       }
     ];
     svgAnimationsSettings.forEach((el) => {
