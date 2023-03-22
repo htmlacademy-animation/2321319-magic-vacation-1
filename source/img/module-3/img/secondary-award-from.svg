@@ -1,6 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 350 350">
   <g id="backgroundScene" style="opacity:0">
-    <animate attributeType="CSS"
+    <animate
+      attributeType="CSS"
       id="backgroundShow"
       attributeName="opacity"
       values="0; 1"
@@ -37,7 +38,8 @@
         repeatCount="1"
         begin="suitcaseMove.begin + 0.3s"
       />
-      <animate attributeType="CSS"
+      <animate
+        attributeType="CSS"
         attributeName="opacity"
         values="1; 0"
         keySplines="0 0.32 0.41 1"
@@ -105,7 +107,8 @@
     </g>
     <g id="ground">
       <line x1="41.13" y1="329" x2="41.13" y2="329" fill="none" stroke="#fff" stroke-width="2">
-        <animate attributeName="x2"
+        <animate
+          attributeName="x2"
           id="groundAppearance"
           values="41.13;260.3"
           dur="0.15s"
@@ -127,7 +130,8 @@
           begin="groundAppearance.end"
           additive="sum"
         />
-        <animate attributeName="x1"
+        <animate
+          attributeName="x1"
           values="41.13;91.13"
           dur="0.15s"
           repeatCount="1"
@@ -141,7 +145,8 @@
   </g>
   <!-- <path xmlns="http://www.w3.org/2000/svg" d="M179,111c24.19-9.24,29.8-15.84,29.42-20.44C207.18,75.43,138.73,51.78,96,84c-2.93,2.21-31.66,24.52-29,54,3.54,39.18,59.83,61.15,75.7,67.35,53.65,20.94,94.43,8.79,101.78,27.18,2.89,7.25.78,19.69-21.48,42.47" fill="none" stroke="white" stroke-miterlimit="10"/> -->
   <g id="suitcaseScene" style="opacity:0">
-    <animate attributeType="CSS"
+    <animate
+      attributeType="CSS"
       attributeName="opacity"
       values="0; 1"
       begin="backgroundShow.end + 0.19s"
@@ -266,7 +271,8 @@
     </g>
   </g>
   <g id="bottomFlower" style="opacity:0">
-    <animate attributeType="CSS"
+    <animate
+      attributeType="CSS"
       attributeName="opacity"
       values="0; 1"
       begin="backgroundShow.begin"
