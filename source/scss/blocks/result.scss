@@ -5,6 +5,15 @@
   padding: 15rem 5.7rem 6rem;
   width: 100%;
 
+  .fade-scaling-down {
+    animation: fade-scaling-down ease-out $standart-duration 1 both;
+    animation-play-state: paused;
+
+    .screen--transitioned & {
+      animation-play-state: running;
+    }
+  }
+
   @media (min-width: $stop-scaling) {
     padding: 150px 57px 60px;
   }
@@ -148,6 +157,7 @@
 
 .result__title {
   margin: 0 auto 2rem;
+  position: relative;
   color: $c-light;
 
   @media (min-width: $stop-scaling) {
@@ -270,7 +280,7 @@
     margin-left: 0.3rem;
     width: 2.4rem;
     height: 1.9rem;
-    animation: fade-in $standart-duration ease-out $long-duration 1 both;
+    animation: fade-in $standart-duration ease-out $short-duration 1 both;
     animation-play-state: paused;
 
     .screen--transitioned & {
@@ -351,6 +361,12 @@
     width: 66.5rem;
     height: 11.3rem;
 
+    svg {
+      height: 200%;
+      position: relative;
+      top: -100%;
+    }
+
     @media (min-width: $stop-scaling) {
       margin-top: 95px;
       width: 665px;
@@ -370,6 +386,23 @@
 
     @media (max-width: $mobile) and (orientation: landscape) {
       width: 45rem;
+    }
+  }
+
+  .letters {
+    .letter-drawing {
+      animation: letter-falling ease-out $extra-long-duration 1 both;
+      animation-play-state: paused;
+
+      @for $i from 1 through 9 {
+        &:nth-child(#{$i}) {
+          animation-delay: 0.1s * ($i - 1);
+        }
+      }
+
+      .screen--transitioned & {
+        animation-play-state: running;
+      }
     }
   }
 }

@@ -12,7 +12,7 @@ export default class Page {
     this.fullPageScroll = new FullPageScroll(this.screenElements);
     this.fullPageScroll.init();
     this.swiper = new Slider();
-    this.svgAnimations = [];
+    this.svgAnimations = {};
     this.setTheme();
 
     this.accentTypographyItems = [];
@@ -27,7 +27,7 @@ export default class Page {
               `transform`,
               100 * index
           ),
-          _screenId: screen.id,
+          _screenId: Screen[screen.id.toUpperCase()],
         });
       });
     });
@@ -38,6 +38,13 @@ export default class Page {
       setTimeout(() => {
         this.bodyElement.classList.add(DOM_LOADED_CLASS);
       }, 100);
+    });
+
+    document.body.addEventListener(`screenResultChanged`, (event) => {
+      this.destroyAnimationsForPrevScreen(event);
+      setTimeout(() => {
+        this.runAnimationsForScreen(event);
+      }, 200);
     });
 
     document.body.addEventListener(`screenChanged`, (event) => {
@@ -77,13 +84,13 @@ export default class Page {
 
   destroyAnimationsForPrevScreen(event) {
     this.accentTypographyItems.forEach((item) => {
-      if (item._screenId === event.detail.prevScreenName) {
+      if (item._screenId === event.detail.prevScreenId) {
         item._element.destroyAnimation();
       }
     });
 
-    if (event.detail.screenId !== Screen.PRIZES) {
-      [].forEach.call(this.svgAnimations, (animation) => {
+    if (this.svgAnimations[event.detail.prevScreenId]) {
+      [].forEach.call(this.svgAnimations[event.detail.prevScreenId], (animation) => {
         animation.element.endElement();
       });
     }
@@ -91,38 +98,96 @@ export default class Page {
 
   runAnimationsForScreen(event) {
     this.accentTypographyItems.forEach((item) => {
-      if (item._screenId === event.detail.screenName) {
+      if (item._screenId === event.detail.screenId) {
         item._element.runAnimation();
       }
     });
 
-    if (event.detail.screenId === Screen.PRIZES) {
-      [].forEach.call(this.svgAnimations, (animation) => {
+    if (this.svgAnimations[event.detail.screenId]) {
+      [].forEach.call(this.svgAnimations[event.detail.screenId], (animation) => {
         setTimeout(() => animation.element.beginElement(), animation.delay);
       });
     }
   }
 
   initSvgAnimations() {
-    const svgAnimationsSettings = [
+    this.initPrizeAnimations();
+    this.initResultsAnimations();
+  }
+
+  initPrizeAnimations() {
+    const svgPrizeAnimationsSettings = [
       {
-        title: `airshipShow`,
+        id: `airshipShow`,
         delay: 0
       },
       {
-        title: `backgroundShow`,
+        id: `backgroundShow`,
         delay: 3000
       },
       {
-        title: `suitcaseShow`,
+        id: `suitcaseShow`,
         delay: 5000
       }
     ];
-    svgAnimationsSettings.forEach((el) => {
-      let svgAnimationElement = document.getElementById(el.title);
+    const svgPrizeAnimations = [];
+
+    svgPrizeAnimationsSettings.forEach((el) => {
+      let svgAnimationElement = document.getElementById(el.id);
       if (svgAnimationElement) {
-        this.svgAnimations.push({element: svgAnimationElement, delay: el.delay});
+        svgPrizeAnimations.push({element: svgAnimationElement, delay: el.delay});
       }
     });
+    this.svgAnimations[Screen.PRIZES] = svgPrizeAnimations;
+  }
+
+  initResultsAnimations() {
+    const svgResultAnimationsSettings = [
+      {
+        id: `result`,
+        delay: 0,
+        delayBetweenItems: 0
+      },
+      {
+        id: `result2`,
+        delay: 0,
+        delayBetweenItems: 0
+      },
+      {
+        id: `result3`,
+        delay: 0,
+        delayBetweenItems: 100
+      }
+    ];
+    svgResultAnimationsSettings.forEach((el) => {
+      let screenElement = document.getElementById(el.id);
+      if (screenElement) {
+        const svgResultsElements = screenElement.querySelectorAll(`.letter-drawing`);
+        this.svgAnimations[Screen[el.id.toUpperCase()]] = [];
+        [].forEach.call(svgResultsElements, (svgEl, index) => {
+          this.setLetterAnimation(svgEl);
+          this.svgAnimations[Screen[el.id.toUpperCase()]].push(
+              {
+                element: svgEl.firstChild, delay: el.delay + index * el.delayBetweenItems
+              }
+          );
+        });
+      }
+    });
+  }
+
+  setLetterAnimation(svgElement) {
+    const numberOfDrawingPoints = 3;
+    const pathLength = svgElement.getTotalLength() / numberOfDrawingPoints;
+    svgElement.setAttribute(`stroke-dasharray`, `0, ${pathLength}`);
+    const animation = document.createElementNS(`http://www.w3.org/2000/svg`, `animate`);
+    animation.setAttribute(`attributeName`, `stroke-dasharray`);
+    animation.setAttribute(`begin`, `indefinite`);
+    animation.setAttribute(`dur`, `0.6s`);
+    animation.setAttribute(`calcMode`, `spline`);
+    animation.setAttribute(`keySplines`, `0.21 0 0.8 1`);
+    animation.setAttribute(`values`, `0, ${pathLength}; ${pathLength}, 0`);
+    animation.setAttribute(`fill`, `freeze`);
+    svgElement.appendChild(animation);
   }
 }

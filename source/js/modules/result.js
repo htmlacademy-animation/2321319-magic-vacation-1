@@ -1,3 +1,5 @@
+import {Screen} from "../general/consts";
+
 export default () => {
   let showResultEls = document.querySelectorAll(`.js-show-result`);
   let results = document.querySelectorAll(`.screen--result`);
@@ -15,6 +17,15 @@ export default () => {
         });
         targetEl[0].classList.add(`screen--show`);
         targetEl[0].classList.remove(`screen--hidden`);
+
+        const event = new CustomEvent(`screenResultChanged`, {
+          detail: {
+            'screenId': Screen[target.toUpperCase()],
+            'prevScreenId': Screen.GAME,
+          }
+        });
+        document.body.dispatchEvent(event);
+
         setTimeout(function () {
           targetEl[0].classList.add(`screen--transitioned`);
         }, 150);
