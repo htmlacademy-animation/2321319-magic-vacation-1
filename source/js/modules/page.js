@@ -1,4 +1,5 @@
 import FullPageScroll from "./full-page-scroll";
+import GameTimer from "./game-timer";
 import Slider from "./slider";
 import AccentTypography from "./accent-typography";
 import {ThemeColor, Screen} from "../general/consts";
@@ -12,6 +13,7 @@ export default class Page {
     this.fullPageScroll = new FullPageScroll(this.screenElements);
     this.fullPageScroll.init();
     this.swiper = new Slider();
+    this.gameTimer = new GameTimer(5, 1);
     this.svgAnimations = {};
     this.setTheme();
 
@@ -53,6 +55,7 @@ export default class Page {
       setTimeout(() => {
         this.runAnimationsForScreen(event);
       }, 200);
+      this.updateTimerStatus(event.detail.screenId);
     });
 
     document.body.addEventListener(`slideChanged`, (event) => {
@@ -107,6 +110,16 @@ export default class Page {
       [].forEach.call(this.svgAnimations[event.detail.screenId], (animation) => {
         setTimeout(() => animation.element.beginElement(), animation.delay);
       });
+    }
+  }
+
+  updateTimerStatus(screenId) {
+    if (screenId === Screen.GAME) {
+      setTimeout(() => {
+        this.gameTimer.startTimer();
+      }, 450); // TODO: уточнить время после завершения работы над экраном
+    } else {
+      this.gameTimer.stopTimer();
     }
   }
 
