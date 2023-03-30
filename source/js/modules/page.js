@@ -1,5 +1,6 @@
 import FullPageScroll from "./full-page-scroll";
 import GameTimer from "./game-timer";
+import PrizeCountAnimation from "./prize-count-animation";
 import Slider from "./slider";
 import AccentTypography from "./accent-typography";
 import {ThemeColor, Screen} from "../general/consts";
@@ -15,6 +16,7 @@ export default class Page {
     this.swiper = new Slider();
     this.gameTimer = new GameTimer(5, 1);
     this.svgAnimations = {};
+    this.jsAnimations = {};
     this.setTheme();
 
     this.accentTypographyItems = [];
@@ -35,6 +37,7 @@ export default class Page {
     });
 
     this.initSvgAnimations();
+    this.initJsAnimations();
 
     window.addEventListener(`load`, () => {
       setTimeout(() => {
@@ -97,6 +100,12 @@ export default class Page {
         animation.element.endElement();
       });
     }
+
+    if (this.jsAnimations[event.detail.prevScreenId]) {
+      [].forEach.call(this.jsAnimations[event.detail.prevScreenId], (animation) => {
+        animation.element.stopAnimation();
+      });
+    }
   }
 
   runAnimationsForScreen(event) {
@@ -109,6 +118,13 @@ export default class Page {
     if (this.svgAnimations[event.detail.screenId]) {
       [].forEach.call(this.svgAnimations[event.detail.screenId], (animation) => {
         setTimeout(() => animation.element.beginElement(), animation.delay);
+      });
+    }
+
+    if (this.jsAnimations[event.detail.screenId]) {
+      [].forEach.call(this.jsAnimations[event.detail.screenId], (animation) => {
+        setTimeout(() => animation.element.startAnimation(), animation.delay);
+        animation.element.setContainerWidth();
       });
     }
   }
@@ -126,6 +142,23 @@ export default class Page {
   initSvgAnimations() {
     this.initPrizeAnimations();
     this.initResultsAnimations();
+  }
+
+  initJsAnimations() {
+    this.jsAnimations[Screen.PRIZES] = [
+      {
+        element: new PrizeCountAnimation(3, 3, 0, 12, document.querySelector(`.prizes__item--journeys .prizes__desc`)),
+        delay: 2000
+      },
+      {
+        element: new PrizeCountAnimation(1, 7, 800, 12, document.querySelector(`.prizes__item--cases .prizes__desc`)),
+        delay: 4000
+      },
+      {
+        element: new PrizeCountAnimation(11, 900, 800, 12, document.querySelector(`.prizes__item--codes .prizes__desc`)),
+        delay: 6000
+      }
+    ];
   }
 
   initPrizeAnimations() {
