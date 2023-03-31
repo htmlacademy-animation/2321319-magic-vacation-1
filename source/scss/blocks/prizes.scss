@@ -127,6 +127,13 @@
   }
 
   &--journeys {
+    transform: translateX(150%);
+    transition: transform $long-duration ease-out $long-duration;
+
+    @media (max-width: $tablet) and (orientation: portrait) {
+      transform: translateX(10%);
+    }
+
     .prizes__icon {
       position: relative;
       left: -5.9rem;
@@ -253,6 +260,8 @@
   margin: 5.6rem 0 0 0;
   font-size: 1.8rem;
   line-height: 1.1;
+  opacity: 0;
+  transition: opacity $standart-duration ease-out;
 
   @media (min-width: $stop-scaling) {
     margin-top: 56px;
@@ -307,6 +316,10 @@
     align-items: flex-end;
     margin-left: 1.4rem;
     max-width: 14rem;
+    opacity: 0;
+    transform: translateX(10%);
+    transition: transform $standart-duration ease-out $standart-duration,
+                opacity $standart-duration ease-out $standart-duration;
 
     @media (min-width: $stop-scaling) {
       margin-left: 14px;
