@@ -1,6 +1,7 @@
 import FullPageScroll from "./full-page-scroll";
 import GameTimer from "./game-timer";
 import PrizeCountAnimation from "./prize-count-animation";
+import ResultSealAnimation from "./result-seal-animation";
 import Slider from "./slider";
 import AccentTypography from "./accent-typography";
 import {ThemeColor, Screen} from "../general/consts";
@@ -157,7 +158,13 @@ export default class Page {
       {
         element: new PrizeCountAnimation(11, 900, 800, 12, document.querySelector(`.prizes__item--codes .prizes__desc`)),
         delay: 6000
-      }
+      },
+    ];
+    this.jsAnimations[Screen.RESULT] = [
+      {
+        element: new ResultSealAnimation(document.getElementById(`seal-scene`)),
+        delay: 0
+      },
     ];
   }
 

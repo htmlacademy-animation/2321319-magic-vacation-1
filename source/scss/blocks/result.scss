@@ -129,6 +129,16 @@
     }
   }
 
+  &.canvas-wrapper {
+    position: static;
+    width: 100%;
+    transform: none;
+  }
+  canvas {
+    position: absolute;
+    top: 0;
+  }
+
   @media (min-width: $stop-scaling) {
     max-height: 35rem;
 
