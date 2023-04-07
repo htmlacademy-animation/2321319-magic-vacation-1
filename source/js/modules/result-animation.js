@@ -15,7 +15,6 @@ export default class ResultAnimation {
       return;
     }
     const fetches = this.elements
-      .filter((el) => !el.isFigure)
       .map((el) => this.loadImage(el));
     Promise.allSettled(fetches)
       .then((results) => {
@@ -82,6 +81,7 @@ export default class ResultAnimation {
       if (transforms.rotate) {
         this.ctx.translate(x + width / 2, y + height / 2);
         this.ctx.rotate((transforms.rotate * Math.PI) / 180);
+        this.ctx.translate(-x - width / 2, -y - height / 2);
       }
 
       if (transforms.scaleX) {
@@ -103,16 +103,17 @@ export default class ResultAnimation {
           y = -y;
         }
       }
-
-      if (transforms.rotate) {
-        this.ctx.translate(-x - width / 2, -y - height / 2);
-      }
     }
 
     element.position.curX = x;
     element.position.curY = y;
+    element.position.curH = height;
+    element.position.curW = width;
 
     this.ctx.drawImage(element.image, x, y, width, height);
+    if (typeof element.drawElement === `function`) {
+      element.drawElement(element);
+    }
 
     if (isContextTransforming) {
       this.ctx.restore();
@@ -154,7 +155,7 @@ export default class ResultAnimation {
       this.lastFrameTime = now - (elapsed % this.frameInterval);
       this.clearScene();
       this.elements.forEach((el) => {
-        if (el.status || el.isFigure) {
+        if (el.status) {
           let animations = [];
           el.animationFunctions.forEach((animation, index) => {
             const isAnimationDelayed = now < this.startTime + el.delays[index];
@@ -164,14 +165,10 @@ export default class ResultAnimation {
             if (!isAnimationDelayed && !isAnimationFinished) {
               const pastProgress = (now - this.startTime - el.delays[index]) / el.durations[index];
               const progress = el.finites[index] ? pastProgress : pastProgress - Math.round(pastProgress);
-              animations.push({ animationFunction: animation, progress });
+              animations.push({animationFunction: animation, progress});
             }
           });
-          if (el.isFigure) {
-            el.drawElement(el, animations);
-          } else {
-            this.setElement(el, animations);
-          }
+          this.setElement(el, animations);
         }
       });
     }
@@ -186,5 +183,11 @@ export default class ResultAnimation {
 
   clearScene() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  }
+
+  rotateElement(element, direction = 1) {
+    this.ctx.translate(element.position.curX + element.position.curW / 2, element.position.curY + element.position.curH / 2);
+    this.ctx.rotate(direction * (element.transforms.rotate * Math.PI) / 180);
+    this.ctx.translate(-element.position.curX - element.position.curW / 2, -element.position.curY - element.position.curH / 2);
   }
 }

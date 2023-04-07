@@ -10,12 +10,45 @@ export default class ResultSealAnimation extends ResultAnimation {
   setContainerWidth() {
     const imageWrapper = document.querySelector(`.screen--show .result__image`);
     this.canvasWidth = imageWrapper.clientWidth;
-    this.canvasHeight = window.innerHeight;
+    this.canvasHeight =
+      window.innerHeight > imageWrapper.clientWidth
+        ? imageWrapper.clientWidth
+        : window.innerHeight;
     super.setContainerWidth();
   }
 
   _initElements() {
     this.elements = [
+      {
+        id: `treeLeft`,
+        imagePath: `./img/module-4/win-primary-images/tree-2.png`,
+        position: { x: 55, y: 62, width: 3 },
+        transforms: {
+          opacity: 0,
+          translateY: 5,
+        },
+        durations: [400],
+        finites: [true],
+        delays: [400],
+        animationFunctions: [
+          (element, progress) => this.treeAnimationFunc(element, progress)
+        ]
+      },
+      {
+        id: `treeRight`,
+        imagePath: `./img/module-4/win-primary-images/tree.png`,
+        position: { x: 58, y: 64, width: 3 },
+        transforms: {
+          opacity: 0,
+          translateY: 5,
+        },
+        durations: [400],
+        finites: [true],
+        delays: [400],
+        animationFunctions: [
+          (element, progress) => this.treeAnimationFunc(element, progress)
+        ]
+      },
       {
         id: `ice`,
         imagePath: `./img/module-4/win-primary-images/ice.png`,
@@ -88,47 +121,28 @@ export default class ResultSealAnimation extends ResultAnimation {
       {
         id: `airplane`,
         imagePath: `./img/module-4/win-primary-images/airplane.png`,
-        position: { x: 50, y: 55, width: 11 },
+        drawElement: (element, animations) =>
+          this.drawTrack(element, animations),
+        position: {
+          x: 50,
+          y: 60,
+          width: 6,
+          centerX: 45,
+          centerY: 57,
+          radius: 12,
+        },
         transforms: {
           opacity: 0,
+          rotate: 0,
         },
-        durations: [600],
-        finites: [true],
-        delays: [200],
+        durations: [600, 600],
+        finites: [true, true],
+        delays: [200, 200],
         animationFunctions: [
           (element, progress) => this.airplaneAnimationFunc(element, progress),
+          (element, progress) => this.trackAnimationFunc(element, progress),
         ],
       },
-      {
-        id: `back`,
-        isFigure: true,
-        drawElement: (element, animations) => this.drawBack(element, animations),
-        transforms: {
-          centerX: 45,
-          centerY: 55,
-          radius: 15
-        },
-        durations: [600],
-        finites: [true],
-        delays: [200],
-        animationFunctions: [
-          (element, progress) => this.backAnimationFunc(element, progress),
-        ],
-      },
-      //   {
-      //     id: `treeLeft`,
-      //     imagePath: `./img/module-4/win-primary-images/tree.png`,
-      //     position: {x: 10, y: 10, width: 100},
-      //     transforms: {},
-      //     animationFunction: () => {}
-      //   },
-      //   {
-      //     id: `treeRight`,
-      //     imagePath: `./img/module-4/win-primary-images/tree-2.png`,
-      //     position: {x: 10, y: 10, width: 100},
-      //     transforms: {},
-      //     animationFunction: () => {}
-      //   },
     ];
   }
 
@@ -148,19 +162,75 @@ export default class ResultSealAnimation extends ResultAnimation {
 
   snowAnimationFunc(element, progress) {
     element.transforms.translateY = 5 * Math.sin(easeInOutQuad(progress) * 3);
+    element.transforms.opacity = 1;
   }
 
   airplaneAnimationFunc(element, progress) {
     element.transforms.opacity = progress;
-    element.transforms.translateX = 35 * easeInOutQuad(progress);
-    element.transforms.translateY = -(100 * Math.sin(0.9 * easeInOutQuad(progress) + 4.1) + 100);
-    element.transforms.rotate = -90 * Math.cos(0.9 * easeInOutQuad(progress) + 4.1) + 45;
+    element.transforms.translateX = 25 * easeInOutQuad(progress);
+    element.transforms.translateY = -(
+      50 * Math.sin(0.9 * easeInOutQuad(progress) + 4.1) +
+      50
+    );
+    element.transforms.rotate =
+      -50 * Math.cos(0.9 * easeInOutQuad(progress) + 4.1) + 45;
   }
 
-  drawBack(element, animations) {
+  treeAnimationFunc(element, progress) {
+    element.transforms.opacity = progress;
+    element.transforms.translateY = 5 - 5 * progress;
   }
 
-  backAnimationFunc(element, progress) {
+  drawTrack(element) {
+    this.ctx.save();
+    this.ctx.globalCompositeOperation = `destination-over`;
+    const centerX = element.position.centerX;
+    const centerY = element.position.centerY;
+    const radius = element.position.radius;
 
+    this.ctx.fillStyle = `#acc3ff`;
+
+    this.ctx.beginPath();
+    this.rotateElement(element, -1);
+    this.ctx.arc(
+      (this.canvasWidth * centerX) / 100,
+      (this.canvasHeight * centerY) / 100,
+      (this.canvasWidth * radius) / 100,
+      Math.PI / 2,
+      (3 * Math.PI) / 2,
+      false
+    );
+    this.ctx.moveTo(
+      (this.canvasWidth * centerX) / 100,
+      (this.canvasHeight * centerY) / 100 - (this.canvasWidth * radius) / 100
+    );
+    this.rotateElement(element);
+    this.ctx.quadraticCurveTo(
+      (this.canvasWidth * centerX) / 100 + (this.canvasWidth * radius) / 100,
+      (this.canvasHeight * centerY) / 100,
+      this.elements[6].position.curX,
+      this.elements[6].position.curY + this.elements[6].position.curH - 10
+    );
+    this.rotateElement(element, -1);
+    this.ctx.quadraticCurveTo(
+      this.elements[6].position.curX,
+      (this.canvasHeight * centerY) / 100 + (this.canvasWidth * radius) / 100 / 4,
+      (this.canvasWidth * centerX) / 100,
+      (this.canvasHeight * centerY) / 100 + (this.canvasWidth * radius) / 100
+    );
+    this.ctx.lineTo(
+      (this.canvasWidth * centerX) / 100,
+      (this.canvasHeight * centerY) / 100 - (this.canvasWidth * radius) / 100
+    );
+    this.ctx.fill();
+
+    this.ctx.restore();
+  }
+
+  trackAnimationFunc(element, progress) {
+    const progressReversed = 1 - progress;
+    element.position.radius = 10 * progress;
+    element.position.centerY = 57 - 10 * progressReversed;
+    element.position.opacity = progress;
   }
 }
