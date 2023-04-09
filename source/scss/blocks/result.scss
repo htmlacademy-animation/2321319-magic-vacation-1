@@ -129,6 +129,21 @@
     }
   }
 
+  &.canvas-wrapper {
+    position: static;
+    width: 100%;
+    transform: none;
+  }
+
+  canvas {
+    position: absolute;
+    top: 0;
+
+    @media (orientation: portrait) {
+      top: 20%;
+    }
+  }
+
   @media (min-width: $stop-scaling) {
     max-height: 35rem;
 
