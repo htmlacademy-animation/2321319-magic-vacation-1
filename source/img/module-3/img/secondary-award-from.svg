@@ -154,7 +154,7 @@
       calcMode="linear"
       fill="freeze"
     />
-    <g transform="scale(0) translate(222.595, 275.9)"> 
+    <g transform="scale(0) translate(222.595, 275.9)">
       <animateMotion
         id="suitcaseMove"
         dur="1.367s"

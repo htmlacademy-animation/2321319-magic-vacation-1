@@ -738,7 +738,7 @@
                         </g>
                       </g>
                     </g>
-                </svg>                
+                </svg>
 
               </div>
               <p class="prizes__desc">
@@ -901,7 +901,7 @@
                         calcMode="linear"
                         fill="freeze"
                       />
-                      <g transform="scale(0) translate(222.595, 275.9)"> 
+                      <g transform="scale(0) translate(222.595, 275.9)">
                         <animateMotion
                           id="suitcaseMove"
                           dur="1.367s"
@@ -1067,7 +1067,7 @@
                       <path d="M245.13,327.88s3.48-30.11,21.7-30.11" fill="none" stroke="#fe6183" stroke-miterlimit="10" stroke-width="2"/>
                     </g>
                   </svg>
-                  
+
                 </div>
               <p class="prizes__desc">
                 <b>7</b>
@@ -1165,7 +1165,7 @@
                             begin="suitcaseOpening.begin"
                           />
                           <g transform="rotate(40, 107.65, 166.71)">
-                             <animateTransform
+                            <animateTransform
                               attributeName="transform"
                               type="rotate"
                               values="40, 107.65, 166.71; -15, 107.65, 166.71; 10, 107.65, 166.71; -7, 107.65, 166.71; 7, 107.65, 166.71; -5, 107.65, 166.71; 5, 107.65, 166.71; 0, 107.65, 166.71"
@@ -1379,7 +1379,7 @@
                       <line x1="46.24" y1="329" x2="303.76" y2="329" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
                     </g>
                   </g>
-                </svg>                
+                </svg>
               </div>
               <p class="prizes__desc">
                 <b>900</b>
@@ -1519,7 +1519,7 @@
                 class="letter-drawing"
                 d="M287.36,8V24.44H236v14.4h25.32c25.44,0,34,11.16,34,26.52,0,15.6-8.52,26.64-34,26.64H222.56V8h64.8ZM256.88,76.52c15.12,0,23.52-2,23.52-11.52S272,54.44,256.88,54.44H236V76.52h20.88Z"
                 transform="translate(-2.1 -1.5)" fill="none" stroke="currentColor"/>
-              <path 
+              <path
                 class="letter-drawing"
                 d="M371.47,8V24.44H320.84V41.6h33.6V58h-33.6V75.56h50.64V92H307.4V8h64.08Z" transform="translate(-2.1 -1.5)"
                 fill="none" stroke="currentColor"/>
@@ -1627,12 +1627,6 @@
     <section class="screen screen--hidden screen--result" id="result3">
       <div class="screen__wrapper">
         <div class="result result--negative">
-          <div class="result__image">
-            <picture>
-              <source srcset="img/result3-mob.png 1x, img/result3-mob@2x.png 2x" media="(max-width: 768px) and (orientation: portrait)">
-              <img src="img/result3.png" srcset="img/result3@2x.png 2x" alt="">
-            </picture>
-          </div>
           <h2 class="result__title">
             <span class="visually-hidden">Не угадал!</span>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 661 219" class="letters">
@@ -1668,6 +1662,9 @@
               </g>
             </svg>
           </h2>
+          <div class="result__image canvas-wrapper">
+            <canvas id="crocodile-scene"></canvas>
+          </div>
           <button class="result__button js-play" type="button">
             <p class="fade-in">не сдавайся!</p>
             <span>

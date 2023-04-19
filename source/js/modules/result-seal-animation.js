@@ -91,7 +91,7 @@ export default class ResultSealAnimation extends ResultAnimation {
           opacity: 0,
           translateY: 0,
         },
-        durations: [400, 2100],
+        durations: [400, 2400],
         finites: [true, false],
         delays: [200, 400],
         animationFunctions: [
@@ -109,7 +109,7 @@ export default class ResultSealAnimation extends ResultAnimation {
           scaleX: -1,
           opacity: 0,
         },
-        durations: [400, 2100],
+        durations: [400, 2400],
         finites: [true, false],
         delays: [400, 600],
         animationFunctions: [
@@ -161,7 +161,7 @@ export default class ResultSealAnimation extends ResultAnimation {
   }
 
   snowAnimationFunc(element, progress) {
-    element.transforms.translateY = 5 * Math.sin(easeInOutQuad(progress) * 3);
+    element.transforms.translateY = 5 * Math.sin(easeInOutQuad(progress) * 3.145);
     element.transforms.opacity = 1;
   }
 
@@ -182,6 +182,7 @@ export default class ResultSealAnimation extends ResultAnimation {
   }
 
   drawTrack(element) {
+    // TODO: изменить форму кривой
     this.ctx.save();
     this.ctx.globalCompositeOperation = `destination-over`;
     const centerX = element.position.centerX;
@@ -193,34 +194,34 @@ export default class ResultSealAnimation extends ResultAnimation {
     this.ctx.beginPath();
     this.rotateElement(element, -1);
     this.ctx.arc(
-      (this.canvasWidth * centerX) / 100,
-      (this.canvasHeight * centerY) / 100,
-      (this.canvasWidth * radius) / 100,
-      Math.PI / 2,
-      (3 * Math.PI) / 2,
-      false
+        (this.canvasWidth * centerX) / 100,
+        (this.canvasHeight * centerY) / 100,
+        (this.canvasWidth * radius) / 100,
+        Math.PI / 2,
+        (3 * Math.PI) / 2,
+        false
     );
     this.ctx.moveTo(
-      (this.canvasWidth * centerX) / 100,
-      (this.canvasHeight * centerY) / 100 - (this.canvasWidth * radius) / 100
+        (this.canvasWidth * centerX) / 100,
+        (this.canvasHeight * centerY) / 100 - (this.canvasWidth * radius) / 100
     );
     this.rotateElement(element);
     this.ctx.quadraticCurveTo(
-      (this.canvasWidth * centerX) / 100 + (this.canvasWidth * radius) / 100,
-      (this.canvasHeight * centerY) / 100,
-      this.elements[6].position.curX,
-      this.elements[6].position.curY + this.elements[6].position.curH - 10
+        (this.canvasWidth * centerX) / 100 + (this.canvasWidth * radius) / 100,
+        (this.canvasHeight * centerY) / 100,
+        this.elements[6].position.curX,
+        this.elements[6].position.curY + this.elements[6].position.curH - 10
     );
     this.rotateElement(element, -1);
     this.ctx.quadraticCurveTo(
-      this.elements[6].position.curX,
-      (this.canvasHeight * centerY) / 100 + (this.canvasWidth * radius) / 100 / 4,
-      (this.canvasWidth * centerX) / 100,
-      (this.canvasHeight * centerY) / 100 + (this.canvasWidth * radius) / 100
+        this.elements[6].position.curX,
+        (this.canvasHeight * centerY) / 100 + (this.canvasWidth * radius) / 100 / 4,
+        (this.canvasWidth * centerX) / 100,
+        (this.canvasHeight * centerY) / 100 + (this.canvasWidth * radius) / 100
     );
     this.ctx.lineTo(
-      (this.canvasWidth * centerX) / 100,
-      (this.canvasHeight * centerY) / 100 - (this.canvasWidth * radius) / 100
+        (this.canvasWidth * centerX) / 100,
+        (this.canvasHeight * centerY) / 100 - (this.canvasWidth * radius) / 100
     );
     this.ctx.fill();
 
