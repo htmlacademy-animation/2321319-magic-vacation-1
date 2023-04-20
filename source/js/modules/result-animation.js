@@ -110,10 +110,10 @@ export default class ResultAnimation {
     element.position.curH = height;
     element.position.curW = width;
 
-    this.ctx.drawImage(element.image, x, y, width, height);
     if (typeof element.drawElement === `function`) {
       element.drawElement(element);
     }
+    this.ctx.drawImage(element.image, x, y, width, height);
 
     if (isContextTransforming) {
       this.ctx.restore();
@@ -164,7 +164,7 @@ export default class ResultAnimation {
               : false;
             if (!isAnimationDelayed && !isAnimationFinished) {
               const pastProgress = (now - this.startTime - el.delays[index]) / el.durations[index];
-              const progress = el.finites[index] ? pastProgress : pastProgress - Math.round(pastProgress);
+              const progress = el.finites[index] ? pastProgress : pastProgress - Math.trunc(pastProgress);
               animations.push({animationFunction: animation, progress});
             }
           });
@@ -178,11 +178,12 @@ export default class ResultAnimation {
     if (this.runnungAnimation) {
       cancelAnimationFrame(this.runnungAnimation);
       this.runnungAnimation = this.startTime = this.lastFrameTime = null;
+      this.clearScene();
     }
   }
 
   clearScene() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
   }
 
   rotateElement(element, direction = 1) {

@@ -2,6 +2,7 @@ import FullPageScroll from "./full-page-scroll";
 import GameTimer from "./game-timer";
 import PrizeCountAnimation from "./prize-count-animation";
 import ResultSealAnimation from "./result-seal-animation";
+import ResultCrocodileAnimation from "./result-crocodile-animation";
 import Slider from "./slider";
 import AccentTypography from "./accent-typography";
 import {ThemeColor, Screen} from "../general/consts";
@@ -164,7 +165,13 @@ export default class Page {
       {
         element: new ResultSealAnimation(document.getElementById(`seal-scene`)),
         delay: 0
-      },
+      }
+    ];
+    this.jsAnimations[Screen.RESULT3] = [
+      {
+        element: new ResultCrocodileAnimation(document.getElementById(`crocodile-scene`)),
+        delay: 0
+      }
     ];
   }
 

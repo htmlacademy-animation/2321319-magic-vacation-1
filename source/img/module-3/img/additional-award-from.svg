@@ -86,7 +86,7 @@
             begin="suitcaseOpening.begin"
           />
           <g transform="rotate(40, 107.65, 166.71)">
-             <animateTransform
+            <animateTransform
               attributeName="transform"
               type="rotate"
               values="40, 107.65, 166.71; -15, 107.65, 166.71; 10, 107.65, 166.71; -7, 107.65, 166.71; 7, 107.65, 166.71; -5, 107.65, 166.71; 5, 107.65, 166.71; 0, 107.65, 166.71"
