@@ -1,5 +1,6 @@
 import FullPageScroll from "./full-page-scroll";
 import GameTimer from "./game-timer";
+import WebGLScene from "./webgl-scene";
 import PrizeCountAnimation from "./prize-count-animation";
 import ResultSealAnimation from "./result-seal-animation";
 import ResultCrocodileAnimation from "./result-crocodile-animation";
@@ -13,12 +14,18 @@ export default class Page {
   constructor() {
     this.screenElements = document.querySelectorAll(`.screen:not(.screen--result)`);
     this.bodyElement = document.querySelector(`body`);
+
     this.fullPageScroll = new FullPageScroll(this.screenElements);
     this.fullPageScroll.init();
     this.swiper = new Slider();
-    this.gameTimer = new GameTimer(5, 1);
+
     this.svgAnimations = {};
     this.jsAnimations = {};
+    this.webGLObjects = {};
+
+    this.initWebGLObjects();
+    this.webGLScene = new WebGLScene(document.getElementById(`3d-scene`), this.webGLObjects);
+    this.gameTimer = new GameTimer(5, 1);
     this.setTheme();
 
     this.accentTypographyItems = [];
@@ -66,6 +73,7 @@ export default class Page {
     document.body.addEventListener(`slideChanged`, (event) => {
       this.clearTheme();
       this.setTheme(event.detail.theme);
+      this.renderSceen3D(event.detail.theme);
     });
   }
 
@@ -85,9 +93,18 @@ export default class Page {
     let themeName;
     this.clearTheme();
     if (event.detail.screenId === Screen.STORY) {
-      [themeName] = this.swiper.getStylesByActiveSlide();
+      themeName = this.swiper.getStylesByActiveSlide();
+      this.setTheme(themeName);
+      this.renderSceen3D(themeName);
+    }
+    if (event.detail.screenId === Screen.TOP) {
+      this.renderSceen3D(event.detail.screenId);
     }
     this.setTheme(themeName);
+  }
+
+  renderSceen3D(screenId) {
+    this.webGLScene.renderSceneObject(screenId);
   }
 
   destroyAnimationsForPrevScreen(event) {
@@ -173,6 +190,34 @@ export default class Page {
         delay: 0
       }
     ];
+  }
+
+  initWebGLObjects() {
+    const slideSettings = this.swiper.getSlideSettings();
+    const imageWidth = 2048;
+    const imageHeight = 1024;
+    this.webGLObjects[Screen.TOP] = {
+      url: `./img/module-5/scenes-textures/scene-0.png`,
+      position: {
+        x: 0,
+        y: 0,
+        z: 0,
+        width: imageWidth,
+        height: imageHeight
+      }
+    };
+    Object.entries(slideSettings).forEach(([key, value], index) => {
+      this.webGLObjects[key] = {
+        url: value.backgroundImage,
+        position: {
+          x: imageWidth * (index + 1),
+          y: 0,
+          z: 0,
+          width: imageWidth,
+          height: imageHeight
+        },
+      };
+    });
   }
 
   initPrizeAnimations() {
