@@ -17,6 +17,8 @@ export default class WebGLScene {
       y: 0,
       z: 1000
     };
+    this.isLoading = true;
+    this.currentSceneObject = null;
     this.init();
   }
 
@@ -67,10 +69,18 @@ export default class WebGLScene {
             this.scene.add(image);
           }
         });
+        this.isLoading = false;
+        if (this.currentSceneObject) {
+          this.renderSceneObject(this.currentSceneObject);
+        }
       });
   }
 
   renderSceneObject(sceneObjectId) {
+    this.currentSceneObject = sceneObjectId;
+    if (this.isLoading) {
+      return;
+    }
     const objectPosition = this.sceneObjects[sceneObjectId].position;
     this.backgroundColor = getComputedStyle(document.body).getPropertyValue(`--secondary-color`).trim();
     this.setColor();
