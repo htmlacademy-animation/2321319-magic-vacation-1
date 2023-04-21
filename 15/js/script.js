@@ -62938,7 +62938,7 @@ class WebGLScene {
           }
         });
         this.isLoading = false;
-        if (this.currentSceneObject) {
+        if (this.currentSceneObject !== null) {
           this.renderSceneObject(this.currentSceneObject);
         }
       });
