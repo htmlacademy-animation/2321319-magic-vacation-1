@@ -62916,9 +62916,11 @@ class WebGLScene {
     const textureLoader = new three__WEBPACK_IMPORTED_MODULE_0__["TextureLoader"](loadingManager);
 
     const planeGeometry = new three__WEBPACK_IMPORTED_MODULE_0__["PlaneGeometry"](1, 1);
-    const fetches = Object.values(this.sceneObjects).map((texture) =>
-      textureLoader.load(texture.url)
-    );
+    const fetches = Object.values(this.sceneObjects).map((texture) => {
+      return new Promise((resolve, reject) => {
+        textureLoader.load(texture.url, resolve, reject);
+      });
+    });
     Promise.allSettled(fetches)
       .then((results) => {
         results.forEach((result, i) => {
