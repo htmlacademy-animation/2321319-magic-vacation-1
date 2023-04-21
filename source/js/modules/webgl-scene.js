@@ -48,9 +48,11 @@ export default class WebGLScene {
     const textureLoader = new THREE.TextureLoader(loadingManager);
 
     const planeGeometry = new THREE.PlaneGeometry(1, 1);
-    const fetches = Object.values(this.sceneObjects).map((texture) =>
-      textureLoader.load(texture.url)
-    );
+    const fetches = Object.values(this.sceneObjects).map((texture) => {
+      return new Promise((resolve, reject) => {
+        textureLoader.load(texture.url, resolve, reject);
+      });
+    });
     Promise.allSettled(fetches)
       .then((results) => {
         results.forEach((result, i) => {
