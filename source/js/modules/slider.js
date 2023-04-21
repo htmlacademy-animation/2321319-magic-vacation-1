@@ -4,7 +4,7 @@ import {ThemeColor} from "../general/consts";
 export default class Slider {
   constructor() {
     this.sliderContainer = document.getElementById(`story`);
-    this.sliderContainer.style.backgroundImage = `url("img/slide1.jpg"), linear-gradient(180deg, rgba(83, 65, 118, 0) 0%, #523E75 16.85%)`;
+    this.initSlideSettings();
     window.addEventListener(`resize`, () => {
       if (this.storySlider) {
         this.storySlider.destroy();
@@ -27,8 +27,7 @@ export default class Slider {
         },
         on: {
           slideChange: () => {
-            const [themeName, backgroundImage] = this.getStylesByActiveSlide();
-            this.sliderContainer.style.backgroundImage = backgroundImage;
+            const themeName = this.getStylesByActiveSlide();
             this.emitSlideChangedEvent(themeName);
           },
           resize: () => {
@@ -56,8 +55,7 @@ export default class Slider {
         },
         on: {
           slideChange: () => {
-            const [themeName, backgroundImage] = this.getStylesByActiveSlide();
-            this.sliderContainer.style.backgroundImage = backgroundImage;
+            const themeName = this.getStylesByActiveSlide();
             this.emitSlideChangedEvent(themeName);
           },
           resize: () => {
@@ -74,51 +72,33 @@ export default class Slider {
     return ((window.innerWidth / window.innerHeight) < 1) || window.innerWidth < 769;
   }
 
+  initSlideSettings() {
+    this.slideSetings = {
+      [ThemeColor.LIGHT_PURPLE]: {
+        theme: ThemeColor.LIGHT_PURPLE,
+        backgroundImage: `./img/module-5/scenes-textures/scene-1.png`
+      },
+      [ThemeColor.BLUE]: {
+        theme: ThemeColor.BLUE,
+        backgroundImage: `./img/module-5/scenes-textures/scene-2.png`
+      },
+      [ThemeColor.LIGHT_BLUE]: {
+        theme: ThemeColor.LIGHT_BLUE,
+        backgroundImage: `./img/module-5/scenes-textures/scene-3.png`
+      },
+      [ThemeColor.PURPLE]: {
+        theme: ThemeColor.PURPLE,
+        backgroundImage: `./img/module-5/scenes-textures/scene-4.png`
+      },
+    };
+  }
+
   getStylesByActiveSlide() {
-    let themeName;
-    let backgroundImage;
-    if (this.isMobileSlider()) {
-      if (
-        this.storySlider.activeIndex === 0 ||
-        this.storySlider.activeIndex === 1
-      ) {
-        themeName = ThemeColor.LIGHT_PURPLE;
-        backgroundImage = `url("img/slide1.jpg"), linear-gradient(180deg, rgba(83, 65, 118, 0) 0%, #523E75 16.85%)`;
-      } else if (
-        this.storySlider.activeIndex === 2 ||
-        this.storySlider.activeIndex === 3
-      ) {
-        themeName = ThemeColor.BLUE;
-        backgroundImage = `url("img/slide2.jpg"), linear-gradient(180deg, rgba(45, 54, 179, 0) 0%, #2A34B0 16.85%)`;
-      } else if (
-        this.storySlider.activeIndex === 4 ||
-        this.storySlider.activeIndex === 5
-      ) {
-        themeName = ThemeColor.LIGHT_BLUE;
-        backgroundImage = `url("img/slide3.jpg"), linear-gradient(180deg, rgba(92, 138, 198, 0) 0%, #5183C4 16.85%)`;
-      } else if (
-        this.storySlider.activeIndex === 6 ||
-        this.storySlider.activeIndex === 7
-      ) {
-        themeName = ThemeColor.PURPLE;
-        backgroundImage = `url("img/slide4.jpg"), linear-gradient(180deg, rgba(45, 39, 63, 0) 0%, #2F2A42 16.85%)`;
-      }
-    } else {
-      if (this.storySlider.activeIndex === 0) {
-        themeName = ThemeColor.LIGHT_PURPLE;
-        backgroundImage = `url("img/slide1.jpg")`;
-      } else if (this.storySlider.activeIndex === 2) {
-        themeName = ThemeColor.BLUE;
-        backgroundImage = `url("img/slide2.jpg")`;
-      } else if (this.storySlider.activeIndex === 4) {
-        themeName = ThemeColor.LIGHT_BLUE;
-        backgroundImage = `url("img/slide3.jpg")`;
-      } else if (this.storySlider.activeIndex === 6) {
-        themeName = ThemeColor.PURPLE;
-        backgroundImage = `url("img/slide4.jpg")`;
-      }
-    }
-    return [themeName, backgroundImage];
+    return Object.values(this.slideSetings)[Math.floor(this.storySlider.activeIndex / 2)].theme;
+  }
+
+  getSlideSettings() {
+    return this.slideSetings;
   }
 
   emitSlideChangedEvent(themeName) {

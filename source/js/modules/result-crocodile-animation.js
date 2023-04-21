@@ -213,6 +213,7 @@ export default class ResultSealAnimation extends ResultAnimation {
     element.transforms.scaleY = 0.7 + 0.3 * easeInOutQuad(progress);
     element.transforms.translateY = element.transforms.scaleY;
     element.transforms.translateX = -element.transforms.scaleX;
+    // TODO: скейлинг из центра
   }
 
   crocodileAnimationFunc(element, progress) {
@@ -231,7 +232,7 @@ export default class ResultSealAnimation extends ResultAnimation {
     } else if (progress > 0.4 && progress < 0.6) {
       element.transforms.scaleX = 1;
       element.transforms.scaleY = 1;
-      element.transforms.translateY = 3 + 10 * progress;
+      element.transforms.translateY += 1;
     } else if (progress >= 0.6 && progress < 0.7) {
       element.transforms.opacity = (1 - progress) / 0.6;
       element.transforms.scaleX = (1 - progress) / 0.6;
