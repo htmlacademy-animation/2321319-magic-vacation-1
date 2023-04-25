@@ -5,11 +5,14 @@ const fragmentShader = require(`./shaders/custom-fragment-shader.glsl`);
 
 
 export default class CustomMaterial extends THREE.RawShaderMaterial {
-  constructor(map) {
+  constructor(map, hue) {
     super({
       uniforms: {
         map: {
           value: map
+        },
+        hue: {
+          value: hue
         }
       },
       vertexShader,
