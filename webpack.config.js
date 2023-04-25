@@ -65,6 +65,12 @@ module.exports = {
         ],
       },
       {
+        test: /\.glsl$/,
+        use: [
+          { loader: 'webpack-glsl-loader' }
+        ]
+      },
+      {
         test: /\.html$/,
         use: [
           {

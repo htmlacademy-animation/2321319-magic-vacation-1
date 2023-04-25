@@ -1,11 +1,12 @@
 import * as THREE from "three";
+import CustomMaterial from './3d/custom-material';
 
 export default class WebGLScene {
   constructor(canvasElement, sceneObjects) {
     this.canvas = canvasElement;
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
-    this.aspectRation = this.canvas.width / this.canvas.height;
+    this.aspectRatio = this.canvas.width / this.canvas.height;
     this.sceneObjects = sceneObjects;
     this.alpha = 1;
     this.backgroundColor = `#5f458c`;
@@ -32,7 +33,7 @@ export default class WebGLScene {
 
     this.camera = new THREE.PerspectiveCamera(
         this.fov,
-        this.aspectRation,
+        this.aspectRatio,
         this.near,
         this.far
     );
@@ -59,9 +60,7 @@ export default class WebGLScene {
       .then((results) => {
         results.forEach((result, i) => {
           if (result.status === `fulfilled`) {
-            const material = new THREE.MeshBasicMaterial({
-              map: result.value,
-            });
+            const material = new CustomMaterial(result.value);
             const image = new THREE.Mesh(planeGeometry, material);
             const imagePosition = Object.values(this.sceneObjects)[i].position;
             image.position.set(imagePosition.x, imagePosition.y, imagePosition.z);
