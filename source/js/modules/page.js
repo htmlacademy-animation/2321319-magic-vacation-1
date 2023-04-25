@@ -204,7 +204,8 @@ export default class Page {
         z: 0,
         width: imageWidth,
         height: imageHeight
-      }
+      },
+      hue: 0.0
     };
     Object.entries(slideSettings).forEach(([key, value], index) => {
       this.webGLObjects[key] = {
@@ -216,6 +217,7 @@ export default class Page {
           width: imageWidth,
           height: imageHeight
         },
+        hue: index === 1 ? -12.0 : 0.0
       };
     });
   }

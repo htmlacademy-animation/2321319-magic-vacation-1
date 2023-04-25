@@ -60,9 +60,10 @@ export default class WebGLScene {
       .then((results) => {
         results.forEach((result, i) => {
           if (result.status === `fulfilled`) {
-            const material = new CustomMaterial(result.value);
+            const objectSettings = Object.values(this.sceneObjects);
+            const material = new CustomMaterial(result.value, THREE.Math.degToRad(objectSettings[i].hue));
             const image = new THREE.Mesh(planeGeometry, material);
-            const imagePosition = Object.values(this.sceneObjects)[i].position;
+            const imagePosition = objectSettings[i].position;
             image.position.set(imagePosition.x, imagePosition.y, imagePosition.z);
             image.scale.set(imagePosition.width, imagePosition.height, 1);
             this.scene.add(image);
