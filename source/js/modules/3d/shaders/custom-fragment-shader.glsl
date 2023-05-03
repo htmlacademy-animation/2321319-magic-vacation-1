@@ -1,3 +1,5 @@
+#define PI 3.1415926538
+
 precision mediump float;
 
 uniform vec2 canvasSize;
@@ -21,6 +23,8 @@ const float IMAGE_RATIO = 2.0;
 const float BORDER_WIDTH = 0.0025;
 const float STRENGTH = 0.5;
 const vec4 BORDER_COLOR = vec4(1.0, 1.0, 1.0, 0.15);
+const float GLARE_ANGLE_START = 2.0 * PI / 3.0;
+const float GLARE_ANGLE_END = 5.0 * PI / 6.0;
 
 vec4 getColorWithHue(vec4 texel, float hue) {
 	vec3 color = texel.rgb;
@@ -50,8 +54,10 @@ void mixColor(vec4 color, inout vec4 texel) {
 
 void drawBubble(Bubble bubble, inout vec4 texel) {
 	vec2 uv = vec2(vUv.x * IMAGE_RATIO, vUv.y);
-	vec2 currentPosition = vec2(bubble.center.x * IMAGE_RATIO, bubble.center.y);
-    float distToBubbleCenter = length(uv - currentPosition);
+	vec2 bubbleCenter = vec2(bubble.center.x * IMAGE_RATIO, bubble.center.y);
+	float glareRadius = 0.85 * bubble.radius;
+	vec2 currentToBubbleCenter = uv - bubbleCenter;
+    float distToBubbleCenter = length(currentToBubbleCenter);
 
 	if (distToBubbleCenter < bubble.radius) {
 		vec2 modifiedUV = getModifiedUV(
@@ -61,6 +67,14 @@ void drawBubble(Bubble bubble, inout vec4 texel) {
 			STRENGTH
 		);
 		texel = texture2D(map, modifiedUV);
+
+		bool isOnGlareBorder = distToBubbleCenter <= glareRadius + BORDER_WIDTH && distToBubbleCenter > glareRadius;
+		float angle = atan(currentToBubbleCenter.y, currentToBubbleCenter.x);
+		bool isInSector = angle >= GLARE_ANGLE_START && angle <= GLARE_ANGLE_END;
+		
+		if (isOnGlareBorder && isInSector) {
+			mixColor(BORDER_COLOR, texel);
+		}
 
 	} else if (distToBubbleCenter <= bubble.radius + BORDER_WIDTH) {
 		mixColor(BORDER_COLOR, texel);
