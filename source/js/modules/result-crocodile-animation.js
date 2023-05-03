@@ -9,11 +9,13 @@ export default class ResultSealAnimation extends ResultAnimation {
 
   setContainerWidth() {
     const imageWrapper = document.querySelector(`.screen--show .result__image`);
-    this.canvasWidth = imageWrapper.clientWidth;
-    this.canvasHeight =
-      window.innerHeight > imageWrapper.clientWidth
-        ? imageWrapper.clientWidth
-        : window.innerHeight;
+    if (imageWrapper) {
+      this.canvasWidth = imageWrapper.clientWidth;
+      this.canvasHeight =
+        window.innerHeight > imageWrapper.clientWidth
+          ? imageWrapper.clientWidth
+          : window.innerHeight;
+    }
     super.setContainerWidth();
   }
 

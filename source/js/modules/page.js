@@ -205,7 +205,8 @@ export default class Page {
         width: imageWidth,
         height: imageHeight
       },
-      hue: 0.0
+      hue: 0.0,
+      bubbles: []
     };
     Object.entries(slideSettings).forEach(([key, value], index) => {
       this.webGLObjects[key] = {
@@ -217,7 +218,24 @@ export default class Page {
           width: imageWidth,
           height: imageHeight
         },
-        hue: index === 1 ? -12.0 : 0.0
+        hue: index === 1 ? -12.0 : 0.0,
+        // нормализованные координаты
+        bubbles: index === 1
+          ? [
+            {
+              center: { x: 0.45, y: 0.75 },
+              radius: 0.08,
+            },
+            {
+              center: { x: 0.3, y: 0.6 },
+              radius: 0.06,
+            },
+            {
+              center: { x: 0.49, y: 0.4 },
+              radius: 0.03,
+            }
+          ]
+          : []
       };
     });
   }

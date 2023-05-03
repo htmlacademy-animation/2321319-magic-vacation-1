@@ -8,6 +8,7 @@ export default class ResultAnimation {
     this.runnungAnimation = null;
     this.startTime = null;
     this.lastFrameTime = null;
+    window.addEventListener(`resize`, () => this.setSizes());
   }
 
   drawElements() {
@@ -134,6 +135,12 @@ export default class ResultAnimation {
     this.canvas.width = this.canvasWidth;
     this.canvas.height = this.canvasHeight;
     this.canvas.top = 0;
+  }
+
+  setSizes() {
+    this.canvasWidth = window.innerWidth;
+    this.canvasHeight = window.innerHeight;
+    this.setContainerWidth();
   }
 
   startAnimation() {
