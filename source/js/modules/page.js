@@ -21,10 +21,7 @@ export default class Page {
 
     this.svgAnimations = {};
     this.jsAnimations = {};
-    this.webGLObjects = {};
-
-    this.initWebGLObjects();
-    this.webGLScene = new WebGLScene(document.getElementById(`3d-scene`), this.webGLObjects);
+    this.webGLScene = new WebGLScene(document.getElementById(`3d-scene`), this.getStorySettings());
     this.gameTimer = new GameTimer(5, 1);
     this.setTheme();
 
@@ -125,6 +122,10 @@ export default class Page {
         animation.element.stopAnimation();
       });
     }
+
+    if (event.detail.prevScreenId === Screen.STORY || event.detail.prevScreenId === Screen.TOP) {
+      this.webGLScene.stopAnimation();
+    }
   }
 
   runAnimationsForScreen(event) {
@@ -192,52 +193,8 @@ export default class Page {
     ];
   }
 
-  initWebGLObjects() {
-    const slideSettings = this.swiper.getSlideSettings();
-    const imageWidth = 2048;
-    const imageHeight = 1024;
-    this.webGLObjects[Screen.TOP] = {
-      url: `./img/module-5/scenes-textures/scene-0.png`,
-      position: {
-        x: 0,
-        y: 0,
-        z: 0,
-        width: imageWidth,
-        height: imageHeight
-      },
-      hue: 0.0,
-      bubbles: []
-    };
-    Object.entries(slideSettings).forEach(([key, value], index) => {
-      this.webGLObjects[key] = {
-        url: value.backgroundImage,
-        position: {
-          x: imageWidth * (index + 1),
-          y: 0,
-          z: 0,
-          width: imageWidth,
-          height: imageHeight
-        },
-        hue: index === 1 ? -12.0 : 0.0,
-        // нормализованные координаты
-        bubbles: index === 1
-          ? [
-            {
-              center: { x: 0.45, y: 0.75 },
-              radius: 0.08,
-            },
-            {
-              center: { x: 0.3, y: 0.6 },
-              radius: 0.06,
-            },
-            {
-              center: { x: 0.49, y: 0.4 },
-              radius: 0.03,
-            }
-          ]
-          : []
-      };
-    });
+  getStorySettings() {
+    return this.swiper.getSlideSettings();
   }
 
   initPrizeAnimations() {
