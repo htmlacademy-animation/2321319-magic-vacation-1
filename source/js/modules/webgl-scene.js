@@ -62,33 +62,8 @@ export default class WebGLScene {
           width: imageWidth,
           height: imageHeight
         },
-        hue: index === 1 ? -12.0 : 0.0,
-        // нормализованные координаты
-        bubbles: index === 1
-          ? [
-            {
-              center: { x: 0.45, y: 0.75 },
-              radius: 0.08,
-            },
-            {
-              center: { x: 0.3, y: 0.6 },
-              radius: 0.06,
-            },
-            {
-              center: { x: 0.49, y: 0.4 },
-              radius: 0.03,
-            }
-          ]
-          : [],
-        durations: [1800, 600],
-        finites: [false, true],
-        delays: [0, 200],
-        animationFunctions: index === 1
-          ? [
-            (progress) => this.hueBlinkAnimationFunct(progress),
-            (progress) => this.bubblesMoveAnimationFunct(progress)
-          ]
-          : [],
+        hue: 0.0,
+        ...this.getSceneObjectsSettings(index)
       };
     });
   }
@@ -162,6 +137,45 @@ export default class WebGLScene {
     });
   }
 
+  getSceneObjectsSettings(index) {
+    return index === 1 ? {
+      bubbles: this.getInitialBubblesPosition(),
+      durations: [2000, 2500, 2700, 2800],
+      finites: [false, true, true, true],
+      delays: [0, 200, 700, 900],
+      animationFunctions: [
+        (progress) => this.hueBlinkAnimationFunc(progress),
+        (progress) => this.firstBubbleMoveAnimationFunc(progress),
+        (progress) => this.secondBubbleMoveAnimationFunc(progress),
+        (progress) => this.thirdBubbleMoveAnimationFunc(progress)
+      ]
+    }
+    : {
+      bubbles: [],
+      durations: [],
+      finites: [],
+      delays: [],
+      animationFunctions: []
+    };
+  }
+
+  getInitialBubblesPosition() {
+    return [
+      {
+        center: { x: 0.45, y: -0.16 },
+        radius: 0.08,
+      },
+      {
+        center: { x: 0.3, y: -0.12 },
+        radius: 0.06,
+      },
+      {
+        center: { x: 0.49, y: -0.06 },
+        radius: 0.03,
+      }
+    ];
+  }
+
   renderSceneObject(sceneObjectId) {
     this.currentSceneObject = sceneObjectId;
     if (this.isLoading) {
@@ -206,6 +220,8 @@ export default class WebGLScene {
     }
 
     this.stopAnimation();
+    this.startTime = Date.now();
+    this.lastFrameTime = this.startTime;
     this.tick();
   }
 
@@ -237,17 +253,58 @@ export default class WebGLScene {
     if (this.runnungAnimation) {
       cancelAnimationFrame(this.runnungAnimation);
       this.runnungAnimation = this.startTime = this.lastFrameTime = null;
+      if (this.sceneObjects[this.currentSceneObject].bubbles.length) {
+        this.sceneObjects[this.currentSceneObject].bubbles = this.getInitialBubblesPosition();
+        this.sceneObjects[this.currentSceneObject].bubbles.forEach((el, index) => {
+          this.sceneObjects[this.currentSceneObject].material.uniforms.bubbles.value[index] = {
+            center: new THREE.Vector2(el.center.x, el.center.y),
+            radius: el.radius
+          };
+        });
+        this.sceneObjects[this.currentSceneObject].material.uniforms.hue.value = 0.0;
+        this.sceneObjects[this.currentSceneObject].material.needsUpdate = true;
+      }
     }
   }
 
-  hueBlinkAnimationFunct(progress) {
+  hueBlinkAnimationFunc(progress) {
     const hueForProgress = 6 * Math.sin(6.3 * progress + 1.6) - 6 + Math.random();
     const hueRad = THREE.Math.degToRad(hueForProgress);
     this.sceneObjects[this.currentSceneObject].material.uniforms.hue.value = hueRad;
     this.sceneObjects[this.currentSceneObject].material.needsUpdate = true;
   }
 
-  bubblesMoveAnimationFunct(progress) {
+  firstBubbleMoveAnimationFunc(progress) {
+    const newY = this.getProgressedValue(progress, 2 * this.sceneObjects[this.currentSceneObject].bubbles[0].radius);
+    const newX = 0.035 * Math.sin(15 * progress + 1.5) * Math.exp(-0.8 * progress);
+    this.bubbleMoveAnimation(0, newX, newY);
+  }
 
+  secondBubbleMoveAnimationFunc(progress) {
+    const newY = this.getProgressedValue(progress, 2 * this.sceneObjects[this.currentSceneObject].bubbles[1].radius);
+    const newX = 0.025 * Math.sin(18 * progress + 1.5) * Math.exp(-0.8 * progress);
+    this.bubbleMoveAnimation(1, newX, newY);
+  }
+
+  thirdBubbleMoveAnimationFunc(progress) {
+    const newY = this.getProgressedValue(progress, 2 * this.sceneObjects[this.currentSceneObject].bubbles[2].radius);
+    const newX = 0.02 * Math.sin(18 * progress + 1.5) * Math.exp(-0.8 * progress);
+    this.bubbleMoveAnimation(2, newX, newY);
+  }
+
+  getProgressedValue(progress, diameter) {
+    return progress + diameter + diameter * progress;
+  }
+
+  bubbleMoveAnimation(index, curX, curY) {
+    let [x, y] = [
+      this.sceneObjects[this.currentSceneObject].bubbles[index].center.x,
+      this.sceneObjects[this.currentSceneObject].bubbles[index].center.y
+    ];
+    y += curY;
+    x += curX;
+
+    this.sceneObjects[this.currentSceneObject].material.uniforms.bubbles.value[index].center = new THREE.Vector2(x, y);
+    this.sceneObjects[this.currentSceneObject].material.needsUpdate = true;
   }
 }
