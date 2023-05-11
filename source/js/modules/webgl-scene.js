@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import CustomMaterial from "./3d/custom-material";
 import {Screen} from "../general/consts";
 
@@ -14,12 +15,13 @@ export default class WebGLScene {
     this.backgroundColor = `#5f458c`;
     this.near = 0.1;
     this.far = 1000;
-    this.fov =
-      (180 * (2 * Math.atan(this.canvas.height / 2 / this.far))) / Math.PI;
+    this.fov = 35;
+    // this.fov =
+    //   (180 * (2 * Math.atan(this.canvas.height / 2 / this.far))) / Math.PI;
     this.cameraPosition = {
       x: 0,
       y: 0,
-      z: 1000,
+      z: 750,
     };
     this.isLoading = true;
     this.currentSceneObject = null;
@@ -34,8 +36,8 @@ export default class WebGLScene {
   }
 
   initSceneObjects(storySettings) {
-    const imageWidth = 2048;
-    const imageHeight = 1024;
+    const imageWidth = 1024;
+    const imageHeight = 512;
     this.sceneObjects[Screen.TOP] = {
       url: `./img/module-5/scenes-textures/scene-0.png`,
       position: {
@@ -83,17 +85,27 @@ export default class WebGLScene {
       this.near,
       this.far
     );
+    
     this.camera.position.set(
       this.cameraPosition.x,
       this.cameraPosition.y,
       this.cameraPosition.z
     );
 
+    // TODO: убрать после завершения работы
+    // this.controls = new OrbitControls(this.camera, this.canvas);
+    // this.controls.addEventListener(`change`, () => {
+    //   this.renderer.render(this.scene, this.camera);
+    // });
+    // this.controls.update();
+
     this.setColor();
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(this.canvas.width, this.canvas.height);
 
+    this.initLight();
     this.initObjects();
+    this.init3dObjects();
   }
 
   initObjects() {
@@ -135,6 +147,44 @@ export default class WebGLScene {
         this.renderSceneObject(this.currentSceneObject);
       }
     });
+  }
+
+  init3dObjects() {
+    const geometry = new THREE.SphereGeometry(200, 80, 80);
+
+    const material = new THREE.MeshStandardMaterial({
+      color: 0x000000,
+      metalness: 0.05,
+      emissive: 0x0,
+      roughness: 0.5
+    });
+
+    const sphereMesh = new THREE.Mesh(geometry, material);
+    this.scene.add(sphereMesh);
+  }
+
+  initLight() {
+    const light = new THREE.Group();
+
+    const lightDirection = new THREE.DirectionalLight(0xffffff, 0.84);
+    lightDirection.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z);
+    const targetForLight = new THREE.Object3D();
+    const targetY = this.camera.position.z * Math.tan(THREE.Math.degToRad(15.0)); // прилежащий катет на тангенс
+    targetForLight.position.set(this.camera.position.x, targetY, this.camera.position.z);
+    this.scene.add(targetForLight);
+    lightDirection.target = targetForLight;
+    light.add(lightDirection);
+
+    const lightPoint1 = new THREE.PointLight(0xF6F2FF, 0.60, 975, 2); // dist ? (>2800)
+    lightPoint1.position.set(-785, -350, -710);
+    light.add(lightPoint1);
+
+    const lightPoint2 = new THREE.PointLight(0xF5FEFF, 0.95, 975, 2); // dist ? (>2800)
+    lightPoint2.position.set(730, 800, -985);
+    light.add(lightPoint2);
+
+    light.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z);
+    this.scene.add(light);
   }
 
   getSceneObjectsSettings(index) {
@@ -184,7 +234,7 @@ export default class WebGLScene {
     const objectPosition = this.sceneObjects[sceneObjectId].position;
     this.backgroundColor = getComputedStyle(document.body)
       .getPropertyValue(`--secondary-color`)
-      .trim();
+      .trim() || this.backgroundColor;
     this.setColor();
     this.camera.position.set(
       objectPosition.x,
