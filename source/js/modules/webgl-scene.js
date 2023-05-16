@@ -1,7 +1,9 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import CustomMaterial from "./3d/custom-material";
-import {Screen} from "../general/consts";
+import { Screen, ThemeColor } from "../general/consts";
+import PyramidScene from "./3d/scenes/story-pyramid-scene";
+import SnowmanScene from "./3d/scenes/story-snowman-scene";
 
 export default class WebGLScene {
   constructor(canvasElement, storySettings) {
@@ -9,12 +11,13 @@ export default class WebGLScene {
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
     this.aspectRatio = this.canvas.width / this.canvas.height;
+    this.storyScenes = null;
     this.sceneObjects = {};
     this.initSceneObjects(storySettings);
     this.alpha = 1;
     this.backgroundColor = `#5f458c`;
     this.near = 0.1;
-    this.far = 1000;
+    this.far = 2000;
     this.fov = 35;
     // this.fov =
     //   (180 * (2 * Math.atan(this.canvas.height / 2 / this.far))) / Math.PI;
@@ -38,6 +41,11 @@ export default class WebGLScene {
   initSceneObjects(storySettings) {
     const imageWidth = 1024;
     const imageHeight = 512;
+    const scenes = {
+      [ThemeColor.BLUE]: new PyramidScene(),
+      [ThemeColor.LIGHT_BLUE]: new SnowmanScene(),
+    };
+
     this.sceneObjects[Screen.TOP] = {
       url: `./img/module-5/scenes-textures/scene-0.png`,
       position: {
@@ -45,14 +53,15 @@ export default class WebGLScene {
         y: 0,
         z: 0,
         width: imageWidth,
-        height: imageHeight
+        height: imageHeight,
       },
+      scene: null,
       hue: 0.0,
       bubbles: [],
       durations: [],
       finites: [],
       delays: [],
-      animationFunctions: []
+      animationFunctions: [],
     };
     Object.entries(storySettings).forEach(([key, value], index) => {
       this.sceneObjects[key] = {
@@ -62,10 +71,11 @@ export default class WebGLScene {
           y: 0,
           z: 0,
           width: imageWidth,
-          height: imageHeight
+          height: imageHeight,
         },
+        scene: scenes[key] ? scenes[key] : null,
         hue: 0.0,
-        ...this.getSceneObjectsSettings(index)
+        ...this.getSceneObjectsSettings(index),
       };
     });
   }
@@ -76,7 +86,7 @@ export default class WebGLScene {
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
       alpha: true,
-      antialias: true
+      antialias: true,
     });
 
     this.camera = new THREE.PerspectiveCamera(
@@ -85,7 +95,7 @@ export default class WebGLScene {
       this.near,
       this.far
     );
-    
+
     this.camera.position.set(
       this.cameraPosition.x,
       this.cameraPosition.y,
@@ -105,14 +115,12 @@ export default class WebGLScene {
 
     this.initLight();
     this.initObjects();
-    this.init3dObjects();
   }
 
   initObjects() {
     const loadingManager = new THREE.LoadingManager();
     const textureLoader = new THREE.TextureLoader(loadingManager);
 
-    const planeGeometry = new THREE.PlaneGeometry(1, 1);
     const fetches = Object.values(this.sceneObjects).map((texture) => {
       return new Promise((resolve, reject) => {
         textureLoader.load(texture.url, resolve, reject);
@@ -121,26 +129,9 @@ export default class WebGLScene {
     Promise.allSettled(fetches).then((results) => {
       results.forEach((result, i) => {
         if (result.status === `fulfilled`) {
-          const objectSettings = Object.values(this.sceneObjects);
-          const key = Object.keys(this.sceneObjects)[i];
-          const material = new CustomMaterial(
-            new THREE.Vector2(this.canvas.width, this.canvas.height),
-            result.value,
-            THREE.Math.degToRad(objectSettings[i].hue),
-            !!objectSettings[i].bubbles.length,
-            objectSettings[i].bubbles.map((el) => ({
-              center: new THREE.Vector2(el.center.x, el.center.y),
-              radius: el.radius,
-            }))
-          );
-          material.needsUpdate = true;
-          this.sceneObjects[key].material = material;
-          const image = new THREE.Mesh(planeGeometry, material);
-          const imagePosition = objectSettings[i].position;
-          image.position.set(imagePosition.x, imagePosition.y, imagePosition.z);
-          image.scale.set(imagePosition.width, imagePosition.height, 1);
-          this.scene.add(image);
+          this.initImage(result.value, i);
         }
+        this.init3dObject(i);
       });
       this.isLoading = false;
       if (this.currentSceneObject !== null) {
@@ -149,18 +140,40 @@ export default class WebGLScene {
     });
   }
 
-  init3dObjects() {
-    const geometry = new THREE.SphereGeometry(200, 80, 80);
+  initImage(imageValue, indexOfScene) {
+    const planeGeometry = new THREE.PlaneGeometry(1, 1);
+    const objectSettings = Object.values(this.sceneObjects);
+    const key = Object.keys(this.sceneObjects)[indexOfScene];
+    const material = new CustomMaterial(
+      new THREE.Vector2(this.canvas.width, this.canvas.height),
+      imageValue,
+      THREE.Math.degToRad(objectSettings[indexOfScene].hue),
+      !!objectSettings[indexOfScene].bubbles.length,
+      objectSettings[indexOfScene].bubbles.map((el) => ({
+        center: new THREE.Vector2(el.center.x, el.center.y),
+        radius: el.radius,
+      }))
+    );
+    material.needsUpdate = true;
+    this.sceneObjects[key].material = material;
+    const image = new THREE.Mesh(planeGeometry, material);
+    const imagePosition = objectSettings[indexOfScene].position;
+    image.position.set(imagePosition.x, imagePosition.y, imagePosition.z);
+    image.scale.set(imagePosition.width, imagePosition.height, 1);
+    this.scene.add(image);
+  }
 
-    const material = new THREE.MeshStandardMaterial({
-      color: 0x000000,
-      metalness: 0.05,
-      emissive: 0x0,
-      roughness: 0.5
-    });
-
-    const sphereMesh = new THREE.Mesh(geometry, material);
-    this.scene.add(sphereMesh);
+  init3dObject(indexOfScene) {
+    const key = Object.keys(this.sceneObjects)[indexOfScene];
+    const sceneSettings = this.sceneObjects[key];
+    if (sceneSettings.scene) {
+      sceneSettings.scene.initObjects();
+      sceneSettings.scene.addToScene(this.scene, [
+        sceneSettings.position.x,
+        sceneSettings.position.y,
+        sceneSettings.position.z,
+      ]);
+    }
   }
 
   initLight() {
@@ -175,11 +188,11 @@ export default class WebGLScene {
     lightDirection.target = targetForLight;
     light.add(lightDirection);
 
-    const lightPoint1 = new THREE.PointLight(0xF6F2FF, 0.60, 975, 2); // dist ? (>2800)
+    const lightPoint1 = new THREE.PointLight(0xf6f2ff, 0.6, 2800, 2);
     lightPoint1.position.set(-785, -350, -710);
     light.add(lightPoint1);
 
-    const lightPoint2 = new THREE.PointLight(0xF5FEFF, 0.95, 975, 2); // dist ? (>2800)
+    const lightPoint2 = new THREE.PointLight(0xf5feff, 0.95, 2800, 2);
     lightPoint2.position.set(730, 800, -985);
     light.add(lightPoint2);
 
