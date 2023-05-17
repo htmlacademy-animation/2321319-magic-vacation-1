@@ -7,6 +7,7 @@ export default class SnowmanScene extends DefaultScene {
     this.initSnowman();
   }
 
+  // TODO: move object settings to config
   initSnowman() {
     this.snowman = new THREE.Group();
     let geometry = new THREE.SphereGeometry(44, 80, 80);

@@ -8,6 +8,7 @@ export default class PyramidScene extends DefaultScene {
     this.initFlashlight();
   }
 
+  // TODO: move object settings to config
   initPyramid() {
     this.pyramid = new THREE.Group();
     const geometry = new THREE.CylinderGeometry(0, 125, 280, 4, 1);

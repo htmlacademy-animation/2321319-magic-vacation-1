@@ -1,19 +1,20 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import CustomMaterial from "./3d/custom-material";
+import CustomMaterial from "./3d/materials/custom-material";
 import { Screen, ThemeColor } from "../general/consts";
+import ObjectLoader from "./3d/objects/object-loader";
 import PyramidScene from "./3d/scenes/story-pyramid-scene";
 import SnowmanScene from "./3d/scenes/story-snowman-scene";
+import IntroScene from "./3d/scenes/intro-scene";
 
 export default class WebGLScene {
-  constructor(canvasElement, storySettings) {
+  constructor(canvasElement) {
     this.canvas = canvasElement;
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
     this.aspectRatio = this.canvas.width / this.canvas.height;
     this.storyScenes = null;
     this.sceneObjects = {};
-    this.initSceneObjects(storySettings);
     this.alpha = 1;
     this.backgroundColor = `#5f458c`;
     this.near = 0.1;
@@ -36,48 +37,6 @@ export default class WebGLScene {
 
     window.addEventListener(`resize`, () => this.setSizes());
     this.init();
-  }
-
-  initSceneObjects(storySettings) {
-    const imageWidth = 1024;
-    const imageHeight = 512;
-    const scenes = {
-      [ThemeColor.BLUE]: new PyramidScene(),
-      [ThemeColor.LIGHT_BLUE]: new SnowmanScene(),
-    };
-
-    this.sceneObjects[Screen.TOP] = {
-      url: `./img/module-5/scenes-textures/scene-0.png`,
-      position: {
-        x: 0,
-        y: 0,
-        z: 0,
-        width: imageWidth,
-        height: imageHeight,
-      },
-      scene: null,
-      hue: 0.0,
-      bubbles: [],
-      durations: [],
-      finites: [],
-      delays: [],
-      animationFunctions: [],
-    };
-    Object.entries(storySettings).forEach(([key, value], index) => {
-      this.sceneObjects[key] = {
-        url: value.backgroundImage,
-        position: {
-          x: imageWidth * (index + 1),
-          y: 0,
-          z: 0,
-          width: imageWidth,
-          height: imageHeight,
-        },
-        scene: scenes[key] ? scenes[key] : null,
-        hue: 0.0,
-        ...this.getSceneObjectsSettings(index),
-      };
-    });
   }
 
   init() {
@@ -103,11 +62,11 @@ export default class WebGLScene {
     );
 
     // TODO: убрать после завершения работы
-    // this.controls = new OrbitControls(this.camera, this.canvas);
-    // this.controls.addEventListener(`change`, () => {
-    //   this.renderer.render(this.scene, this.camera);
-    // });
-    // this.controls.update();
+    this.controls = new OrbitControls(this.camera, this.canvas);
+    this.controls.addEventListener(`change`, () => {
+      this.renderer.render(this.scene, this.camera);
+    });
+    this.controls.update();
 
     this.setColor();
     this.renderer.setPixelRatio(window.devicePixelRatio);
@@ -115,65 +74,6 @@ export default class WebGLScene {
 
     this.initLight();
     this.initObjects();
-  }
-
-  initObjects() {
-    const loadingManager = new THREE.LoadingManager();
-    const textureLoader = new THREE.TextureLoader(loadingManager);
-
-    const fetches = Object.values(this.sceneObjects).map((texture) => {
-      return new Promise((resolve, reject) => {
-        textureLoader.load(texture.url, resolve, reject);
-      });
-    });
-    Promise.allSettled(fetches).then((results) => {
-      results.forEach((result, i) => {
-        if (result.status === `fulfilled`) {
-          this.initImage(result.value, i);
-        }
-        this.init3dObject(i);
-      });
-      this.isLoading = false;
-      if (this.currentSceneObject !== null) {
-        this.renderSceneObject(this.currentSceneObject);
-      }
-    });
-  }
-
-  initImage(imageValue, indexOfScene) {
-    const planeGeometry = new THREE.PlaneGeometry(1, 1);
-    const objectSettings = Object.values(this.sceneObjects);
-    const key = Object.keys(this.sceneObjects)[indexOfScene];
-    const material = new CustomMaterial(
-      new THREE.Vector2(this.canvas.width, this.canvas.height),
-      imageValue,
-      THREE.Math.degToRad(objectSettings[indexOfScene].hue),
-      !!objectSettings[indexOfScene].bubbles.length,
-      objectSettings[indexOfScene].bubbles.map((el) => ({
-        center: new THREE.Vector2(el.center.x, el.center.y),
-        radius: el.radius,
-      }))
-    );
-    material.needsUpdate = true;
-    this.sceneObjects[key].material = material;
-    const image = new THREE.Mesh(planeGeometry, material);
-    const imagePosition = objectSettings[indexOfScene].position;
-    image.position.set(imagePosition.x, imagePosition.y, imagePosition.z);
-    image.scale.set(imagePosition.width, imagePosition.height, 1);
-    this.scene.add(image);
-  }
-
-  init3dObject(indexOfScene) {
-    const key = Object.keys(this.sceneObjects)[indexOfScene];
-    const sceneSettings = this.sceneObjects[key];
-    if (sceneSettings.scene) {
-      sceneSettings.scene.initObjects();
-      sceneSettings.scene.addToScene(this.scene, [
-        sceneSettings.position.x,
-        sceneSettings.position.y,
-        sceneSettings.position.z,
-      ]);
-    }
   }
 
   initLight() {
@@ -198,6 +98,94 @@ export default class WebGLScene {
 
     light.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z);
     this.scene.add(light);
+  }
+
+  async initObjects() {
+    this.objectLoader = new ObjectLoader();
+    await this.objectLoader.initObjects();
+    this.initScenesSettings();
+    Object.entries(this.sceneObjects).map(([key, _value]) => {
+      this.initImage(this.objectLoader.getObjectByName(key).object, key);
+      this.init3dSceneObjects(key);
+    });
+    this.isLoading = false;
+    if (this.currentSceneObject !== null) {
+      this.renderSceneObject(this.currentSceneObject);
+    }
+  }
+
+  initScenesSettings() {
+    const imageWidth = 1024;
+    const imageHeight = 512;
+    const scenes = {
+      [Screen.TOP]: new IntroScene(this.objectLoader),
+      [ThemeColor.BLUE]: new PyramidScene(this.objectLoader),
+      [ThemeColor.LIGHT_BLUE]: new SnowmanScene(this.objectLoader),
+    };
+
+    this.sceneObjects[Screen.TOP] = {
+      position: {
+        x: 0,
+        y: 0,
+        z: 0,
+        width: imageWidth,
+        height: imageHeight,
+      },
+      scene: scenes[Screen.TOP],
+      hue: 0.0,
+      bubbles: [],
+      durations: [],
+      finites: [],
+      delays: [],
+      animationFunctions: [],
+    };
+    Object.entries(ThemeColor).forEach(([_key, value], index) => {
+      this.sceneObjects[value] = {
+        position: {
+          x: imageWidth * (index + 1),
+          y: 0,
+          z: 0,
+          width: imageWidth,
+          height: imageHeight,
+        },
+        scene: scenes[value] ? scenes[value] : null,
+        hue: 0.0,
+        ...this.getSceneObjectsSettings(index),
+      };
+    });
+  }
+
+  initImage(imageValue, sceneKey) {
+    const planeGeometry = new THREE.PlaneGeometry(1, 1);
+    const material = new CustomMaterial(
+      new THREE.Vector2(this.canvas.width, this.canvas.height),
+      imageValue,
+      THREE.Math.degToRad(this.sceneObjects[sceneKey].hue),
+      !!this.sceneObjects[sceneKey].bubbles.length,
+      this.sceneObjects[sceneKey].bubbles.map((el) => ({
+        center: new THREE.Vector2(el.center.x, el.center.y),
+        radius: el.radius,
+      }))
+    );
+    material.needsUpdate = true;
+    this.sceneObjects[sceneKey].material = material;
+    const image = new THREE.Mesh(planeGeometry, material);
+    const imagePosition = this.sceneObjects[sceneKey].position;
+    image.position.set(imagePosition.x, imagePosition.y, imagePosition.z);
+    image.scale.set(imagePosition.width, imagePosition.height, 1);
+    this.scene.add(image);
+  }
+
+  init3dSceneObjects(sceneKey) {
+    const sceneSettings = this.sceneObjects[sceneKey];
+    if (sceneSettings.scene) {
+      sceneSettings.scene.initObjects();
+      sceneSettings.scene.addToScene(this.scene, [
+        sceneSettings.position.x,
+        sceneSettings.position.y,
+        sceneSettings.position.z,
+      ]);
+    }
   }
 
   getSceneObjectsSettings(index) {
@@ -254,6 +242,9 @@ export default class WebGLScene {
       objectPosition.y,
       this.cameraPosition.z
     );
+    this.controls.target = new THREE.Vector3(objectPosition.x,
+      objectPosition.y,
+      0);
     this.render();
     this.startAnimation();
   }
