@@ -64255,12 +64255,12 @@ class ExtrudeHelper {
   constructor(objectMap) {
     this.objectMap = objectMap;
     this.baseSettings = {
-        steps: 2,
+        steps: 4,
         depth: 8,
         bevelSize: 2,
         bevelThickness: 2,
         bevelOffset: 0,
-        bevelSegments: 8
+        bevelSegments: 5
       };
   }
 
@@ -64403,52 +64403,52 @@ const SceneObjects = {
     svgShapes: [
       {
         id: _general_consts__WEBPACK_IMPORTED_MODULE_0__["SvgShape"].FLAMINGO.id,
-        position: [-180, 200, 50],
-        scale: [1, 1, 1],
+        position: [-150, 150, 50],
+        scale: [0.6, 0.6, 0.6],
         rotation: [0, 0, 180],
-        extrudeSettings: {},
+        extrudeSettings: {bevelOffset: -2},
       },
       {
         id: _general_consts__WEBPACK_IMPORTED_MODULE_0__["SvgShape"].SNOWFLAKE.id,
         position: [-190, -40, 50],
         scale: [1, 1, 1],
         rotation: [0, 0, 180],
-        extrudeSettings: {},
+        extrudeSettings: {bevelOffset: -2},
       },
       {
         id: _general_consts__WEBPACK_IMPORTED_MODULE_0__["SvgShape"].QUESTION.id,
         position: [20, -150, 50],
-        scale: [1, 1, 1],
+        scale: [0.8, 0.8, 0.8],
         rotation: [0, 180, 180],
-        extrudeSettings: {},
+        extrudeSettings: {bevelOffset: -2},
       },
       {
         id: _general_consts__WEBPACK_IMPORTED_MODULE_0__["SvgShape"].FLOWER.id,
         position: [290, 10, 100],
-        scale: [0.5, 0.5, 1],
+        scale: [0.2, 0.2, 1],
         rotation: [0, 0, 180],
-        extrudeSettings: { depth: 4 },
+        extrudeSettings: { depth: 4, bevelOffset: -2 },
       },
       {
         id: _general_consts__WEBPACK_IMPORTED_MODULE_0__["SvgShape"].KEYHOLE.id,
         position: [70, 70, 50],
         scale: [0.09, 0.09, 1],
         rotation: [0, 0, 180],
-        extrudeSettings: { depth: 20 },
+        extrudeSettings: { depth: 20, bevelOffset: -2 },
       },
       {
         id: _general_consts__WEBPACK_IMPORTED_MODULE_0__["SvgShape"].LEAF.id,
         position: [200, 200, 50],
-        scale: [1, 1, 1],
+        scale: [0.8, 0.8, 0.8],
         rotation: [0, 180, 180],
-        extrudeSettings: {},
+        extrudeSettings: {bevelOffset: -2},
       },
       {
         id: _general_consts__WEBPACK_IMPORTED_MODULE_0__["SvgShape"].LEAF.id,
         position: [150, 150, 50],
-        scale: [1, 1, 1],
+        scale: [0.8, 0.8, 0.8],
         rotation: [0, 180, 180],
-        extrudeSettings: { depth: 3, bevelThickness: 3, bevelSize: 3 },
+        extrudeSettings: { depth: 3, bevelThickness: 3, bevelSize: 3, bevelOffset: -3 },
       },
     ],
   },
