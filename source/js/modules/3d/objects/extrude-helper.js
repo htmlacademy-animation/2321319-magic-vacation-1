@@ -4,12 +4,12 @@ export default class ExtrudeHelper {
   constructor(objectMap) {
     this.objectMap = objectMap;
     this.baseSettings = {
-        steps: 2,
+        steps: 4,
         depth: 8,
         bevelSize: 2,
         bevelThickness: 2,
         bevelOffset: 0,
-        bevelSegments: 8
+        bevelSegments: 5
       };
   }
 
