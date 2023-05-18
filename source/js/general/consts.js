@@ -21,14 +21,6 @@ export const ObjectType = {
   SVG: 1,
 };
 
-export const SceneImage = {
-  [Screen.TOP]: `img/module-5/scenes-textures/scene-0.png`,
-  [ThemeColor.LIGHT_PURPLE]: `./img/module-5/scenes-textures/scene-1.png`,
-  [ThemeColor.BLUE]: `./img/module-5/scenes-textures/scene-2.png`,
-  [ThemeColor.LIGHT_BLUE]: `./img/module-5/scenes-textures/scene-3.png`,
-  [ThemeColor.PURPLE]: `./img/module-5/scenes-textures/scene-4.png`,
-};
-
 export const SvgShape = {
   FLAMINGO: {
     id: `FLAMINGO`,

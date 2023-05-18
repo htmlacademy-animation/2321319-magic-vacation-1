@@ -6,6 +6,7 @@ import ObjectLoader from "./3d/objects/object-loader";
 import PyramidScene from "./3d/scenes/story-pyramid-scene";
 import SnowmanScene from "./3d/scenes/story-snowman-scene";
 import IntroScene from "./3d/scenes/intro-scene";
+import DogScene from "./3d/scenes/story-dog-scene";
 
 export default class WebGLScene {
   constructor(canvasElement) {
@@ -119,6 +120,7 @@ export default class WebGLScene {
     const imageHeight = 512;
     const scenes = {
       [Screen.TOP]: new IntroScene(this.objectLoader),
+      [ThemeColor.LIGHT_PURPLE]: new DogScene(this.objectLoader),
       [ThemeColor.BLUE]: new PyramidScene(this.objectLoader),
       [ThemeColor.LIGHT_BLUE]: new SnowmanScene(this.objectLoader),
     };

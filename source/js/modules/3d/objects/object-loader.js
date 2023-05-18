@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader.js";
-import { ObjectType, SvgShape, SceneImage } from "../../../general/consts";
+import { ObjectType, SvgShape } from "../../../general/consts";
+import { SceneObjects } from "./scene-objects-config";
 import ExtrudeHelper from "./extrude-helper";
 
 export default class ObjectLoader {
@@ -18,15 +19,15 @@ export default class ObjectLoader {
     const loadingManager = new THREE.LoadingManager();
     const textureLoader = new THREE.TextureLoader(loadingManager);
 
-    const fetches = Object.values(SceneImage).map((texture) => {
+    const fetches = Object.values(SceneObjects).map((sceneConfig) => {
       return new Promise((resolve, reject) => {
-        textureLoader.load(texture, resolve, reject);
+        textureLoader.load(sceneConfig.backgroundImage, resolve, reject);
       });
     });
     await Promise.allSettled(fetches).then((results) => {
       results.forEach((result, i) => {
         if (result.status === `fulfilled`) {
-          this._addObject(ObjectType.IMAGE, result.value, i);
+          this._addObject(ObjectType.IMAGE, result.value, Object.keys(SceneObjects)[i]);
         }
         // TODO: error handling
       });
@@ -45,16 +46,14 @@ export default class ObjectLoader {
     await Promise.allSettled(fetches).then((results) => {
       results.forEach((result, i) => {
         if (result.status === `fulfilled`) {
-          this._addObject(ObjectType.SVG, result.value, i);
+          this._addObject(ObjectType.SVG, result.value, Object.values(SvgShape)[i].id);
         }
         // TODO: error handling
       });
     });
   }
 
-  _addObject(objectType, data, index) {
-    const config = objectType === ObjectType.SVG ? SvgShape : SceneImage;
-    const key = Object.keys(config)[index];
+  _addObject(objectType, data, key) {
     this.objectMap[key] = {
       type: objectType,
       object: data
