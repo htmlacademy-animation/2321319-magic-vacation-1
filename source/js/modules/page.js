@@ -21,7 +21,7 @@ export default class Page {
 
     this.svgAnimations = {};
     this.jsAnimations = {};
-    this.webGLScene = new WebGLScene(document.getElementById(`3d-scene`), this.getStorySettings());
+    this.webGLScene = new WebGLScene(document.getElementById(`3d-scene`));
     this.gameTimer = new GameTimer(5, 1);
     this.setTheme();
 
@@ -191,10 +191,6 @@ export default class Page {
         delay: 0
       }
     ];
-  }
-
-  getStorySettings() {
-    return this.swiper.getSlideSettings();
   }
 
   initPrizeAnimations() {
