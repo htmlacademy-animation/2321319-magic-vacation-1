@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader.js";
 import { ObjectType, SvgShape } from "../../../general/consts";
 import { SceneObjects } from "./scene-objects-config";
-import ExtrudeHelper from "./extrude-helper";
+import { ExtrudeHelper } from "./helpers";
 
 export default class ObjectLoader {
   constructor() {

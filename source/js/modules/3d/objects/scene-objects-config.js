@@ -1,4 +1,6 @@
+import * as THREE from "three";
 import { SvgShape, ThemeColor, Screen } from "../../../general/consts";
+import { getLathePointsBy } from "./helpers";
 
 export const SceneObjects = {
   [Screen.TOP]: {
@@ -10,21 +12,21 @@ export const SceneObjects = {
         position: [-150, 150, 50],
         scale: [0.6, 0.6, 0.6],
         rotation: [0, 0, 180],
-        extrudeSettings: {bevelOffset: -2},
+        extrudeSettings: { bevelOffset: -2 },
       },
       {
         id: SvgShape.SNOWFLAKE.id,
         position: [-190, -40, 50],
         scale: [1, 1, 1],
         rotation: [0, 0, 180],
-        extrudeSettings: {bevelOffset: -2},
+        extrudeSettings: { bevelOffset: -2 },
       },
       {
         id: SvgShape.QUESTION.id,
         position: [20, -150, 50],
         scale: [0.8, 0.8, 0.8],
         rotation: [0, 180, 180],
-        extrudeSettings: {bevelOffset: -2},
+        extrudeSettings: { bevelOffset: -2 },
       },
       {
         id: SvgShape.FLOWER.id,
@@ -45,14 +47,19 @@ export const SceneObjects = {
         position: [200, 200, 50],
         scale: [0.8, 0.8, 0.8],
         rotation: [0, 180, 180],
-        extrudeSettings: {bevelOffset: -2},
+        extrudeSettings: { bevelOffset: -2 },
       },
       {
         id: SvgShape.LEAF.id,
         position: [150, 150, 50],
         scale: [0.8, 0.8, 0.8],
         rotation: [0, 180, 180],
-        extrudeSettings: { depth: 3, bevelThickness: 3, bevelSize: 3, bevelOffset: -3 },
+        extrudeSettings: {
+          depth: 3,
+          bevelThickness: 3,
+          bevelSize: 3,
+          bevelOffset: -3,
+        },
       },
     ],
   },
@@ -136,7 +143,74 @@ export const SceneObjects = {
   },
   [ThemeColor.LIGHT_PURPLE]: {
     backgroundImage: `./img/module-5/scenes-textures/scene-1.png`,
-    primitives: [],
+    primitives: [
+      {
+        groupId: `chandelier`,
+        position: [30, 130, 0],
+        scale: [0.5, 0.5, 0.5],
+        rotation: [0, 0, 0],
+        children: [
+          {
+            id: `chandelierLathe`,
+            primitiveType: `LatheGeometry`,
+            primitiveSettings: [
+              getLathePointsBy(80, 40, 2).map((el) => new THREE.Vector2(...el)),
+              35,
+              0,
+              2 * Math.PI
+            ],
+            position: [0, 0, 0],
+            scale: [1, 1, 1],
+            rotation: [0, 0, 18],
+          },
+          {
+            id: `chandelierBody`,
+            primitiveType: `SphereGeometry`,
+            primitiveSettings: [60, 80, 80],
+            position: [0, 0, 0],
+            scale: [1, 1, 1],
+            rotation: [0, 0, 0],
+          },
+          {
+            id: `chandelierThread`,
+            primitiveType: `CylinderGeometry`,
+            primitiveSettings: [1, 1, 1000],
+            position: [0, 560, 0],
+            scale: [1, 1, 1],
+            rotation: [0, 0, 0],
+          },
+          {
+            id: `chandelierHanging`,
+            primitiveType: `SphereGeometry`,
+            primitiveSettings: [10, 80, 80],
+            position: [0, 120, 0],
+            scale: [1, 1, 1],
+            rotation: [0, 0, 0],
+          },
+        ],
+      },
+      {
+        groupId: `carpet`,
+        position: [50, -130, -50],
+        scale: [0.4, 0.4, 0.4],
+        rotation: [0, -80, 0],
+        children: [
+          {
+            id: `carpetLathe`,
+            primitiveType: `LatheGeometry`,
+            primitiveSettings: [
+              getLathePointsBy(763, 180, 3).map((el) => new THREE.Vector2(...el)),
+              12,
+              THREE.Math.degToRad(16),
+              THREE.Math.degToRad(74)
+            ],
+            position: [0, 0, 0],
+            scale: [1, 1, 1],
+            rotation: [0, 0, 0],
+          }
+        ],
+      },
+    ],
     svgShapes: [],
   },
   [ThemeColor.LIGHT_BLUE]: {
@@ -172,6 +246,27 @@ export const SceneObjects = {
             scale: [1, 1, 1],
             rotation: [0, 0, -90],
           },
+        ],
+      },
+      {
+        groupId: `road`,
+        position: [50, -130, -50],
+        scale: [0.4, 0.4, 0.4],
+        rotation: [0, -60, 0],
+        children: [
+          {
+            id: `roadLathe`,
+            primitiveType: `LatheGeometry`,
+            primitiveSettings: [
+              getLathePointsBy(732, 160, 3).map((el) => new THREE.Vector2(...el)),
+              12,
+              THREE.Math.degToRad(0),
+              THREE.Math.degToRad(90)
+            ],
+            position: [0, 0, 0],
+            scale: [1, 1, 1],
+            rotation: [0, 0, 0],
+          }
         ],
       },
     ],
