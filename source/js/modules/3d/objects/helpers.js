@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-export default class ExtrudeHelper {
+export class ExtrudeHelper {
   constructor(objectMap) {
     this.objectMap = objectMap;
     this.baseSettings = {
@@ -34,4 +34,8 @@ export default class ExtrudeHelper {
 
     return group;
   }
+}
+
+export function getLathePointsBy(offset, width, height) {
+  return [[offset, 0], [offset + width, 0], [offset + width, height], [offset, height], [offset, 0]];
 }
