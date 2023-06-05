@@ -24,7 +24,8 @@ export default class DefaultScene {
           const geometry = new THREE[object.primitiveType](
             ...object.primitiveSettings
           );
-          const mesh = new THREE.Mesh(geometry, this.baseMaterial);
+          const material = this.objectLoader.getMaterialByProps(object.materialType, object.color);
+          const mesh = new THREE.Mesh(geometry, material && material.object || this.baseMaterial);
           this.setPosition(
             mesh,
             object.position,
@@ -41,7 +42,8 @@ export default class DefaultScene {
 
   initSvgObjects() {
     SceneObjects[this.sceneId].svgShapes.forEach((el) => {
-      const object = this.objectLoader.extrudeObject(el.id, el.extrudeSettings);
+      const material = this.objectLoader.getMaterialByProps(el.materialType, el.color);
+      const object = this.objectLoader.extrudeObject(el.id, el.extrudeSettings, material && material.object || this.baseMaterial);
       this.setPosition(object, el.position, el.scale, el.rotation);
       this.sceneGroup.add(object);
     });

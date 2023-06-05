@@ -1,12 +1,13 @@
 import * as THREE from "three";
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader.js";
-import { ObjectType, SvgShape } from "../../../general/consts";
+import { MaterialType, ObjectType, SvgShape, ObjectColor } from "../../../general/consts";
 import { SceneObjects } from "./scene-objects-config";
 import { ExtrudeHelper } from "./helpers";
 
 export default class ObjectLoader {
   constructor() {
     this.objectMap = {};
+    this.materialMap = {};
   }
 
   async initObjects() {
@@ -68,7 +69,32 @@ export default class ObjectLoader {
     return this.objectMap[objectName];
   }
 
-  extrudeObject(objectName, settings) {
-    return this.extrudeHelper.extrudeObject(objectName, settings);
+  extrudeObject(objectName, settings, material) {
+    return this.extrudeHelper.extrudeObject(objectName, settings, material);
+  }
+
+  getMaterialMap() {
+    return this.materialMap;
+  }
+
+  getMaterialByProps(materialType, materialColor) {
+    if (!materialType || !materialColor) {
+      return null;
+    }
+    const materialName = `${materialType.toUpperCase()}_${materialColor.toUpperCase()}`;
+    const materialFromMap = this.materialMap[materialName];
+    if (materialFromMap) {
+      return materialFromMap;
+    }
+    this.materialMap[materialName] = {
+      type: materialType,
+      color: materialColor,
+      object: new THREE.MeshStandardMaterial({
+        color: new THREE.Color(ObjectColor[materialColor.toUpperCase()].value),
+        metalness: MaterialType[materialType].metalness,
+        roughness: MaterialType[materialType].roughness,
+      })
+    };
+    return this.materialMap[materialName];
   }
 }

@@ -13,16 +13,11 @@ export class ExtrudeHelper {
       };
   }
 
-  extrudeObject(objectName, settings) {
+  extrudeObject(objectName, settings, material) {
     const paths = this.objectMap[objectName] && this.objectMap[objectName].object || [];
     const group = new THREE.Group();
 
     for (const path of paths) {
-      const material = new THREE.MeshStandardMaterial({
-        color: path.color,
-        side: THREE.DoubleSide,
-      });
-
       const shapes = path.toShapes();
 
       for (const shape of shapes) {

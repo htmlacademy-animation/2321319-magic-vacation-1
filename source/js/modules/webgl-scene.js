@@ -7,6 +7,7 @@ import PyramidScene from "./3d/scenes/story-pyramid-scene";
 import SnowmanScene from "./3d/scenes/story-snowman-scene";
 import IntroScene from "./3d/scenes/intro-scene";
 import DogScene from "./3d/scenes/story-dog-scene";
+import IIScene from "./3d/scenes/story-ii-scene";
 
 export default class WebGLScene {
   constructor(canvasElement) {
@@ -89,11 +90,11 @@ export default class WebGLScene {
     lightDirection.target = targetForLight;
     light.add(lightDirection);
 
-    const lightPoint1 = new THREE.PointLight(0xf6f2ff, 0.6, 2800, 2);
+    const lightPoint1 = new THREE.PointLight(0xf6f2ff, 0.6, 975, 2);
     lightPoint1.position.set(-785, -350, -710);
     light.add(lightPoint1);
 
-    const lightPoint2 = new THREE.PointLight(0xf5feff, 0.95, 2800, 2);
+    const lightPoint2 = new THREE.PointLight(0xf5feff, 0.95, 975, 2);
     lightPoint2.position.set(730, 800, -985);
     light.add(lightPoint2);
 
@@ -123,6 +124,7 @@ export default class WebGLScene {
       [ThemeColor.LIGHT_PURPLE]: new DogScene(this.objectLoader),
       [ThemeColor.BLUE]: new PyramidScene(this.objectLoader),
       [ThemeColor.LIGHT_BLUE]: new SnowmanScene(this.objectLoader),
+      [ThemeColor.PURPLE]: new IIScene(this.objectLoader),
     };
 
     this.sceneObjects[Screen.TOP] = {
