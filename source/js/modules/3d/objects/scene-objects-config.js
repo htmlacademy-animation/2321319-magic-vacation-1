@@ -1,11 +1,30 @@
 import * as THREE from "three";
-import { SvgShape, ThemeColor, Screen } from "../../../general/consts";
+import { SvgShape, ThemeColor, Screen, ObjectColor, MaterialType } from "../../../general/consts";
 import { getLathePointsBy } from "./helpers";
 
 export const SceneObjects = {
   [Screen.TOP]: {
     backgroundImage: `img/module-5/scenes-textures/scene-0.png`,
-    primitives: [],
+    primitives: [
+      {
+        groupId: `plane`,
+        position: [0, 0, 10],
+        scale: [1, 1, 1],
+        rotation: [0, 0, 0],
+        children: [
+          {
+            id: `planeMain`,
+            primitiveType: `PlaneGeometry`,
+            primitiveSettings: [100, 100],
+            position: [0, 0, 0],
+            scale: [1, 1, 1],
+            rotation: [0, 0, 0],
+            color: ObjectColor.PURPLE.id,
+            materialType: MaterialType.BASIC.id
+          },
+        ],
+      },
+    ],
     svgShapes: [
       {
         id: SvgShape.FLAMINGO.id,
@@ -13,6 +32,8 @@ export const SceneObjects = {
         scale: [0.6, 0.6, 0.6],
         rotation: [0, 0, 180],
         extrudeSettings: { bevelOffset: -2 },
+        color: ObjectColor.LIGHT_DOMINANT_RED.id,
+        materialType: MaterialType.SOFT.id
       },
       {
         id: SvgShape.SNOWFLAKE.id,
@@ -20,6 +41,8 @@ export const SceneObjects = {
         scale: [1, 1, 1],
         rotation: [0, 0, 180],
         extrudeSettings: { bevelOffset: -2 },
+        color: ObjectColor.BLUE.id,
+        materialType: MaterialType.BASIC.id
       },
       {
         id: SvgShape.QUESTION.id,
@@ -27,6 +50,8 @@ export const SceneObjects = {
         scale: [0.8, 0.8, 0.8],
         rotation: [0, 180, 180],
         extrudeSettings: { bevelOffset: -2 },
+        color: ObjectColor.BLUE.id,
+        materialType: MaterialType.BASIC.id
       },
       {
         id: SvgShape.FLOWER.id,
@@ -34,6 +59,8 @@ export const SceneObjects = {
         scale: [0.2, 0.2, 1],
         rotation: [0, 0, 180],
         extrudeSettings: { depth: 4, bevelOffset: -2 },
+        color: ObjectColor.PURPLE.id,
+        materialType: MaterialType.BASIC.id
       },
       {
         id: SvgShape.KEYHOLE.id,
@@ -41,6 +68,8 @@ export const SceneObjects = {
         scale: [0.09, 0.09, 1],
         rotation: [0, 0, 180],
         extrudeSettings: { depth: 20, bevelOffset: -2 },
+        color: ObjectColor.DARK_PURPLE.id,
+        materialType: MaterialType.SOFT.id
       },
       {
         id: SvgShape.LEAF.id,
@@ -48,6 +77,8 @@ export const SceneObjects = {
         scale: [0.8, 0.8, 0.8],
         rotation: [0, 180, 180],
         extrudeSettings: { bevelOffset: -2 },
+        color: ObjectColor.GREEN.id,
+        materialType: MaterialType.BASIC.id
       },
       {
         id: SvgShape.LEAF.id,
@@ -60,6 +91,8 @@ export const SceneObjects = {
           bevelSize: 3,
           bevelOffset: -3,
         },
+        color: ObjectColor.GREEN.id,
+        materialType: MaterialType.BASIC.id
       },
     ],
   },
@@ -80,6 +113,8 @@ export const SceneObjects = {
             position: [0, 0, 0],
             scale: [1, 1, 1],
             rotation: [0, 0, 0],
+            color: ObjectColor.BLUE.id,
+            materialType: MaterialType.SOFT.id
           },
         ],
       },
@@ -96,6 +131,8 @@ export const SceneObjects = {
             position: [0, 0, 0],
             scale: [1, 1, 1],
             rotation: [0, 0, 0],
+            color: ObjectColor.BLUE.id,
+            materialType: MaterialType.SOFT.id
           },
           {
             id: `bottomPartTop`,
@@ -104,6 +141,8 @@ export const SceneObjects = {
             position: [0, 60, 0],
             scale: [1, 1, 1],
             rotation: [0, 0, 0],
+            color: ObjectColor.BLUE.id,
+            materialType: MaterialType.SOFT.id
           },
           {
             id: `centerPart`,
@@ -112,6 +151,8 @@ export const SceneObjects = {
             position: [0, 183, 0],
             scale: [1, 1, 1],
             rotation: [0, 0, 0],
+            color: ObjectColor.BLUE.id,
+            materialType: MaterialType.SOFT.id
           },
           {
             id: `topPartBottom`,
@@ -120,6 +161,8 @@ export const SceneObjects = {
             position: [0, 298, 0],
             scale: [1, 1, 1],
             rotation: [0, 0, 0],
+            color: ObjectColor.BLUE.id,
+            materialType: MaterialType.SOFT.id
           },
           {
             id: `topPartCenter`,
@@ -128,6 +171,8 @@ export const SceneObjects = {
             position: [0, 330, 0],
             scale: [1, 1, 1],
             rotation: [0, 45, 0],
+            color: ObjectColor.LIGHT_BLUE.id,
+            materialType: MaterialType.SOFT.id
           },
           {
             id: `topPartTop`,
@@ -136,6 +181,8 @@ export const SceneObjects = {
             position: [0, 363, 0],
             scale: [1, 1, 1],
             rotation: [0, 45, 0],
+            color: ObjectColor.BLUE.id,
+            materialType: MaterialType.SOFT.id
           },
         ],
       },
@@ -162,6 +209,8 @@ export const SceneObjects = {
             position: [0, 0, 0],
             scale: [1, 1, 1],
             rotation: [0, 0, 18],
+            color: ObjectColor.BRIGHT_PURPLE.id,
+            materialType: MaterialType.SOFT.id
           },
           {
             id: `chandelierBody`,
@@ -170,6 +219,8 @@ export const SceneObjects = {
             position: [0, 0, 0],
             scale: [1, 1, 1],
             rotation: [0, 0, 0],
+            color: ObjectColor.DOMINANT_RED.id,
+            materialType: MaterialType.SOFT.id
           },
           {
             id: `chandelierThread`,
@@ -178,6 +229,8 @@ export const SceneObjects = {
             position: [0, 560, 0],
             scale: [1, 1, 1],
             rotation: [0, 0, 0],
+            color: ObjectColor.METAL_GREY.id,
+            materialType: MaterialType.SOFT.id
           },
           {
             id: `chandelierHanging`,
@@ -186,6 +239,8 @@ export const SceneObjects = {
             position: [0, 120, 0],
             scale: [1, 1, 1],
             rotation: [0, 0, 0],
+            color: ObjectColor.BRIGHT_PURPLE.id,
+            materialType: MaterialType.SOFT.id
           },
         ],
       },
@@ -229,6 +284,8 @@ export const SceneObjects = {
             position: [0, 65, 0],
             scale: [1, 1, 1],
             rotation: [0, 0, 0],
+            color: ObjectColor.SNOW_COLOR.id,
+            materialType: MaterialType.STRONG.id
           },
           {
             id: `snowTop`,
@@ -237,6 +294,8 @@ export const SceneObjects = {
             position: [0, 173, 0],
             scale: [1, 1, 1],
             rotation: [0, 0, 0],
+            color: ObjectColor.SNOW_COLOR.id,
+            materialType: MaterialType.STRONG.id
           },
           {
             id: `carrot`,
@@ -245,6 +304,8 @@ export const SceneObjects = {
             position: [45, 173, 0],
             scale: [1, 1, 1],
             rotation: [0, 0, -90],
+            color: ObjectColor.ORANGE.id,
+            materialType: MaterialType.SOFT.id
           },
         ],
       },
@@ -274,7 +335,61 @@ export const SceneObjects = {
   },
   [ThemeColor.PURPLE]: {
     backgroundImage: `./img/module-5/scenes-textures/scene-4.png`,
-    primitives: [],
+    primitives: [
+      {
+        groupId: `chandelier`,
+        position: [30, 130, 0],
+        scale: [0.5, 0.5, 0.5],
+        rotation: [0, 0, 0],
+        children: [
+          {
+            id: `chandelierLathe`,
+            primitiveType: `LatheGeometry`,
+            primitiveSettings: [
+              getLathePointsBy(80, 40, 2).map((el) => new THREE.Vector2(...el)),
+              35,
+              0,
+              2 * Math.PI
+            ],
+            position: [0, 0, 0],
+            scale: [1, 1, 1],
+            rotation: [0, 0, 18],
+            color: ObjectColor.SHADOWED_BRIGHT_PURPLE.id,
+            materialType: MaterialType.SOFT.id
+          },
+          {
+            id: `chandelierBody`,
+            primitiveType: `SphereGeometry`,
+            primitiveSettings: [60, 80, 80],
+            position: [0, 0, 0],
+            scale: [1, 1, 1],
+            rotation: [0, 0, 0],
+            color: ObjectColor.SHADOWED_DOMIANT_RED.id,
+            materialType: MaterialType.SOFT.id
+          },
+          {
+            id: `chandelierThread`,
+            primitiveType: `CylinderGeometry`,
+            primitiveSettings: [1, 1, 1000],
+            position: [0, 560, 0],
+            scale: [1, 1, 1],
+            rotation: [0, 0, 0],
+            color: ObjectColor.METAL_GREY.id,
+            materialType: MaterialType.SOFT.id
+          },
+          {
+            id: `chandelierHanging`,
+            primitiveType: `SphereGeometry`,
+            primitiveSettings: [10, 80, 80],
+            position: [0, 120, 0],
+            scale: [1, 1, 1],
+            rotation: [0, 0, 0],
+            color: ObjectColor.SHADOWED_BRIGHT_PURPLE.id,
+            materialType: MaterialType.SOFT.id
+          },
+        ],
+      },
+    ],
     svgShapes: [],
   },
 };
