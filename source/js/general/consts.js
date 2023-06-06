@@ -94,5 +94,5 @@ export const ObjectColor = {
   ORANGE: { id: `ORANGE`, value: `rgb(230, 80, 0)` },
   GREEN: { id: `GREEN`, value: `rgb(0, 210, 134)` },
   WHITE: { id: `WHITE`, value: `rgb(255, 255, 255)` },
-  SNOW_COLOR: { id: `SNOW_COLOR`, value: `rgb(182, 206, 240` },
+  SNOW_COLOR: { id: `SNOW_COLOR`, value: `rgb(182, 206, 240)` },
 };
