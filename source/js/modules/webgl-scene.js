@@ -27,7 +27,7 @@ export default class WebGLScene {
     this.cameraPosition = {
       x: 0,
       y: 0,
-      z: 750,
+      z: 1405,
     };
     this.isLoading = true;
     this.currentSceneObject = null;
@@ -117,8 +117,8 @@ export default class WebGLScene {
   }
 
   initScenesSettings() {
-    const imageWidth = 1024;
-    const imageHeight = 512;
+    const imageWidth = 2048;
+    const imageHeight = 1024;
     const scenes = {
       [Screen.TOP]: new IntroScene(this.objectLoader),
       [ThemeColor.LIGHT_PURPLE]: new DogScene(this.objectLoader),
