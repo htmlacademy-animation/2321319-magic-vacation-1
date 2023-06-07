@@ -10,14 +10,14 @@ export const SceneObjects = {
     primitives: [
       {
         groupId: `plane`,
-        position: [0, 0, 10],
+        position: [0, 0, 1],
         scale: [1, 1, 1],
         rotation: [0, 0, 0],
         children: [
           {
             id: `planeMain`,
             primitiveType: `PlaneGeometry`,
-            primitiveSettings: [100, 100],
+            primitiveSettings: [500, 500],
             position: [0, 0, 0],
             scale: [1, 1, 1],
             rotation: [0, 0, 0],
@@ -28,14 +28,51 @@ export const SceneObjects = {
           },
         ],
       },
+      {
+        groupId: `chandelier`,
+        position: [485, -140, 105],
+        scale: [0.7, 0.7, 0.7],
+        rotation: [10, 0, 15],
+        children: [
+          {
+            id: `chandelierLathe`,
+            primitiveType: `LatheGeometry`,
+            primitiveSettings: [
+              getLathePointsBy(80, 40, 2).map((el) => new THREE.Vector2(...el)),
+              35,
+              0,
+              2 * Math.PI
+            ],
+            position: [0, 0, 0],
+            scale: [1, 1, 1],
+            rotation: [0, 0, 18],
+            materialType: MaterialType.SOFT.id,
+            materialProps: {
+              color: ObjectColor.BRIGHT_PURPLE.id,
+            }
+          },
+          {
+            id: `chandelierBody`,
+            primitiveType: `SphereGeometry`,
+            primitiveSettings: [60, 80, 80],
+            position: [0, 0, 0],
+            scale: [1, 1, 1],
+            rotation: [0, 0, 0],
+            materialType: MaterialType.SOFT.id,
+            materialProps: {
+              color: ObjectColor.DOMINANT_RED.id,
+            }
+          },
+        ]
+      }
     ],
     svgShapes: [
       {
         id: SvgShape.FLAMINGO.id,
-        position: [-150, 150, 50],
-        scale: [0.6, 0.6, 0.6],
-        rotation: [0, 0, 180],
-        extrudeSettings: { bevelOffset: -2 },
+        position: [-510, 384, 80],
+        scale: [0.8, 0.8, 0.8],
+        rotation: [-10, 30, 205],
+        extrudeSettings: { depth: 12, bevelOffset: -2 },
         materialType: MaterialType.SOFT.id,
         materialProps: {
           color: ObjectColor.LIGHT_DOMINANT_RED.id,
@@ -43,10 +80,10 @@ export const SceneObjects = {
       },
       {
         id: SvgShape.SNOWFLAKE.id,
-        position: [-190, -40, 50],
-        scale: [1, 1, 1],
-        rotation: [0, 0, 180],
-        extrudeSettings: { bevelOffset: -2 },
+        position: [-395, 100, 70],
+        scale: [1.4, 1.4, 1.4],
+        rotation: [-20, 40, 200],
+        extrudeSettings: { depth: 11, bevelOffset: -2 },
         materialType: MaterialType.BASIC.id,
         materialProps: {
           color: ObjectColor.BLUE.id,
@@ -54,30 +91,19 @@ export const SceneObjects = {
       },
       {
         id: SvgShape.QUESTION.id,
-        position: [20, -150, 50],
-        scale: [0.8, 0.8, 0.8],
-        rotation: [0, 180, 180],
-        extrudeSettings: { bevelOffset: -2 },
+        position: [115, -345, 65],
+        scale: [1.2, 1.2, 1.2],
+        rotation: [-45, 180, 160],
+        extrudeSettings: { depth: 14, bevelOffset: -2 },
         materialType: MaterialType.BASIC.id,
         materialProps: {
           color: ObjectColor.BLUE.id,
         }
       },
       {
-        id: SvgShape.FLOWER.id,
-        position: [290, 10, 100],
-        scale: [0.2, 0.2, 1],
-        rotation: [0, 0, 180],
-        extrudeSettings: { depth: 4, bevelOffset: -2 },
-        materialType: MaterialType.BASIC.id,
-        materialProps: {
-          color: ObjectColor.PURPLE.id,
-        }
-      },
-      {
         id: SvgShape.KEYHOLE.id,
-        position: [70, 70, 50],
-        scale: [0.09, 0.09, 1],
+        position: [1000, 1000, 0],
+        scale: [1.02, 1.02, 1.02],
         rotation: [0, 0, 180],
         extrudeSettings: { depth: 20, bevelOffset: -2 },
         materialType: MaterialType.SOFT.id,
@@ -87,15 +113,44 @@ export const SceneObjects = {
       },
       {
         id: SvgShape.LEAF.id,
-        position: [200, 200, 50],
-        scale: [0.8, 0.8, 0.8],
-        rotation: [0, 180, 180],
-        extrudeSettings: { bevelOffset: -2 },
+        position: [690, 360, 145],
+        scale: [1.8, 1.8, 1.8],
+        rotation: [5, 135, 245],
+        extrudeSettings: { depth: 14, bevelOffset: -2 },
         materialType: MaterialType.BASIC.id,
         materialProps: {
           color: ObjectColor.GREEN.id,
         }
       },
+    ],
+    objects: [
+      {
+        id: Objects.AIRPLANE.id,
+        position: [275, 140, 140],
+        scale: [1.45, 1.45, 1.45],
+        rotation: [60, 140, -15],
+        materialType: MaterialType.BASIC.id,
+        materialProps: {
+          color: ObjectColor.WHITE.id,
+        }
+      },
+      {
+        id: Objects.WATERMELON.id,
+        position: [-750, -265, 120],
+        scale: [2.5, 2.5, 2.5],
+        rotation: [15, -10, 140],
+      },
+      {
+        id: Objects.SUITCASE.id,
+        position: [-75, -195, 95],
+        scale: [0.55, 0.55, 0.55],
+        rotation: [30, 215, 15],
+      },
+    ]
+  },
+  [ThemeColor.BLUE]: {
+    backgroundImage: `./img/module-5/scenes-textures/scene-2.png`,
+    svgShapes: [
       {
         id: SvgShape.LEAF.id,
         position: [150, 150, 50],
@@ -113,34 +168,6 @@ export const SceneObjects = {
         }
       },
     ],
-    objects: [
-      {
-        id: Objects.AIRPLANE.id,
-        position: [0, 120, 70],
-        scale: [1, 1, 1],
-        rotation: [0, 0, 0],
-        materialType: MaterialType.BASIC.id,
-        materialProps: {
-          color: ObjectColor.WHITE.id,
-        }
-      },
-      {
-        id: Objects.WATERMELON.id,
-        position: [-150, 0, 50],
-        scale: [1, 1, 1],
-        rotation: [0, 0, 0],
-      },
-      {
-        id: Objects.SUITCASE.id,
-        position: [150, -80, 50],
-        scale: [0.5, 0.5, 0.5],
-        rotation: [0, 0, 0],
-      },
-    ]
-  },
-  [ThemeColor.BLUE]: {
-    backgroundImage: `./img/module-5/scenes-textures/scene-2.png`,
-    svgShapes: [],
     objects: [],
     primitives: [
       {
@@ -338,7 +365,19 @@ export const SceneObjects = {
         ],
       },
     ],
-    svgShapes: [],
+    svgShapes: [
+      {
+        id: SvgShape.FLOWER.id,
+        position: [290, 10, 100],
+        scale: [0.2, 0.2, 1],
+        rotation: [0, 0, 180],
+        extrudeSettings: { depth: 4, bevelOffset: -2 },
+        materialType: MaterialType.BASIC.id,
+        materialProps: {
+          color: ObjectColor.PURPLE.id,
+        }
+      },
+    ],
     objects: [],
   },
   [ThemeColor.LIGHT_BLUE]: {
