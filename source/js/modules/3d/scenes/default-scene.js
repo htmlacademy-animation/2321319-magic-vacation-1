@@ -14,6 +14,7 @@ export default class DefaultScene {
     if (this.sceneId === null) return;
     this.initPrimitives();
     this.initSvgObjects();
+    this.initPreparedObjects();
   }
 
   initPrimitives() {
@@ -44,6 +45,14 @@ export default class DefaultScene {
     SceneObjects[this.sceneId].svgShapes.forEach((el) => {
       const material = this.objectLoader.getMaterialByProps(el.materialType, el.materialProps);
       const object = this.objectLoader.extrudeObject(el.id, el.extrudeSettings, material && material.object || this.baseMaterial);
+      this.setPosition(object, el.position, el.scale, el.rotation);
+      this.sceneGroup.add(object);
+    });
+  }
+
+  initPreparedObjects() {
+    SceneObjects[this.sceneId].objects.forEach((el) => {
+      const object = this.objectLoader.getPreparedObjectWithMateral(el.id, el.materialType, el.materialProps);
       this.setPosition(object, el.position, el.scale, el.rotation);
       this.sceneGroup.add(object);
     });
