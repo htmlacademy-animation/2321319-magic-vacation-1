@@ -1,6 +1,11 @@
 import * as THREE from "three";
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader.js";
-import { MaterialType, ObjectType, SvgShape, ObjectColor } from "../../../general/consts";
+import {
+  MaterialType,
+  ObjectType,
+  SvgShape,
+  ObjectColor,
+} from "../../../general/consts";
 import { SceneObjects } from "./scene-objects-config";
 import { ExtrudeHelper } from "./helpers";
 
@@ -28,7 +33,11 @@ export default class ObjectLoader {
     await Promise.allSettled(fetches).then((results) => {
       results.forEach((result, i) => {
         if (result.status === `fulfilled`) {
-          this._addObject(ObjectType.IMAGE, result.value, Object.keys(SceneObjects)[i]);
+          this._addObject(
+            ObjectType.IMAGE,
+            result.value,
+            Object.keys(SceneObjects)[i]
+          );
         }
         // TODO: error handling
       });
@@ -47,7 +56,11 @@ export default class ObjectLoader {
     await Promise.allSettled(fetches).then((results) => {
       results.forEach((result, i) => {
         if (result.status === `fulfilled`) {
-          this._addObject(ObjectType.SVG, result.value, Object.values(SvgShape)[i].id);
+          this._addObject(
+            ObjectType.SVG,
+            result.value,
+            Object.values(SvgShape)[i].id
+          );
         }
         // TODO: error handling
       });
@@ -57,7 +70,7 @@ export default class ObjectLoader {
   _addObject(objectType, data, key) {
     this.objectMap[key] = {
       type: objectType,
-      object: data
+      object: data,
     };
   }
 
@@ -77,24 +90,50 @@ export default class ObjectLoader {
     return this.materialMap;
   }
 
-  getMaterialByProps(materialType, materialColor) {
-    if (!materialType || !materialColor) {
+  getMaterialByProps(materialType, materialProps) {
+    if (!materialType || !materialProps) {
       return null;
     }
-    const materialName = `${materialType.toUpperCase()}_${materialColor.toUpperCase()}`;
-    const materialFromMap = this.materialMap[materialName];
+
+    const isCustomMatrial = materialType === MaterialType.CUSTOM.id;
+    const key = isCustomMatrial
+      ? `${materialType.toUpperCase()}_${materialProps.mainColor}-${materialProps.secondaryColor}` 
+      : `${materialType.toUpperCase()}_${materialProps.color.toUpperCase()}`;
+    const materialFromMap = this.materialMap[key];
     if (materialFromMap) {
       return materialFromMap;
     }
-    this.materialMap[materialName] = {
-      type: materialType,
-      color: materialColor,
-      object: new THREE.MeshStandardMaterial({
-        color: new THREE.Color(ObjectColor[materialColor.toUpperCase()].value),
-        metalness: MaterialType[materialType].metalness,
-        roughness: MaterialType[materialType].roughness,
-      })
-    };
-    return this.materialMap[materialName];
+
+    if (materialType === MaterialType.CUSTOM.id) {
+      this.materialMap[key] = {
+        type: materialType,
+        color: `${materialProps.mainColor}-${materialProps.secondaryColor}`,
+        object: new materialProps[`materialConstructor`](
+          new THREE.Color(
+            ObjectColor[materialProps.mainColor].value
+          ),
+          new THREE.Color(
+            ObjectColor[materialProps.secondaryColor].value
+          ),
+          materialProps.textureFrequency,
+          MaterialType.SOFT.metalness,
+          MaterialType.SOFT.roughness,
+        ),
+      };
+      return this.materialMap[key];
+    } else {
+      this.materialMap[key] = {
+        type: materialType,
+        color: materialProps.color,
+        object: new THREE.MeshStandardMaterial({
+          color: new THREE.Color(
+            ObjectColor[materialProps.color].value
+          ),
+          metalness: MaterialType[materialType].metalness,
+          roughness: MaterialType[materialType].roughness,
+        }),
+      };
+      return this.materialMap[key];
+    }
   }
 }
