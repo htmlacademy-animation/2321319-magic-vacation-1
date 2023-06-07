@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { SvgShape, ThemeColor, Screen, ObjectColor, MaterialType } from "../../../general/consts";
+import { SvgShape, ThemeColor, Screen, ObjectColor, MaterialType, Objects } from "../../../general/consts";
 import { getLathePointsBy } from "./helpers";
 import RoadMaterial from "../materials/road-material";
 import CarpetMaterial from "../materials/carpet-material";
@@ -113,10 +113,35 @@ export const SceneObjects = {
         }
       },
     ],
+    objects: [
+      {
+        id: Objects.AIRPLANE.id,
+        position: [0, 120, 70],
+        scale: [1, 1, 1],
+        rotation: [0, 0, 0],
+        materialType: MaterialType.BASIC.id,
+        materialProps: {
+          color: ObjectColor.WHITE.id,
+        }
+      },
+      {
+        id: Objects.WATERMELON.id,
+        position: [-150, 0, 50],
+        scale: [1, 1, 1],
+        rotation: [0, 0, 0],
+      },
+      {
+        id: Objects.SUITCASE.id,
+        position: [150, -80, 50],
+        scale: [0.5, 0.5, 0.5],
+        rotation: [0, 0, 0],
+      },
+    ]
   },
   [ThemeColor.BLUE]: {
     backgroundImage: `./img/module-5/scenes-textures/scene-2.png`,
     svgShapes: [],
+    objects: [],
     primitives: [
       {
         groupId: `pyramid`,
@@ -314,6 +339,7 @@ export const SceneObjects = {
       },
     ],
     svgShapes: [],
+    objects: [],
   },
   [ThemeColor.LIGHT_BLUE]: {
     backgroundImage: `./img/module-5/scenes-textures/scene-3.png`,
@@ -392,6 +418,7 @@ export const SceneObjects = {
       },
     ],
     svgShapes: [],
+    objects: [],
   },
   [ThemeColor.PURPLE]: {
     backgroundImage: `./img/module-5/scenes-textures/scene-4.png`,
@@ -487,5 +514,6 @@ export const SceneObjects = {
       },
     ],
     svgShapes: [],
+    objects: [],
   },
 };

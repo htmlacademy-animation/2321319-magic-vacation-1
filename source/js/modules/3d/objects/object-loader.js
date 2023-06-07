@@ -1,10 +1,14 @@
 import * as THREE from "three";
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader.js";
+import { OBJLoader  } from "three/examples/jsm/loaders/OBJLoader.js";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import {
   MaterialType,
   ObjectType,
   SvgShape,
   ObjectColor,
+  Objects,
+  ObjectLoadType
 } from "../../../general/consts";
 import { SceneObjects } from "./scene-objects-config";
 import { ExtrudeHelper } from "./helpers";
@@ -17,6 +21,7 @@ export default class ObjectLoader {
 
   async initObjects() {
     await this._initImages();
+    await this._initPreparedObjects();
     await this._initSvgObjects();
     this.extrudeHelper = new ExtrudeHelper(this.objectMap);
   }
@@ -37,6 +42,36 @@ export default class ObjectLoader {
             ObjectType.IMAGE,
             result.value,
             Object.keys(SceneObjects)[i]
+          );
+        }
+        // TODO: error handling
+      });
+    });
+  }
+
+  async _initPreparedObjects() {
+    const objLoader = new OBJLoader();
+    const gLTFLoader = new GLTFLoader();
+    const fetches = Object.values(Objects).map((el) => {
+      return new Promise((resolve, _reject) => {
+        if (el.type === ObjectLoadType.OBJ) {
+          objLoader.load(el.path, (result) => {
+            resolve(result);
+          });
+        } else {
+          gLTFLoader.load(el.path, (result) => {
+            resolve(result.scene);
+          });
+        }
+      });
+    });
+    await Promise.allSettled(fetches).then((results) => {
+      results.forEach((result, i) => {
+        if (result.status === `fulfilled`) {
+          this._addObject(
+            ObjectType.OBJECT,
+            result.value,
+            Object.values(Objects)[i].id
           );
         }
         // TODO: error handling
@@ -84,6 +119,22 @@ export default class ObjectLoader {
 
   extrudeObject(objectName, settings, material) {
     return this.extrudeHelper.extrudeObject(objectName, settings, material);
+  }
+
+  getPreparedObjectWithMateral(objectName, materialType, materialProps) {
+    const object = this.getObjectByName(objectName).object;
+
+    if (Objects[objectName].type === ObjectLoadType.GLTF) {
+      return object;
+    }
+
+    const material = this.getMaterialByProps(materialType, materialProps);
+    object.traverse((child) => {
+      if (child.isMesh) {
+        child.material = material.object;
+      }
+    });
+    return object;
   }
 
   getMaterialMap() {

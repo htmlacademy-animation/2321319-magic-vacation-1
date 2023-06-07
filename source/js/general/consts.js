@@ -19,6 +19,12 @@ export const Screen = {
 export const ObjectType = {
   IMAGE: 0,
   SVG: 1,
+  OBJECT: 2
+};
+
+export const ObjectLoadType = {
+  OBJ: 0,
+  GLTF: 1,
 };
 
 export const SvgShape = {
@@ -46,6 +52,24 @@ export const SvgShape = {
     id: `LEAF`,
     path: `img/module-6/svg-forms/leaf.svg`,
   },
+};
+
+export const Objects = {
+  AIRPLANE: {
+    id: `AIRPLANE`,
+    type: ObjectLoadType.OBJ,
+    path: `3d/module-6/scene-0-objects/airplane.obj`,
+  },
+  SUITCASE: {
+    id: `SUITCASE`,
+    type: ObjectLoadType.GLTF,
+    path: `3d/module-6/scene-0-objects/suitcase.gltf`,
+  },
+  WATERMELON: {
+    id: `WATERMELON`,
+    type: ObjectLoadType.GLTF,
+    path: `3d/module-6/scene-0-objects/watermelon.gltf`,
+  }
 };
 
 export const MaterialType = {
