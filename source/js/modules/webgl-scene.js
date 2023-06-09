@@ -26,7 +26,7 @@ export default class WebGLScene {
     //   (180 * (2 * Math.atan(this.canvas.height / 2 / this.far))) / Math.PI;
     this.cameraPosition = {
       x: 0,
-      y: 200,
+      y: 0,
       z: 2550,
     };
     this.isLoading = true;

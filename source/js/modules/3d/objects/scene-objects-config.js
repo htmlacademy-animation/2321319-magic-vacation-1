@@ -227,7 +227,7 @@ export const SceneObjects = {
       },
       {
         groupId: `carpet`,
-        position: [0, -500, 80],
+        position: [0, -495, 80],
         scale: [0.9, 0.9, 0.9],
         rotation: [0, -55, 0],
         children: [
@@ -284,7 +284,8 @@ export const SceneObjects = {
         extrudeSettings: { depth: 4, bevelOffset: -2 },
         materialType: MaterialType.BASIC.id,
         materialProps: {
-          color: ObjectColor.PURPLE.id
+          color: ObjectColor.DARK_PURPLE.id,
+          side: THREE.DoubleSide,
         }
       },
     ],
@@ -302,7 +303,7 @@ export const SceneObjects = {
       },
       {
         id: Objects.ROOM_1_STATIC.id,
-        position: [0, -500, 0],
+        position: [-5, -495, 5],
         scale: [1, 1, 1],
         rotation: [0, -45, 0]
       },
@@ -361,7 +362,7 @@ export const SceneObjects = {
       },
       {
         id: Objects.ROOM_2_STATIC.id,
-        position: [0, -500, 0],
+        position: [0, -498, 10],
         scale: [1, 1, 1],
         rotation: [0, -45, 0],
       },
@@ -389,7 +390,7 @@ export const SceneObjects = {
       },
       {
         groupId: `flashlight`,
-        position: [380, -440, 570],
+        position: [380, -435, 570],
         scale: [1, 1, 1],
         rotation: [0, 30, 0],
         children: [
@@ -500,7 +501,7 @@ export const SceneObjects = {
         groupId: `snowman`,
         position: [-130, -445, 400],
         scale: [1, 1, 1],
-        rotation: [10, 0, 0],
+        rotation: [0, -40, 0],
         children: [
           {
             id: `snowBottom`,
@@ -542,9 +543,9 @@ export const SceneObjects = {
       },
       {
         groupId: `road`,
-        position: [0, -500, 80],
-        scale: [0.9, 0.9, 0.9],
-        rotation: [0, -45, 0],
+        position: [0, -292, 20],
+        scale: [1, 1, 1],
+        rotation: [0, 45, 180],
         children: [
           {
             id: `roadLathe`,
@@ -607,7 +608,7 @@ export const SceneObjects = {
       },
       {
         id: Objects.ROOM_3_STATIC.id,
-        position: [0, -500, 0],
+        position: [0, -495, 5],
         scale: [1, 1, 1],
         rotation: [0, -45, 0],
       },
@@ -621,8 +622,8 @@ export const SceneObjects = {
     primitives: [
       {
         groupId: `chandelier`,
-        position: [30, 130, 0],
-        scale: [0.5, 0.5, 0.5],
+        position: [30, 130, 600],
+        scale: [0.9, 0.9, 0.9],
         rotation: [0, 0, 0],
         children: [
           {
@@ -682,9 +683,9 @@ export const SceneObjects = {
       },
       {
         groupId: `carpet`,
-        position: [50, -130, -50],
-        scale: [0.4, 0.4, 0.4],
-        rotation: [0, -60, 60],
+        position: [0, -495, 80],
+        scale: [0.9, 0.9, 0.9],
+        rotation: [0, -55, 0],
         children: [
           {
             id: `carpetLathe`,
@@ -732,7 +733,20 @@ export const SceneObjects = {
         ],
       },
     ],
-    svgShapes: [],
+    svgShapes: [
+      {
+        id: SvgShape.FLOWER.id,
+        position: [-240, -108, 340],
+        scale: [0.6, 0.6, 0.6],
+        rotation: [180, -45, 0],
+        extrudeSettings: { depth: 4, bevelOffset: -2 },
+        materialType: MaterialType.BASIC.id,
+        materialProps: {
+          color: ObjectColor.SHADOWED_DARK_PURPLE.id,
+          side: THREE.DoubleSide,
+        }
+      },
+    ],
     objects: [
       {
         id: Objects.WALLS.id,
@@ -744,6 +758,12 @@ export const SceneObjects = {
           color: ObjectColor.SHADOWED_PURPLE.id,
           side: THREE.DoubleSide,
         },
+      },
+      {
+        id: Objects.ROOM_4_STATIC.id,
+        position: [-5, -495, 5],
+        scale: [1, 1, 1],
+        rotation: [0, -45, 0]
       },
     ],
   },
