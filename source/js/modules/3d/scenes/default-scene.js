@@ -17,16 +17,31 @@ export default class DefaultScene {
     this.initPreparedObjects();
   }
 
+  setScenePosition() {
+    this.setPosition(
+      this.sceneGroup,
+      SceneObjects[this.sceneId].position,
+      SceneObjects[this.sceneId].scale,
+      SceneObjects[this.sceneId].rotation
+    );
+  }
+
   initPrimitives() {
     SceneObjects[this.sceneId].primitives.forEach((el) => {
       const group = new THREE.Group();
       el.children.forEach((object) => {
-        if (typeof (THREE[object.primitiveType]) === `function`) {
+        if (typeof THREE[object.primitiveType] === `function`) {
           const geometry = new THREE[object.primitiveType](
             ...object.primitiveSettings
           );
-          const material = this.objectLoader.getMaterialByProps(object.materialType, object.materialProps);
-          const mesh = new THREE.Mesh(geometry, material && material.object || this.baseMaterial);
+          const material = this.objectLoader.getMaterialByProps(
+            object.materialType,
+            object.materialProps
+          );
+          const mesh = new THREE.Mesh(
+            geometry,
+            (material && material.object) || this.baseMaterial
+          );
           this.setPosition(
             mesh,
             object.position,
@@ -43,8 +58,15 @@ export default class DefaultScene {
 
   initSvgObjects() {
     SceneObjects[this.sceneId].svgShapes.forEach((el) => {
-      const material = this.objectLoader.getMaterialByProps(el.materialType, el.materialProps);
-      const object = this.objectLoader.extrudeObject(el.id, el.extrudeSettings, material && material.object || this.baseMaterial);
+      const material = this.objectLoader.getMaterialByProps(
+        el.materialType,
+        el.materialProps
+      );
+      const object = this.objectLoader.extrudeObject(
+        el.id,
+        el.extrudeSettings,
+        (material && material.object) || this.baseMaterial
+      );
       this.setPosition(object, el.position, el.scale, el.rotation);
       this.sceneGroup.add(object);
     });
@@ -52,7 +74,9 @@ export default class DefaultScene {
 
   initPreparedObjects() {
     SceneObjects[this.sceneId].objects.forEach((el) => {
-      const object = this.objectLoader.getPreparedObjectWithMateral(el.id, el.materialType, el.materialProps);
+      const object = this.objectLoader
+        .getPreparedObjectWithMateral(el.id, el.materialType, el.materialProps)
+        .clone();
       this.setPosition(object, el.position, el.scale, el.rotation);
       this.sceneGroup.add(object);
     });
@@ -69,14 +93,9 @@ export default class DefaultScene {
     object.rotation.set(...rotation.map((deg) => THREE.Math.degToRad(deg)));
   }
 
-  addToScene(
-    scene,
-    position = [0, 0, 0],
-    scale = [1, 1, 1],
-    rotation = [0, 0, 0]
-  ) {
+  addToScene(scene) {
     this.scene = scene;
-    this.setPosition(this.sceneGroup, position, scale, rotation);
+    this.setScenePosition(this.sceneGroup);
     this.scene.add(this.sceneGroup);
   }
 }

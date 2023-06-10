@@ -182,6 +182,7 @@ export default class ObjectLoader {
           ),
           metalness: MaterialType[materialType].metalness,
           roughness: MaterialType[materialType].roughness,
+          side: materialProps.side || THREE.FrontSide
         }),
       };
       return this.materialMap[key];

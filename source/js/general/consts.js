@@ -69,7 +69,32 @@ export const Objects = {
     id: `WATERMELON`,
     type: ObjectLoadType.GLTF,
     path: `3d/module-6/scene-0-objects/watermelon.gltf`,
-  }
+  },
+  WALLS: {
+    id: `WALLS`,
+    type: ObjectLoadType.OBJ,
+    path: `3d/module-6/rooms-scenes/common/WallCornerUnit.obj`,
+  },
+  ROOM_1_STATIC: {
+    id: `ROOM_1_STATIC`,
+    type: ObjectLoadType.GLTF,
+    path: `3d/module-6/rooms-scenes/scenesStatic/scene1-static-output-1.gltf`,
+  },
+  ROOM_2_STATIC: {
+    id: `ROOM_2_STATIC`,
+    type: ObjectLoadType.GLTF,
+    path: `3d/module-6/rooms-scenes/scenesStatic/scene2-static-output-1.gltf`,
+  },
+  ROOM_3_STATIC: {
+    id: `ROOM_3_STATIC`,
+    type: ObjectLoadType.GLTF,
+    path: `3d/module-6/rooms-scenes/scenesStatic/scene3-static-output-1.gltf`,
+  },
+  ROOM_4_STATIC: {
+    id: `ROOM_4_STATIC`,
+    type: ObjectLoadType.GLTF,
+    path: `3d/module-6/rooms-scenes/scenesStatic/scene4-static-output-1.gltf`,
+  },
 };
 
 export const MaterialType = {
