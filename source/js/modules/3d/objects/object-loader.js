@@ -125,6 +125,8 @@ export default class ObjectLoader {
     const object = this.getObjectByName(objectName).object;
 
     if (Objects[objectName].type === ObjectLoadType.GLTF) {
+      object.castShadow = true;
+      object.receiveShadow = true;
       return object;
     }
 
@@ -132,6 +134,8 @@ export default class ObjectLoader {
     object.traverse((child) => {
       if (child.isMesh) {
         child.material = material.object;
+        child.castShadow = true;
+        child.receiveShadow = true;
       }
     });
     return object;

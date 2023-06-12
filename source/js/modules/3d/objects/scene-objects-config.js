@@ -308,6 +308,14 @@ export const SceneObjects = {
         rotation: [0, -45, 0]
       },
     ],
+    animatedObjects: [
+      {
+        id: Objects.DOG.id,
+        position: [50, -490, 620],
+        scale: [1, 1, 1],
+        rotation: [0, 20, 0],
+      },
+    ]
   },
   [ThemeColor.BLUE]: {
     backgroundImage: `./img/module-5/scenes-textures/scene-2.png`,
@@ -613,6 +621,14 @@ export const SceneObjects = {
         rotation: [0, -45, 0],
       },
     ],
+    animatedObjects: [
+      {
+        id: Objects.COMPASS.id,
+        position: [-20, -495, 80],
+        scale: [1, 1, 1],
+        rotation: [0, -40, 0],
+      },
+    ]
   },
   [ThemeColor.PURPLE]: {
     backgroundImage: `./img/module-5/scenes-textures/scene-4.png`,
@@ -766,5 +782,13 @@ export const SceneObjects = {
         rotation: [0, -45, 0]
       },
     ],
+    animatedObjects: [
+      {
+        id: Objects.SONYA.id,
+        position: [100, -400, 400],
+        scale: [1, 1, 1],
+        rotation: [0, -40, 0],
+      },
+    ]
   },
 };

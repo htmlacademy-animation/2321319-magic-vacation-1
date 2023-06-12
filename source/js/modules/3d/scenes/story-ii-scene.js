@@ -8,4 +8,13 @@ export default class IIScene extends DefaultScene {
     super(objectLoader);
     this.sceneId = ThemeColor.PURPLE;
   }
+
+  initObjects() {
+    super.initObjects();
+    this.addSonya();
+  }
+
+  addSonya() {
+    this.addFirstAnimatedObject();
+  }
 }

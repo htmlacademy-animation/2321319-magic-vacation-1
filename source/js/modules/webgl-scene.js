@@ -75,6 +75,12 @@ export default class WebGLScene {
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(this.canvas.width, this.canvas.height);
 
+
+    if (window.innerWidth > 991) {
+      this.renderer.shadowMap.enabled = true;
+      this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    }
+
     this.initLight();
     this.initObjects();
   }
@@ -100,16 +106,30 @@ export default class WebGLScene {
     lightDirection.target = targetForLight;
     light.add(lightDirection);
 
-    const lightPoint1 = new THREE.PointLight(0xf6f2ff, 0.6, 975, 2);
+    const lightPoint1 = new THREE.PointLight(0xf6f2ff, 0.6, 2500, 2);
     lightPoint1.position.set(-785, -350, -710);
+    lightPoint1.castShadow = true;
+    lightPoint1.shadow.mapSize.width = 1024;
+    lightPoint1.shadow.mapSize.height = 1024;
+    lightPoint1.shadow.camera.near = 0.5;
+    lightPoint1.shadow.camera.far = 6000;
+    lightPoint1.shadow.camera.visible = true;
+
     light.add(lightPoint1);
 
-    const lightPoint2 = new THREE.PointLight(0xf5feff, 0.95, 975, 2);
+    const lightPoint2 = new THREE.PointLight(0xf5feff, 0.95, 2500, 2);
     lightPoint2.position.set(730, 800, -985);
+    lightPoint2.castShadow = true;
+    lightPoint2.shadow.mapSize.width = 1024;
+    lightPoint2.shadow.mapSize.height = 1024;
+    lightPoint2.shadow.camera.near = 0.5;
+    lightPoint2.shadow.camera.far = 6000;
+    lightPoint2.shadow.camera.visible = true;
+
     light.add(lightPoint2);
 
     // TODO: удалить после окончательной постановки света
-    const lightForTesting = new THREE.AmbientLight(`0xFFFF`);
+    const lightForTesting = new THREE.AmbientLight(`0xFFFF`, 0.2);
     light.add(lightForTesting);
 
     light.position.set(

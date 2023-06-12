@@ -8,4 +8,13 @@ export default class SnowmanScene extends DefaultScene {
     super(objectLoader);
     this.sceneId = ThemeColor.LIGHT_BLUE;
   }
+
+  initObjects() {
+    super.initObjects();
+    this.addCompass();
+  }
+
+  addCompass() {
+    this.addFirstAnimatedObject();
+  }
 }
