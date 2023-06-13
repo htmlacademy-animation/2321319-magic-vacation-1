@@ -8,7 +8,7 @@ export default class CarpetMaterial extends THREE.MeshStandardMaterial {
     metalness,
     roughness
   ) {
-    super(metalness, roughness);
+    super(metalness, roughness, THREE.DoubleSide);
     this.mainColor = mainColor;
     this.secondaryColor = secondaryColor;
     this.textureFrequency = textureFrequency;

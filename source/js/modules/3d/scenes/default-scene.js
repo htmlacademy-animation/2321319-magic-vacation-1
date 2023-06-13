@@ -107,6 +107,7 @@ export default class DefaultScene {
   addFirstAnimatedObject() {
     const group = new THREE.Group();
     const objectConfig = SceneObjects[this.sceneId].animatedObjects[0];
+    if (!objectConfig) return;
     const object = this.objectLoader
       .getPreparedObjectWithMateral(objectConfig.id)
       .clone();
