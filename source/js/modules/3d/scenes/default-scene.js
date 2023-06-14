@@ -42,6 +42,9 @@ export default class DefaultScene {
             geometry,
             (material && material.object) || this.baseMaterial
           );
+          mesh.castShadow = true;
+          mesh.receiveShadow = true;
+
           this.setPosition(
             mesh,
             object.position,
@@ -67,6 +70,8 @@ export default class DefaultScene {
         el.extrudeSettings,
         (material && material.object) || this.baseMaterial
       );
+      object.castShadow = true;
+      object.receiveShadow = true;
       this.setPosition(object, el.position, el.scale, el.rotation);
       this.sceneGroup.add(object);
     });
@@ -97,5 +102,17 @@ export default class DefaultScene {
     this.scene = scene;
     this.setScenePosition(this.sceneGroup);
     this.scene.add(this.sceneGroup);
+  }
+
+  addFirstAnimatedObject() {
+    const group = new THREE.Group();
+    const objectConfig = SceneObjects[this.sceneId].animatedObjects[0];
+    if (!objectConfig) return;
+    const object = this.objectLoader
+      .getPreparedObjectWithMateral(objectConfig.id)
+      .clone();
+    this.setPosition(object, objectConfig.position, objectConfig.scale, objectConfig.rotation);
+    group.add(object);
+    this.sceneGroup.add(group);
   }
 }

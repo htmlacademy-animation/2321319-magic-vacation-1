@@ -95,6 +95,21 @@ export const Objects = {
     type: ObjectLoadType.GLTF,
     path: `3d/module-6/rooms-scenes/scenesStatic/scene4-static-output-1.gltf`,
   },
+  DOG: {
+    id: `DOG`,
+    type: ObjectLoadType.GLTF,
+    path: `3d/module-6/rooms-scenes/objects/dog.gltf`,
+  },
+  COMPASS: {
+    id: `COMPASS`,
+    type: ObjectLoadType.GLTF,
+    path: `3d/module-6/rooms-scenes/objects/compass.gltf`,
+  },
+  SONYA: {
+    id: `SONYA`,
+    type: ObjectLoadType.GLTF,
+    path: `3d/module-6/rooms-scenes/objects/sonya.gltf`,
+  },
 };
 
 export const MaterialType = {

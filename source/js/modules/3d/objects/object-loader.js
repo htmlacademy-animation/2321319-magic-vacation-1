@@ -124,13 +124,13 @@ export default class ObjectLoader {
   getPreparedObjectWithMateral(objectName, materialType, materialProps) {
     const object = this.getObjectByName(objectName).object;
 
-    if (Objects[objectName].type === ObjectLoadType.GLTF) {
-      return object;
-    }
-
     const material = this.getMaterialByProps(materialType, materialProps);
     object.traverse((child) => {
       if (child.isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+      if (Objects[objectName].type === ObjectLoadType.OBJ && child.isMesh) {
         child.material = material.object;
       }
     });

@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import CustomMaterial from "./3d/materials/custom-material";
 import { Screen, ThemeColor } from "../general/consts";
 import ObjectLoader from "./3d/objects/object-loader";
@@ -8,6 +7,7 @@ import SnowmanScene from "./3d/scenes/story-snowman-scene";
 import IntroScene from "./3d/scenes/intro-scene";
 import DogScene from "./3d/scenes/story-dog-scene";
 import IIScene from "./3d/scenes/story-ii-scene";
+import { SceneObjects } from "./3d/objects/scene-objects-config";
 
 export default class WebGLScene {
   constructor(canvasElement) {
@@ -26,7 +26,7 @@ export default class WebGLScene {
     //   (180 * (2 * Math.atan(this.canvas.height / 2 / this.far))) / Math.PI;
     this.cameraPosition = {
       x: 0,
-      y: 0,
+      y: 800,
       z: 2550,
     };
     this.isLoading = true;
@@ -62,21 +62,24 @@ export default class WebGLScene {
       this.cameraPosition.y,
       this.cameraPosition.z
     );
-    this.camera.rotation.set(0, THREE.Math.degToRad(-15), 0);
-
-    // TODO: убрать после завершения работы
-    this.controls = new OrbitControls(this.camera, this.canvas);
-    this.controls.addEventListener(`change`, () => {
-      this.renderer.render(this.scene, this.camera);
-    });
-    this.controls.update();
+    this.camera.rotation.set(THREE.Math.degToRad(-15), 0, 0);
 
     this.setColor();
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(this.canvas.width, this.canvas.height);
 
+
+    if (!this.isMobile()) {
+      this.renderer.shadowMap.enabled = true;
+      this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    }
+
     this.initLight();
     this.initObjects();
+  }
+
+  isMobile() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   }
 
   initLight() {
@@ -90,27 +93,40 @@ export default class WebGLScene {
     );
     const targetForLight = new THREE.Object3D();
     const targetY =
-      this.camera.position.z * Math.tan(THREE.Math.degToRad(15.0)); // прилежащий катет на тангенс
+      this.camera.position.z * Math.tan(THREE.Math.degToRad(15.0));
     targetForLight.position.set(
-      this.camera.position.x,
+      0,
       targetY,
-      this.camera.position.z
+      0
     );
     this.scene.add(targetForLight);
     lightDirection.target = targetForLight;
     light.add(lightDirection);
+    
+    const lightHelper = new THREE.DirectionalLightHelper( lightDirection, 10 );
+    this.scene.add( lightHelper );
 
-    const lightPoint1 = new THREE.PointLight(0xf6f2ff, 0.6, 975, 2);
+    const lightPoint1 = new THREE.PointLight(0xf6f2ff, 1.0, 2600, 2);
     lightPoint1.position.set(-785, -350, -710);
+    this.setShadowSettings(lightPoint1);
+
+    const lightHelper1 = new THREE.PointLightHelper( lightPoint1, 10 );
+    this.scene.add( lightHelper1 );
+
     light.add(lightPoint1);
 
-    const lightPoint2 = new THREE.PointLight(0xf5feff, 0.95, 975, 2);
+    const lightPoint2 = new THREE.PointLight(0xf5feff, 3.5, 2500, 2);
     lightPoint2.position.set(730, 800, -985);
+    this.setShadowSettings(lightPoint2);
+
+    const lightHelper2 = new THREE.PointLightHelper( lightPoint2, 10 );
+    this.scene.add( lightHelper2 );
+
     light.add(lightPoint2);
 
     // TODO: удалить после окончательной постановки света
-    const lightForTesting = new THREE.AmbientLight(`0xFFFF`);
-    light.add(lightForTesting);
+    // const lightForTesting = new THREE.AmbientLight(`0xFFFF`, 0.2);
+    // light.add(lightForTesting);
 
     light.position.set(
       this.camera.position.x,
@@ -120,14 +136,28 @@ export default class WebGLScene {
     this.scene.add(light);
   }
 
+  setShadowSettings(light) {
+    light.castShadow = true;
+    light.shadow.bias = -0.001;
+    light.shadow.mapSize.width = 1024;
+    light.shadow.mapSize.height = 1024;
+    light.shadow.camera.near = 0.5;
+    light.shadow.camera.far = 3500;
+    light.shadow.camera.visible = true;
+  }
+
   async initObjects() {
     this.objectLoader = new ObjectLoader();
     await this.objectLoader.initObjects();
     this.initScenesSettings();
+
+    this.sceneGroup = new THREE.Group();
     Object.entries(this.sceneObjects).map(([key, _value]) => {
       // this.initImage(this.objectLoader.getObjectByName(key).object, key);
-      this.init3dSceneObjects(key);
+      this.init3dSceneObjects(key, this.sceneGroup);
     });
+    this.scene.add(this.sceneGroup);
+
     this.isLoading = false;
     if (this.currentSceneObject !== null) {
       this.renderSceneObject(this.currentSceneObject);
@@ -165,11 +195,16 @@ export default class WebGLScene {
       this.sceneObjects[value] = {
         position: {
           // x: imageWidth * (index + 1),
-          x: 0,
-          y: 0,
-          z: 0,
+          x: SceneObjects[value].position[0],
+          y: SceneObjects[value].position[1],
+          z: SceneObjects[value].position[2],
           width: imageWidth,
           height: imageHeight,
+        },
+        rotation: {
+          x: SceneObjects[value].rotation[0],
+          y: SceneObjects[value].rotation[1],
+          z: SceneObjects[value].rotation[2],
         },
         scene: scenes[value] ? scenes[value] : null,
         hue: 0.0,
@@ -199,11 +234,11 @@ export default class WebGLScene {
     this.scene.add(image);
   }
 
-  init3dSceneObjects(sceneKey) {
+  init3dSceneObjects(sceneKey, scenesObject) {
     const sceneSettings = this.sceneObjects[sceneKey];
     if (sceneSettings.scene) {
       sceneSettings.scene.initObjects();
-      sceneSettings.scene.addToScene(this.scene);
+      sceneSettings.scene.addToScene(scenesObject);
     }
   }
 
@@ -252,24 +287,16 @@ export default class WebGLScene {
     if (this.isLoading) {
       return;
     }
-    const objectPosition = this.sceneObjects[sceneObjectId].position;
+    const objectRotation = this.sceneObjects[sceneObjectId].rotation;
     this.backgroundColor =
       getComputedStyle(document.body)
         .getPropertyValue(`--secondary-color`)
         .trim() || this.backgroundColor;
     this.setColor();
-    this.camera.position.set(
-      objectPosition.x,
-      objectPosition.y,
-      this.cameraPosition.z
-    );
-    this.controls.target = new THREE.Vector3(
-      objectPosition.x,
-      objectPosition.y,
-      0
-    );
+
+    this.sceneGroup.rotation.set(0, -THREE.Math.degToRad(objectRotation.y), 0);
     this.render();
-    this.startAnimation();
+    // this.startAnimation();
   }
 
   setColor() {
