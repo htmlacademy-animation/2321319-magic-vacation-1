@@ -12,6 +12,7 @@ export default class DefaultScene {
 
   initObjects() {
     if (this.sceneId === null) return;
+    this.sceneGroup.name = this.sceneId;
     this.initPrimitives();
     this.initSvgObjects();
     this.initPreparedObjects();
@@ -29,6 +30,7 @@ export default class DefaultScene {
   initPrimitives() {
     SceneObjects[this.sceneId].primitives.forEach((el) => {
       const group = new THREE.Group();
+      group.name = el.id;
       el.children.forEach((object) => {
         if (typeof THREE[object.primitiveType] === `function`) {
           const geometry = new THREE[object.primitiveType](
@@ -70,6 +72,7 @@ export default class DefaultScene {
         el.extrudeSettings,
         (material && material.object) || this.baseMaterial
       );
+      object.name = el.id;
       object.castShadow = true;
       object.receiveShadow = true;
       this.setPosition(object, el.position, el.scale, el.rotation);
@@ -82,6 +85,7 @@ export default class DefaultScene {
       const object = this.objectLoader
         .getPreparedObjectWithMateral(el.id, el.materialType, el.materialProps)
         .clone();
+      object.name = el.id;
       this.setPosition(object, el.position, el.scale, el.rotation);
       this.sceneGroup.add(object);
     });
@@ -91,11 +95,12 @@ export default class DefaultScene {
     object,
     position = [0, 0, 0],
     scale = [1, 1, 1],
-    rotation = [0, 0, 0]
+    rotation = [0, 0, 0],
+    notCastDegToRad = false
   ) {
     object.position.set(...position);
     object.scale.set(...scale);
-    object.rotation.set(...rotation.map((deg) => THREE.Math.degToRad(deg)));
+    object.rotation.set(...rotation.map((angle) => notCastDegToRad ? angle : THREE.Math.degToRad(angle)));
   }
 
   addToScene(scene) {

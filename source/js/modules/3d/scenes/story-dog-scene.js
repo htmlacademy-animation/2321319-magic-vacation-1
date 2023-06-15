@@ -12,7 +12,7 @@ export default class DogScene extends DefaultScene {
   initObjects() {
     super.initObjects();
     this.addDog();
-    this.addSuitcase();
+    // this.addSuitcase();
   }
 
   addDog() {
