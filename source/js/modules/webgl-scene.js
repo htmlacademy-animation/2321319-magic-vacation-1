@@ -1,19 +1,19 @@
 import * as THREE from "three";
 import CustomMaterial from "./3d/materials/custom-material";
-import { Screen, ThemeColor } from "../general/consts";
+import { Screen, ThemeColor, AnimationType } from "../general/consts";
 import ObjectLoader from "./3d/objects/object-loader";
 import PyramidScene from "./3d/scenes/story-pyramid-scene";
 import SnowmanScene from "./3d/scenes/story-snowman-scene";
 import IntroScene from "./3d/scenes/intro-scene";
 import DogScene from "./3d/scenes/story-dog-scene";
 import IIScene from "./3d/scenes/story-ii-scene";
+import CanvasAnimation from "./canvas-animation";
 import { SceneObjects } from "./3d/objects/scene-objects-config";
 
-export default class WebGLScene {
+export default class WebGLScene extends CanvasAnimation {
   constructor(canvasElement) {
-    this.canvas = canvasElement;
-    this.canvas.width = window.innerWidth;
-    this.canvas.height = window.innerHeight;
+    super(canvasElement, 60, AnimationType._3D);
+    super.setSizes();
     this.aspectRatio = this.canvas.width / this.canvas.height;
     this.storyScenes = null;
     this.sceneObjects = {};
@@ -22,8 +22,6 @@ export default class WebGLScene {
     this.near = 0.1;
     this.far = 6000;
     this.fov = 35;
-    // this.fov =
-    //   (180 * (2 * Math.atan(this.canvas.height / 2 / this.far))) / Math.PI;
     this.cameraPosition = {
       x: 0,
       y: 800,
@@ -31,11 +29,6 @@ export default class WebGLScene {
     };
     this.isLoading = true;
     this.currentSceneObject = null;
-
-    this.frameInterval = 1000 / 50;
-    this.runnungAnimation = null;
-    this.startTime = null;
-    this.lastFrameTime = null;
 
     window.addEventListener(`resize`, () => this.setSizes());
     this.init();
@@ -68,7 +61,6 @@ export default class WebGLScene {
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(this.canvas.width, this.canvas.height);
 
-
     if (!this.isMobile()) {
       this.renderer.shadowMap.enabled = true;
       this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -79,7 +71,9 @@ export default class WebGLScene {
   }
 
   isMobile() {
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    );
   }
 
   initLight() {
@@ -94,24 +88,20 @@ export default class WebGLScene {
     const targetForLight = new THREE.Object3D();
     const targetY =
       this.camera.position.z * Math.tan(THREE.Math.degToRad(15.0));
-    targetForLight.position.set(
-      0,
-      targetY,
-      0
-    );
+    targetForLight.position.set(0, targetY, 0);
     this.scene.add(targetForLight);
     lightDirection.target = targetForLight;
     light.add(lightDirection);
-    
-    const lightHelper = new THREE.DirectionalLightHelper( lightDirection, 10 );
-    this.scene.add( lightHelper );
+
+    const lightHelper = new THREE.DirectionalLightHelper(lightDirection, 10);
+    this.scene.add(lightHelper);
 
     const lightPoint1 = new THREE.PointLight(0xf6f2ff, 1.0, 2600, 2);
     lightPoint1.position.set(-785, -350, -710);
     this.setShadowSettings(lightPoint1);
 
-    const lightHelper1 = new THREE.PointLightHelper( lightPoint1, 10 );
-    this.scene.add( lightHelper1 );
+    const lightHelper1 = new THREE.PointLightHelper(lightPoint1, 10);
+    this.scene.add(lightHelper1);
 
     light.add(lightPoint1);
 
@@ -119,8 +109,8 @@ export default class WebGLScene {
     lightPoint2.position.set(730, 800, -985);
     this.setShadowSettings(lightPoint2);
 
-    const lightHelper2 = new THREE.PointLightHelper( lightPoint2, 10 );
-    this.scene.add( lightHelper2 );
+    const lightHelper2 = new THREE.PointLightHelper(lightPoint2, 10);
+    this.scene.add(lightHelper2);
 
     light.add(lightPoint2);
 
@@ -152,8 +142,8 @@ export default class WebGLScene {
     this.initScenesSettings();
 
     this.sceneGroup = new THREE.Group();
+    this.sceneGroup.name = `RoomsComposition`;
     Object.entries(this.sceneObjects).map(([key, _value]) => {
-      // this.initImage(this.objectLoader.getObjectByName(key).object, key);
       this.init3dSceneObjects(key, this.sceneGroup);
     });
     this.scene.add(this.sceneGroup);
@@ -175,6 +165,7 @@ export default class WebGLScene {
       [ThemeColor.PURPLE]: new IIScene(this.objectLoader),
     };
 
+    // TODO: отказаться от этого объекта в пользу SceneObject
     this.sceneObjects[Screen.TOP] = {
       position: {
         x: 0,
@@ -183,13 +174,15 @@ export default class WebGLScene {
         width: imageWidth,
         height: imageHeight,
       },
+      rotation: {
+        x: 0,
+        y: 0,
+        z: 0,
+      },
       scene: scenes[Screen.TOP],
       hue: 0.0,
       bubbles: [],
-      durations: [],
-      finites: [],
-      delays: [],
-      animationFunctions: [],
+      ...scenes[Screen.TOP].animationObjects,
     };
     Object.entries(ThemeColor).forEach(([_key, value], index) => {
       this.sceneObjects[value] = {
@@ -208,30 +201,9 @@ export default class WebGLScene {
         },
         scene: scenes[value] ? scenes[value] : null,
         hue: 0.0,
-        ...this.getSceneObjectsSettings(index),
+        ...this.getSceneObjectsSettings(index, scenes[value].animationObjects),
       };
     });
-  }
-
-  initImage(imageValue, sceneKey) {
-    const planeGeometry = new THREE.PlaneGeometry(1, 1);
-    const material = new CustomMaterial(
-      new THREE.Vector2(this.canvas.width, this.canvas.height),
-      imageValue,
-      THREE.Math.degToRad(this.sceneObjects[sceneKey].hue),
-      !!this.sceneObjects[sceneKey].bubbles.length,
-      this.sceneObjects[sceneKey].bubbles.map((el) => ({
-        center: new THREE.Vector2(el.center.x, el.center.y),
-        radius: el.radius,
-      }))
-    );
-    material.needsUpdate = true;
-    this.sceneObjects[sceneKey].material = material;
-    const image = new THREE.Mesh(planeGeometry, material);
-    const imagePosition = this.sceneObjects[sceneKey].position;
-    image.position.set(imagePosition.x, imagePosition.y, imagePosition.z);
-    image.scale.set(imagePosition.width, imagePosition.height, 1);
-    this.scene.add(image);
   }
 
   init3dSceneObjects(sceneKey, scenesObject) {
@@ -242,7 +214,7 @@ export default class WebGLScene {
     }
   }
 
-  getSceneObjectsSettings(index) {
+  getSceneObjectsSettings(index, customSettings) {
     return index === 1
       ? {
           bubbles: this.getInitialBubblesPosition(),
@@ -258,10 +230,7 @@ export default class WebGLScene {
         }
       : {
           bubbles: [],
-          durations: [],
-          finites: [],
-          delays: [],
-          animationFunctions: [],
+          ...customSettings,
         };
   }
 
@@ -296,7 +265,7 @@ export default class WebGLScene {
 
     this.sceneGroup.rotation.set(0, -THREE.Math.degToRad(objectRotation.y), 0);
     this.render();
-    // this.startAnimation();
+    this.startAnimation();
   }
 
   setColor() {
@@ -309,64 +278,44 @@ export default class WebGLScene {
   }
 
   setSizes() {
-    this.canvas.width = window.innerWidth;
-    this.canvas.height = window.innerHeight;
-    this.aspectRatio = this.canvas.width / this.canvas.height;
+    super.setSizes();
+    this.aspectRatio = this.canvasWidth / this.canvasHeight;
     this.camera.aspect = this.aspectRatio;
     this.camera.updateProjectionMatrix();
-    this.renderer.setSize(this.canvas.width, this.canvas.height);
+    this.renderer.setSize(this.canvasWidth, this.canvasHeight);
     this.render();
   }
 
   startAnimation() {
-    if (!this.canvas) {
-      return;
-    }
-
-    this.stopAnimation();
-    this.startTime = Date.now();
-    this.lastFrameTime = this.startTime;
-    this.tick();
+    const scene = this.sceneObjects[this.currentSceneObject].scene;
+    const sceneElements = [
+      ...SceneObjects[this.currentSceneObject].primitives,
+      ...SceneObjects[this.currentSceneObject].svgShapes,
+      ...SceneObjects[this.currentSceneObject].objects,
+    ].filter((el) => {
+      return !!scene.animationObjects[el.id];
+    }).map((el) => {
+      const settings = scene.animationObjects[el.id];
+      const object = scene.sceneGroup.children.find((obj) => obj.name === el.id) || {};
+      return {element: object, ...settings, status: true};
+    });
+    this.elements = sceneElements;
+    super.startAnimation();
   }
 
-  tick() {
-    const now = Date.now();
-    const elapsed = now - this.lastFrameTime;
+  prepareAnimationTick(now, elapsed) {
+    super.prepareAnimationTick(now, elapsed);
+    this.render();
+  }
 
-    this.runnungAnimation = requestAnimationFrame(() => this.tick());
-
-    if (elapsed > this.frameInterval) {
-      this.lastFrameTime = now - (elapsed % this.frameInterval);
-      const currentSceneObject = this.sceneObjects[this.currentSceneObject];
-      currentSceneObject.animationFunctions.forEach(
-        (animationFunction, index) => {
-          const isAnimationDelayed =
-            now < this.startTime + currentSceneObject.delays[index];
-          const isAnimationFinished = currentSceneObject.finites[index]
-            ? now >
-              this.startTime +
-                currentSceneObject.delays[index] +
-                currentSceneObject.durations[index]
-            : false;
-          if (!isAnimationDelayed && !isAnimationFinished) {
-            const pastProgress =
-              (now - this.startTime - currentSceneObject.delays[index]) /
-              currentSceneObject.durations[index];
-            const progress = currentSceneObject.finites[index]
-              ? pastProgress
-              : pastProgress - Math.trunc(pastProgress);
-            animationFunction(progress);
-            this.render();
-          }
-        }
-      );
-    }
+  runAnimationTick(el, animations) {
+    animations.forEach((animation, _index) => {
+      animation.animationFunction(el, animation.progress);
+    });
   }
 
   stopAnimation() {
     if (this.runnungAnimation) {
-      cancelAnimationFrame(this.runnungAnimation);
-      this.runnungAnimation = this.startTime = this.lastFrameTime = null;
       if (this.sceneObjects[this.currentSceneObject].bubbles.length) {
         this.sceneObjects[this.currentSceneObject].bubbles =
           this.getInitialBubblesPosition();
@@ -386,7 +335,10 @@ export default class WebGLScene {
         this.sceneObjects[this.currentSceneObject].material.needsUpdate = true;
       }
     }
+    super.stopAnimation();
   }
+
+  clearScene() {}
 
   hueBlinkAnimationFunc(progress) {
     const hueForProgress =

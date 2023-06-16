@@ -16,6 +16,11 @@ export const Screen = {
   RESULT3: 7,
 };
 
+export const AnimationType = {
+  _2D: 0,
+  _3D: 1,
+};
+
 export const ObjectType = {
   IMAGE: 0,
   SVG: 1,
@@ -25,6 +30,10 @@ export const ObjectType = {
 export const ObjectLoadType = {
   OBJ: 0,
   GLTF: 1,
+};
+
+export const AnimatedPrimitives = {
+  CHANDELIER: `CHANDELIER`,
 };
 
 export const SvgShape = {
