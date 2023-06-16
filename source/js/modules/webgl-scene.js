@@ -12,7 +12,7 @@ import { SceneObjects } from "./3d/objects/scene-objects-config";
 
 export default class WebGLScene extends CanvasAnimation {
   constructor(canvasElement) {
-    super(canvasElement, 100, AnimationType._3D);
+    super(canvasElement, 60, AnimationType._3D);
     super.setSizes();
     this.aspectRatio = this.canvas.width / this.canvas.height;
     this.storyScenes = null;
