@@ -292,6 +292,7 @@ export default class WebGLScene extends CanvasAnimation {
       ...SceneObjects[this.currentSceneObject].primitives,
       ...SceneObjects[this.currentSceneObject].svgShapes,
       ...SceneObjects[this.currentSceneObject].objects,
+      ...SceneObjects[this.currentSceneObject].animatedObjects,
     ].filter((el) => {
       return !!scene.animationObjects[el.id];
     }).map((el) => {
