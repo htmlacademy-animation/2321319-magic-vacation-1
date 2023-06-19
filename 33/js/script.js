@@ -69988,9 +69988,9 @@ class Page {
       });
     }
 
-    if (event.detail.prevScreenId === _general_consts__WEBPACK_IMPORTED_MODULE_8__["Screen"].STORY || event.detail.prevScreenId === _general_consts__WEBPACK_IMPORTED_MODULE_8__["Screen"].TOP) {
-      this.webGLScene.stopAnimation();
-    }
+    // if (event.detail.prevScreenId === Screen.STORY || event.detail.prevScreenId === Screen.TOP) {
+    //   this.webGLScene.stopAnimation();
+    // }
   }
 
   runAnimationsForScreen(event) {
