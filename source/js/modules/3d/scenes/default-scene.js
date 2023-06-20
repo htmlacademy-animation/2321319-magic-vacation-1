@@ -30,7 +30,7 @@ export default class DefaultScene {
   initPrimitives() {
     SceneObjects[this.sceneId].primitives.forEach((el) => {
       const group = new THREE.Group();
-      group.name = el.id;
+      group.name = el.name || el.id;
       el.children.forEach((object) => {
         if (typeof THREE[object.primitiveType] === `function`) {
           const geometry = new THREE[object.primitiveType](
@@ -44,6 +44,7 @@ export default class DefaultScene {
             geometry,
             (material && material.object) || this.baseMaterial
           );
+          mesh.name = object.name || object.id;
           mesh.castShadow = true;
           mesh.receiveShadow = true;
 
@@ -72,11 +73,9 @@ export default class DefaultScene {
         el.extrudeSettings,
         (material && material.object) || this.baseMaterial
       );
-      object.name = el.id;
       object.castShadow = true;
       object.receiveShadow = true;
-      this.setPosition(object, el.position, el.scale, el.rotation);
-      this.sceneGroup.add(object);
+      this.createGroupWrapper(object, el);
     });
   }
 
@@ -85,10 +84,38 @@ export default class DefaultScene {
       const object = this.objectLoader
         .getPreparedObjectWithMateral(el.id, el.materialType, el.materialProps)
         .clone();
-      object.name = el.id;
-      this.setPosition(object, el.position, el.scale, el.rotation);
-      this.sceneGroup.add(object);
+      object.name = el.name || el.id;
+      this.createGroupWrapper(object, el);
     });
+  }
+
+  createGroupWrapper(targetObject, settings) {
+    if (settings.hasGroupTransform) {
+      this.setPosition(targetObject,
+        settings.groupTransformSettings.objectPosition,
+        settings.groupTransformSettings.objectScale,
+        settings.groupTransformSettings.objectRotation
+      );
+      const group = new THREE.Group();
+      group.name = settings.name || settings.id;
+      const internalGroup = new THREE.Group();
+      internalGroup.name = `internalGroup`;
+      internalGroup.add(targetObject);
+      this.setPosition(internalGroup,
+        settings.groupTransformSettings.groupPosition,
+        settings.groupTransformSettings.groupScale,
+        settings.groupTransformSettings.groupRotation
+      );
+      group.add(internalGroup);
+      this.setPosition(group, settings.position, settings.scale, settings.rotation);
+      this.sceneGroup.add(group);
+    } else {
+      const group = new THREE.Group();
+      group.name = settings.name || settings.id;
+      group.add(targetObject);
+      this.setPosition(group, settings.position, settings.scale, settings.rotation);
+      this.sceneGroup.add(group);
+    }
   }
 
   setPosition(
@@ -107,17 +134,5 @@ export default class DefaultScene {
     this.scene = scene;
     this.setScenePosition(this.sceneGroup);
     this.scene.add(this.sceneGroup);
-  }
-
-  addFirstAnimatedObject() {
-    const group = new THREE.Group();
-    const objectConfig = SceneObjects[this.sceneId].animatedObjects[0];
-    if (!objectConfig) return;
-    const object = this.objectLoader
-      .getPreparedObjectWithMateral(objectConfig.id)
-      .clone();
-    this.setPosition(object, objectConfig.position, objectConfig.scale, objectConfig.rotation);
-    group.add(object);
-    this.sceneGroup.add(group);
   }
 }
