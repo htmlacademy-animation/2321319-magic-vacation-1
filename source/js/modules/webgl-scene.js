@@ -61,10 +61,10 @@ export default class WebGLScene extends CanvasAnimation {
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(this.canvas.width, this.canvas.height);
 
-    if (!this.isMobile()) {
-      this.renderer.shadowMap.enabled = true;
-      this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    }
+    // if (!this.isMobile()) {
+    //   this.renderer.shadowMap.enabled = true;
+    //   this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    // }
 
     this.initLight();
     this.initObjects();
@@ -292,12 +292,11 @@ export default class WebGLScene extends CanvasAnimation {
       ...SceneObjects[this.currentSceneObject].primitives,
       ...SceneObjects[this.currentSceneObject].svgShapes,
       ...SceneObjects[this.currentSceneObject].objects,
-      ...SceneObjects[this.currentSceneObject].animatedObjects,
     ].filter((el) => {
-      return !!scene.animationObjects[el.id];
+      return !!scene.animationObjects[el.name] || !!scene.animationObjects[el.id];
     }).map((el) => {
-      const settings = scene.animationObjects[el.id];
-      const object = scene.sceneGroup.children.find((obj) => obj.name === el.id) || {};
+      const settings = scene.animationObjects[el.name] || scene.animationObjects[el.id];
+      const object = scene.sceneGroup.children.find((obj) => obj.name === el.name || obj.name === el.id) || {};
       return {element: object, ...settings, status: true};
     });
     this.elements = sceneElements;
@@ -316,26 +315,26 @@ export default class WebGLScene extends CanvasAnimation {
   }
 
   stopAnimation() {
-    if (this.runnungAnimation) {
-      if (this.sceneObjects[this.currentSceneObject].bubbles.length) {
-        this.sceneObjects[this.currentSceneObject].bubbles =
-          this.getInitialBubblesPosition();
-        this.sceneObjects[this.currentSceneObject].bubbles.forEach(
-          (el, index) => {
-            this.sceneObjects[
-              this.currentSceneObject
-            ].material.uniforms.bubbles.value[index] = {
-              center: new THREE.Vector2(el.center.x, el.center.y),
-              radius: el.radius,
-            };
-          }
-        );
-        this.sceneObjects[
-          this.currentSceneObject
-        ].material.uniforms.hue.value = 0.0;
-        this.sceneObjects[this.currentSceneObject].material.needsUpdate = true;
-      }
-    }
+    // if (this.runnungAnimation) {
+    //   if (this.sceneObjects[this.currentSceneObject].bubbles.length) {
+    //     this.sceneObjects[this.currentSceneObject].bubbles =
+    //       this.getInitialBubblesPosition();
+    //     this.sceneObjects[this.currentSceneObject].bubbles.forEach(
+    //       (el, index) => {
+    //         this.sceneObjects[
+    //           this.currentSceneObject
+    //         ].material.uniforms.bubbles.value[index] = {
+    //           center: new THREE.Vector2(el.center.x, el.center.y),
+    //           radius: el.radius,
+    //         };
+    //       }
+    //     );
+    //     this.sceneObjects[
+    //       this.currentSceneObject
+    //     ].material.uniforms.hue.value = 0.0;
+    //     this.sceneObjects[this.currentSceneObject].material.needsUpdate = true;
+    //   }
+    // }
     super.stopAnimation();
   }
 
