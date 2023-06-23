@@ -1,6 +1,8 @@
 import * as THREE from "three";
+import { SceneObjects } from "../objects/scene-objects-config";
+import SuitcaseRig from "../objects/suitcase-rig";
 import { Screen, AnimatedPrimitives, SvgShape, Objects } from "../../../general/consts";
-import { easeOutQuad, easeInOutQuad } from "../../../general/easing";
+import { easeOutQuad, easeInOutQuad, easeInQuad } from "../../../general/easing";
 import DefaultScene from "./default-scene";
 
 export default class IntroScene extends DefaultScene {
@@ -10,8 +12,24 @@ export default class IntroScene extends DefaultScene {
     this.initAnimationsSettings();
   }
 
+  initObjects() {
+    super.initObjects();
+    this.initSuitcaseObject();
+  }
+
+  initSuitcaseObject() {
+    const suitcaseSettings = SceneObjects[this.sceneId].objects.find((el) => el.id === Objects.SUITCASE.id);
+    const object = this.objectLoader
+      .getPreparedObjectWithMateral(suitcaseSettings.id, suitcaseSettings.materialType, suitcaseSettings.materialProps)
+      .clone();
+    object.name = suitcaseSettings.name || suitcaseSettings.id + `_OBJ`;
+    this.suitcaseRig = new SuitcaseRig(object);
+    this.setPosition(this.suitcaseRig, suitcaseSettings.position, suitcaseSettings.scale, suitcaseSettings.rotation);
+    this.sceneGroup.add(this.suitcaseRig);
+  }
+
   initAnimationsSettings() {
-    const delayForAnimation = 1000;
+    const delayForAnimation = 2000;
     this.animationObjects = {
       [AnimatedPrimitives.CHANDELIER]: {
         durations: [800, 2500],
@@ -66,8 +84,40 @@ export default class IntroScene extends DefaultScene {
           (el, progress) => this.watermelonAnimationFunc(el, progress),
           (el, progress) => this.elementMoveAnimationFunc(el, progress, 1.3),
         ],
+      },
+      [Objects.SUITCASE.id]: {
+        durations: [900, 2500],
+        finites: [true, false],
+        delays: [1300, delayForAnimation + 550],
+        animationFunctions: [
+          (el, progress) => this.suitcaseAnimationFunc(el, progress),
+          (el, progress) => this.suitcaseMoveAnimationFunc(el, progress, 0.8),
+        ],
       }
     };
+  }
+
+  suitcaseAnimationFunc(element, progress) {
+    // from 0 0 0 to [0.55, 0.55, 0.55]
+    const scale = 0.55 * easeOutQuad(progress);
+    this.suitcaseRig.scaleDiff = scale;
+    // from 0 0 0 position: [-75, -350, 125],
+    const x = -75 * easeOutQuad(progress);
+    const y = (progress <= 0.66 ? 195 : 350) * Math.sin(1.5 * Math.PI * progress);
+    const z = 125 * easeOutQuad(progress);
+    // from 30 270 120 to [30, 215, 15]
+    const yRotate = 270 - 55 * easeInOutQuad(progress);
+    const zRotate = 120 - 105 * easeInOutQuad(progress);
+    this.suitcaseRig.xShift = x;
+    this.suitcaseRig.yShift = y;
+    this.suitcaseRig.zShift = z;
+    this.suitcaseRig.angleY = THREE.Math.degToRad(yRotate);
+    this.suitcaseRig.angleZ = THREE.Math.degToRad(zRotate);
+    this.suitcaseRig.invalidate();
+  }
+
+  suitcaseMoveAnimationFunc(element, progress, amplitude) {
+    this.elementMoveAnimationFunc({element: this.suitcaseRig}, progress, amplitude);
   }
 
   chandelierAnimationFunc(element, progress) {

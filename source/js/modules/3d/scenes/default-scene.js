@@ -81,6 +81,7 @@ export default class DefaultScene {
 
   initPreparedObjects() {
     SceneObjects[this.sceneId].objects.forEach((el) => {
+      if (el.isRiggingObject) return;
       const object = this.objectLoader
         .getPreparedObjectWithMateral(el.id, el.materialType, el.materialProps)
         .clone();

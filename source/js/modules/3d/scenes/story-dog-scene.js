@@ -22,7 +22,7 @@ export default class DogScene extends DefaultScene {
     const chandlier = this.sceneGroup.children.find(
       (el) => el.name === AnimatedPrimitives.CHANDELIER
     );
-    this.setRotateOfChandlier(chandlier, this.chandlierAngle);
+    if (chandlier) this.setRotateOfChandlier(chandlier, this.chandlierAngle);
     this.addSuitcase();
   }
 
