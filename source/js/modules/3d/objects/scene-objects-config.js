@@ -137,13 +137,14 @@ export const SceneObjects = {
     objects: [
       {
         id: Objects.AIRPLANE.id,
-        position: [275, 140, 140],
-        scale: [1.45, 1.45, 1.45],
-        rotation: [60, 140, -15],
+        position: [0, 0, 0],
+        scale: [0, 0, 0],
+        rotation: [5, 0, 10],
         materialType: MaterialType.BASIC.id,
         materialProps: {
           color: ObjectColor.WHITE.id,
-        }
+        },
+        isRiggingObject: true
       },
       {
         id: Objects.WATERMELON.id,

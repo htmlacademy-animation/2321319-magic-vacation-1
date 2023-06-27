@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { SceneObjects } from "../objects/scene-objects-config";
 import SuitcaseRig from "../objects/suitcase-rig";
+import AirplaneRig from "../objects/airplane-rig";
 import { Screen, AnimatedPrimitives, SvgShape, Objects } from "../../../general/consts";
 import { easeOutQuad, easeInOutQuad, easeInQuad } from "../../../general/easing";
 import DefaultScene from "./default-scene";
@@ -15,6 +16,7 @@ export default class IntroScene extends DefaultScene {
   initObjects() {
     super.initObjects();
     this.initSuitcaseObject();
+    this.initAirplaneObject();
   }
 
   initSuitcaseObject() {
@@ -26,6 +28,17 @@ export default class IntroScene extends DefaultScene {
     this.suitcaseRig = new SuitcaseRig(object);
     this.setPosition(this.suitcaseRig, suitcaseSettings.position, suitcaseSettings.scale, suitcaseSettings.rotation);
     this.sceneGroup.add(this.suitcaseRig);
+  }
+
+  initAirplaneObject() {
+    const airplaneSettings = SceneObjects[this.sceneId].objects.find((el) => el.id === Objects.AIRPLANE.id);
+    const object = this.objectLoader
+      .getPreparedObjectWithMateral(airplaneSettings.id, airplaneSettings.materialType, airplaneSettings.materialProps)
+      .clone();
+    object.name = airplaneSettings.name || airplaneSettings.id + `_OBJ`;
+    this.airplaneRig = new AirplaneRig(object);
+    this.setPosition(this.airplaneRig, airplaneSettings.position, airplaneSettings.scale, airplaneSettings.rotation);
+    this.sceneGroup.add(this.airplaneRig);
   }
 
   initAnimationsSettings() {
@@ -93,6 +106,14 @@ export default class IntroScene extends DefaultScene {
           (el, progress) => this.suitcaseAnimationFunc(el, progress),
           (el, progress) => this.suitcaseMoveAnimationFunc(el, progress, 0.8),
         ],
+      },
+      [Objects.AIRPLANE.id]: {
+        durations: [1000],
+        finites: [true],
+        delays: [2000],
+        animationFunctions: [
+          (el, progress) => this.airplaneAnimationFunc(el, progress),
+        ],
       }
     };
   }
@@ -118,6 +139,16 @@ export default class IntroScene extends DefaultScene {
 
   suitcaseMoveAnimationFunc(element, progress, amplitude) {
     this.elementMoveAnimationFunc({element: this.suitcaseRig}, progress, amplitude);
+  }
+
+  airplaneAnimationFunc(element, progress) {
+    this.airplaneRig.angleXZMoving = this.airplaneRig.startAngleXZ - Math.PI * progress;
+    this.airplaneRig.radius = 100 + 50 * progress;
+    this.airplaneRig.yShift = this.airplaneRig.initialY + 50 * progress;
+    this.airplaneRig.angleZ = 15 * easeInOutQuad(progress);
+    this.airplaneRig.angleX = -90 * Math.sin(3.85 * progress);
+    this.airplaneRig.scaleDiff = 1.45 * easeInQuad(progress);
+    this.airplaneRig.invalidate();
   }
 
   chandelierAnimationFunc(element, progress) {
