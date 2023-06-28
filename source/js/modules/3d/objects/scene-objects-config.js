@@ -15,9 +15,9 @@ import CarpetMaterial from "../materials/carpet-material";
 export const SceneObjects = {
   [Screen.TOP]: {
     backgroundImage: `img/module-5/scenes-textures/scene-0.png`,
-    position: [0, 400, 1100],
+    position: [23, 920, 3270],
     scale: [1, 1, 1],
-    rotation: [-15, 0, 0],
+    rotation: [0, 0, 0],
     primitives: [
       {
         id: `plane`,
@@ -39,78 +39,78 @@ export const SceneObjects = {
           },
         ],
       },
-      {
-        id: AnimatedPrimitives.CHANDELIER,
-        position: [5, -20, 25],
-        scale: [0, 0, 0],
-        rotation: [10, 0, -60],
-        children: [
-          {
-            id: `chandelierLathe`,
-            primitiveType: `LatheGeometry`,
-            primitiveSettings: [
-              getLathePointsBy(80, 40, 2).map((el) => new THREE.Vector2(...el)),
-              35,
-              0,
-              2 * Math.PI
-            ],
-            position: [0, 0, 0],
-            scale: [1, 1, 1],
-            rotation: [0, 0, 18],
-            materialType: MaterialType.SOFT.id,
-            materialProps: {
-              color: ObjectColor.BRIGHT_PURPLE.id,
-            }
-          },
-          {
-            id: `chandelierBody`,
-            primitiveType: `SphereGeometry`,
-            primitiveSettings: [60, 80, 80],
-            position: [0, 0, 0],
-            scale: [1, 1, 1],
-            rotation: [0, 0, 0],
-            materialType: MaterialType.SOFT.id,
-            materialProps: {
-              color: ObjectColor.DOMINANT_RED.id,
-            }
-          },
-        ]
-      }
+      // {
+      //   id: AnimatedPrimitives.CHANDELIER,
+      //   position: [5, -20, 25],
+      //   scale: [0, 0, 0],
+      //   rotation: [10, 0, -60],
+      //   children: [
+      //     {
+      //       id: `chandelierLathe`,
+      //       primitiveType: `LatheGeometry`,
+      //       primitiveSettings: [
+      //         getLathePointsBy(80, 40, 2).map((el) => new THREE.Vector2(...el)),
+      //         35,
+      //         0,
+      //         2 * Math.PI
+      //       ],
+      //       position: [0, 0, 0],
+      //       scale: [1, 1, 1],
+      //       rotation: [0, 0, 18],
+      //       materialType: MaterialType.SOFT.id,
+      //       materialProps: {
+      //         color: ObjectColor.BRIGHT_PURPLE.id,
+      //       }
+      //     },
+      //     {
+      //       id: `chandelierBody`,
+      //       primitiveType: `SphereGeometry`,
+      //       primitiveSettings: [60, 80, 80],
+      //       position: [0, 0, 0],
+      //       scale: [1, 1, 1],
+      //       rotation: [0, 0, 0],
+      //       materialType: MaterialType.SOFT.id,
+      //       materialProps: {
+      //         color: ObjectColor.DOMINANT_RED.id,
+      //       }
+      //     },
+      //   ]
+      // }
     ],
     svgShapes: [
-      {
-        id: SvgShape.FLAMINGO.id,
-        position: [-50, 30, 20],
-        scale: [0, 0, 0],
-        rotation: [-10, 60, 205],
-        extrudeSettings: { depth: 12, bevelOffset: -2 },
-        materialType: MaterialType.SOFT.id,
-        materialProps: {
-          color: ObjectColor.LIGHT_DOMINANT_RED.id,
-        }
-      },
-      {
-        id: SvgShape.SNOWFLAKE.id,
-        position: [-40, -20, 20],
-        scale: [0, 0, 0],
-        rotation: [-20, 70, 200],
-        extrudeSettings: { depth: 11, bevelOffset: -2 },
-        materialType: MaterialType.BASIC.id,
-        materialProps: {
-          color: ObjectColor.BLUE.id,
-        }
-      },
-      {
-        id: SvgShape.QUESTION.id,
-        position: [10, -60, 20],
-        scale: [0, 0, 0],
-        rotation: [-45, 180, 210],
-        extrudeSettings: { depth: 14, bevelOffset: -2 },
-        materialType: MaterialType.BASIC.id,
-        materialProps: {
-          color: ObjectColor.BLUE.id,
-        }
-      },
+      // {
+      //   id: SvgShape.FLAMINGO.id,
+      //   position: [-50, 30, 20],
+      //   scale: [0, 0, 0],
+      //   rotation: [-10, 60, 205],
+      //   extrudeSettings: { depth: 12, bevelOffset: -2 },
+      //   materialType: MaterialType.SOFT.id,
+      //   materialProps: {
+      //     color: ObjectColor.LIGHT_DOMINANT_RED.id,
+      //   }
+      // },
+      // {
+      //   id: SvgShape.SNOWFLAKE.id,
+      //   position: [-40, -20, 20],
+      //   scale: [0, 0, 0],
+      //   rotation: [-20, 70, 200],
+      //   extrudeSettings: { depth: 11, bevelOffset: -2 },
+      //   materialType: MaterialType.BASIC.id,
+      //   materialProps: {
+      //     color: ObjectColor.BLUE.id,
+      //   }
+      // },
+      // {
+      //   id: SvgShape.QUESTION.id,
+      //   position: [10, -60, 20],
+      //   scale: [0, 0, 0],
+      //   rotation: [-45, 180, 210],
+      //   extrudeSettings: { depth: 14, bevelOffset: -2 },
+      //   materialType: MaterialType.BASIC.id,
+      //   materialProps: {
+      //     color: ObjectColor.BLUE.id,
+      //   }
+      // },
       {
         id: SvgShape.KEYHOLE.id,
         position: [1000, 1000, 0],
@@ -122,43 +122,43 @@ export const SceneObjects = {
           color: ObjectColor.DARK_PURPLE.id,
         }
       },
-      {
-        id: SvgShape.LEAF.id,
-        position: [7, 40, 20],
-        scale: [0, 0, 0],
-        rotation: [5, 90, 245],
-        extrudeSettings: { depth: 14, bevelOffset: -2 },
-        materialType: MaterialType.BASIC.id,
-        materialProps: {
-          color: ObjectColor.GREEN.id,
-        }
-      },
+      // {
+      //   id: SvgShape.LEAF.id,
+      //   position: [7, 40, 20],
+      //   scale: [0, 0, 0],
+      //   rotation: [5, 90, 245],
+      //   extrudeSettings: { depth: 14, bevelOffset: -2 },
+      //   materialType: MaterialType.BASIC.id,
+      //   materialProps: {
+      //     color: ObjectColor.GREEN.id,
+      //   }
+      // },
     ],
     objects: [
-      {
-        id: Objects.AIRPLANE.id,
-        position: [0, 0, 0],
-        scale: [0, 0, 0],
-        rotation: [5, 0, 10],
-        materialType: MaterialType.BASIC.id,
-        materialProps: {
-          color: ObjectColor.WHITE.id,
-        },
-        isRiggingObject: true
-      },
-      {
-        id: Objects.WATERMELON.id,
-        position: [-60, -70, 20],
-        scale: [0, 0, 0],
-        rotation: [15, -10, 210],
-      },
-      {
-        id: Objects.SUITCASE.id,
-        position: [0, 0, 0],
-        scale: [0, 0, 0],
-        rotation: [30, 0, 0],
-        isRiggingObject: true
-      },
+      // {
+      //   id: Objects.AIRPLANE.id,
+      //   position: [0, 0, 0],
+      //   scale: [0, 0, 0],
+      //   rotation: [5, 0, 10],
+      //   materialType: MaterialType.BASIC.id,
+      //   materialProps: {
+      //     color: ObjectColor.WHITE.id,
+      //   },
+      //   isRiggingObject: true
+      // },
+      // {
+      //   id: Objects.WATERMELON.id,
+      //   position: [-60, -70, 20],
+      //   scale: [0, 0, 0],
+      //   rotation: [15, -10, 210],
+      // },
+      // {
+      //   id: Objects.SUITCASE.id,
+      //   position: [0, 0, 0],
+      //   scale: [0, 0, 0],
+      //   rotation: [30, 0, 0],
+      //   isRiggingObject: true
+      // },
     ],
   },
   [ThemeColor.LIGHT_PURPLE]: {
@@ -293,17 +293,17 @@ export const SceneObjects = {
       // },
     ],
     objects: [
-      // {
-      //   id: Objects.WALLS.id,
-      //   position: [0, -500, 0],
-      //   scale: [1, 1, 1],
-      //   rotation: [0, -45, 0],
-      //   materialType: MaterialType.SOFT.id,
-      //   materialProps: {
-      //     color: ObjectColor.PURPLE.id,
-      //     side: THREE.DoubleSide
-      //   }
-      // },
+      {
+        id: Objects.WALLS.id,
+        position: [0, -500, 0],
+        scale: [1, 1, 1],
+        rotation: [0, -45, 0],
+        materialType: MaterialType.SOFT.id,
+        materialProps: {
+          color: ObjectColor.PURPLE.id,
+          side: THREE.DoubleSide
+        }
+      },
       // {
       //   id: Objects.ROOM_1_STATIC.id,
       //   position: [-5, -495, 5],
@@ -384,17 +384,17 @@ export const SceneObjects = {
       // },
     ],
     objects: [
-      // {
-      //   id: Objects.WALLS.id,
-      //   position: [0, -500, 0],
-      //   scale: [1, 1, 1],
-      //   rotation: [0, -45, 0],
-      //   materialType: MaterialType.BASIC.id,
-      //   materialProps: {
-      //     color: ObjectColor.BLUE.id,
-      //     side: THREE.DoubleSide,
-      //   },
-      // },
+      {
+        id: Objects.WALLS.id,
+        position: [0, -500, 0],
+        scale: [1, 1, 1],
+        rotation: [0, -45, 0],
+        materialType: MaterialType.BASIC.id,
+        materialProps: {
+          color: ObjectColor.BLUE.id,
+          side: THREE.DoubleSide,
+        },
+      },
       // {
       //   id: Objects.ROOM_2_STATIC.id,
       //   position: [0, -498, 10],
@@ -630,17 +630,17 @@ export const SceneObjects = {
     ],
     svgShapes: [],
     objects: [
-      // {
-      //   id: Objects.WALLS.id,
-      //   position: [0, -500, 0],
-      //   scale: [1, 1, 1],
-      //   rotation: [0, -45, 0],
-      //   materialType: MaterialType.SOFT.id,
-      //   materialProps: {
-      //     color: ObjectColor.SKY_LIGHT_BLUE.id,
-      //     side: THREE.DoubleSide,
-      //   },
-      // },
+      {
+        id: Objects.WALLS.id,
+        position: [0, -500, 0],
+        scale: [1, 1, 1],
+        rotation: [0, -45, 0],
+        materialType: MaterialType.SOFT.id,
+        materialProps: {
+          color: ObjectColor.SKY_LIGHT_BLUE.id,
+          side: THREE.DoubleSide,
+        },
+      },
       // {
       //   id: Objects.ROOM_3_STATIC.id,
       //   position: [0, -495, 5],
@@ -789,17 +789,17 @@ export const SceneObjects = {
       // },
     ],
     objects: [
-      // {
-      //   id: Objects.WALLS.id,
-      //   position: [0, -500, 0],
-      //   scale: [1, 1, 1],
-      //   rotation: [0, -45, 0],
-      //   materialType: MaterialType.BASIC.id,
-      //   materialProps: {
-      //     color: ObjectColor.SHADOWED_PURPLE.id,
-      //     side: THREE.DoubleSide,
-      //   },
-      // },
+      {
+        id: Objects.WALLS.id,
+        position: [0, -500, 0],
+        scale: [1, 1, 1],
+        rotation: [0, -45, 0],
+        materialType: MaterialType.BASIC.id,
+        materialProps: {
+          color: ObjectColor.SHADOWED_PURPLE.id,
+          side: THREE.DoubleSide,
+        },
+      },
       // {
       //   id: Objects.ROOM_4_STATIC.id,
       //   position: [-5, -495, 5],
