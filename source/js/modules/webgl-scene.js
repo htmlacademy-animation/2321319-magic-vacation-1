@@ -39,6 +39,8 @@ export default class WebGLScene extends CanvasAnimation {
       canvas: this.canvas,
       alpha: true,
       antialias: true,
+      powerPreference: `high-performance`,
+      logarithmicDepthBuffer: true,
     });
 
     const cameraMain = new THREE.PerspectiveCamera(
@@ -47,13 +49,13 @@ export default class WebGLScene extends CanvasAnimation {
       this.near,
       this.far
     );
-    const helper = new THREE.CameraHelper(cameraMain);
-    this.scene.add(helper);
     this.cameraRig = new CameraRig(cameraMain);
-    this.cameraRig.position.set(0, 900, 0);
+    this.cameraRig.position.set(0, 920, 0);
     this.scene.add(this.cameraRig);
     this.camera = cameraMain;
 
+    // const helper = new THREE.CameraHelper(cameraMain);
+    // this.scene.add(helper);
     // this.camera = new THREE.PerspectiveCamera(
     //   this.fov,
     //   this.aspectRatio,
@@ -158,8 +160,9 @@ export default class WebGLScene extends CanvasAnimation {
     this.sceneGroup = new THREE.Group();
     this.sceneGroup.name = `RoomsComposition`;
     Object.entries(this.sceneObjects).map(([key, _value]) => {
-      this.init3dSceneObjects(key, this.sceneGroup);
+      this.init3dSceneObjects(key, +key === Screen.TOP ? this.scene : this.sceneGroup);
     });
+    this.sceneGroup.position.y = 200;
     this.scene.add(this.sceneGroup);
 
     this.isLoading = false;
@@ -184,11 +187,10 @@ export default class WebGLScene extends CanvasAnimation {
       bubbles: [],
       cameraSettings: {
         x: 0,
-        y: 900,
+        y: 920,
         z: 4675,
         angleY: 0,
-        angleX: 0,
-        targetForLookY: 900
+        angleX: 0
       },
       ...scenes[Screen.TOP].animationObjects,
     };
@@ -198,11 +200,10 @@ export default class WebGLScene extends CanvasAnimation {
         hue: 0.0,
         cameraSettings: {
           x: 0,
-          y: 900,
-          z: 2050,
+          y: 920,
+          z: 2260,
           angleY: -15,
-          angleX: SceneObjects[value].rotation[1],
-          targetForLookY: 130
+          angleX: SceneObjects[value].rotation[1]
         },
         ...this.getSceneObjectsSettings(index, scenes[value].animationObjects),
       };
@@ -262,7 +263,7 @@ export default class WebGLScene extends CanvasAnimation {
         status: true,
         durations: [1000],
         finites: [true],
-        delays: [600],
+        delays: [0],
         animationFunctions: [
           (el, progress) => this.cameraAnimationMove(el, progress),
         ],
@@ -273,7 +274,7 @@ export default class WebGLScene extends CanvasAnimation {
         status: true,
         durations: [1000],
         finites: [true],
-        delays: [600],
+        delays: [0],
         animationFunctions: [
           (el, progress) => this.cameraAnimationRotate(el, progress),
         ],
@@ -286,11 +287,6 @@ export default class WebGLScene extends CanvasAnimation {
     if (this.isLoading) {
       return;
     }
-    this.backgroundColor =
-      getComputedStyle(document.body)
-        .getPropertyValue(`--secondary-color`)
-        .trim() || this.backgroundColor;
-    this.setColor();
 
     this.render();
     this.startAnimation();
@@ -302,9 +298,8 @@ export default class WebGLScene extends CanvasAnimation {
   }
 
   cameraAnimationMove(object, progress) {
-    this.cameraRig.zShift = 4675 - 2625 * progress; // 4675 - 2125 * progress;
-    this.cameraRig.targetForLookY = 900 - 770 * easeInExpo(progress); //130 * progress;
-    this.cameraRig.angleY = THREE.Math.degToRad(-15 * easeInExpo(progress));
+    this.cameraRig.zShift = 4675 - 2415 * progress;
+    this.cameraRig.angleY = THREE.Math.degToRad(-15 * progress);
     this.cameraRig.invalidate();
   }
 
@@ -319,7 +314,6 @@ export default class WebGLScene extends CanvasAnimation {
   setCameraPositionWithoutAnimation(sceneObjectId) {
     const sceneCameraSettings = this.sceneObjects[sceneObjectId].cameraSettings;
     this.cameraRig.zShift = sceneCameraSettings.z;
-    this.cameraRig.targetForLookY = sceneCameraSettings.targetForLookY;
     this.cameraRig.angleY = THREE.Math.degToRad(sceneCameraSettings.angleY);
     this.cameraRig.angleX = THREE.Math.degToRad(sceneCameraSettings.angleX);
     this.cameraRig.invalidate();

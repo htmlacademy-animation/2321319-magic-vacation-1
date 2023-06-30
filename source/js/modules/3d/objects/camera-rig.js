@@ -94,7 +94,6 @@ export default class CameraRig extends THREE.Group {
     }
     if (this._targetForLookYChanged) {
       this._camera.lookAt(0, this._targetForLookY, 0);
-      console.log('look at',  this._targetForLookY)
       this._targetForLookYChanged = false;
     }
   }
