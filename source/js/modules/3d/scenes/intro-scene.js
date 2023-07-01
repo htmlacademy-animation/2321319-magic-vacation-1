@@ -21,6 +21,7 @@ export default class IntroScene extends DefaultScene {
 
   initSuitcaseObject() {
     const suitcaseSettings = SceneObjects[this.sceneId].objects.find((el) => el.id === Objects.SUITCASE.id);
+    if (!suitcaseSettings) return;
     const object = this.objectLoader
       .getPreparedObjectWithMateral(suitcaseSettings.id, suitcaseSettings.materialType, suitcaseSettings.materialProps)
       .clone();
@@ -32,6 +33,7 @@ export default class IntroScene extends DefaultScene {
 
   initAirplaneObject() {
     const airplaneSettings = SceneObjects[this.sceneId].objects.find((el) => el.id === Objects.AIRPLANE.id);
+    if (!airplaneSettings) return;
     const object = this.objectLoader
       .getPreparedObjectWithMateral(airplaneSettings.id, airplaneSettings.materialType, airplaneSettings.materialProps)
       .clone();

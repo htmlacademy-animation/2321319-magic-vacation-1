@@ -42,7 +42,7 @@ export default class CanvasAnimation {
     this.lastFrameTime = now - (elapsed % this.frameInterval);
     this.clearScene();
 
-    this.elements.forEach((el) => {
+    this.elements.forEach((el, elIndex) => {
       if (el.status) {
         let animations = [];
         el.animationFunctions.forEach((animation, index) => {
@@ -57,6 +57,10 @@ export default class CanvasAnimation {
               ? pastProgress
               : pastProgress - Math.trunc(pastProgress);
             animations.push({ animationFunction: animation, progress });
+          }
+          if (isAnimationFinished && !animation.hasEndPosition) {
+            this.elements[elIndex].animationFunctions[index].hasEndPosition = true;
+            animations.push({ animationFunction: animation, progress: 1 }); // чтобы анимация гарантировано закончилась конечными настройками
           }
         });
         this.runAnimationTick(el, animations);
