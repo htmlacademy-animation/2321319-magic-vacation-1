@@ -120,6 +120,10 @@ export default class IntroScene extends DefaultScene {
     };
   }
 
+  planeOpacityAnimationFunc(element, progress) {
+    element.material.opacity = 1 - progress;
+  }
+
   suitcaseAnimationFunc(element, progress) {
     // from 0 0 0 to [0.55, 0.55, 0.55]
     const scale = 0.55 * easeOutQuad(progress);

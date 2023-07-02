@@ -12,8 +12,9 @@ export default class DogScene extends DefaultScene {
   constructor(objectLoader) {
     super(objectLoader);
     this.sceneId = ThemeColor.LIGHT_PURPLE;
-    this.suitcaseStartPosition = [-336, -400, 756];
+    this.suitcaseStartPosition = [-336, -730, 750];
     this.chandlierAngle = 2;
+    this.isSuitcaseApear = false;
     this.initAnimationsSettings();
   }
 
@@ -76,7 +77,7 @@ export default class DogScene extends DefaultScene {
     const object = this.objectLoader
       .getPreparedObjectWithMateral(Objects.SUITCASE.id)
       .clone();
-    this.setPosition(object, [0, 0, 0], [1, 1, 1], [0, -45, 0]);
+    this.setPosition(object, [0, 0, 0], [1, 1, 1], [0, -20, 0]);
     this.suitcase.add(object);
     this.setPosition(
       this.suitcase,
@@ -84,19 +85,13 @@ export default class DogScene extends DefaultScene {
       [0, 0, 0],
       [0, 0, 0]
     );
-    this.sceneGroup.add(this.suitcase);
 
     const modelBoundingBox = new THREE.Box3().setFromObject(object);
     this.suitcaseYSize = modelBoundingBox.max.y - modelBoundingBox.min.y;
-
-    // const geometry = new THREE.CircleGeometry(840, 32);
-    // const material = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
-    // const circle = new THREE.Mesh(geometry, material);
-    // this.setPosition(circle, [0, -490, 0], [1, 1, 1], [90, 0, 45]);
-    // this.sceneGroup.add(circle);
   }
 
   suitcaseShowAnimationFunc(_el, _progress) {
+    if (this.isSuitcaseApear) return;
     this.setPosition(
       this.suitcase,
       this.suitcaseStartPosition,
@@ -106,6 +101,7 @@ export default class DogScene extends DefaultScene {
   }
 
   suitcaseAppearenceAnimationFunc(_el, progress) {
+    if (this.isSuitcaseApear) return;
     let y = this.suitcase.position.y;
     let scale = [1, 1, 1];
 
@@ -119,10 +115,11 @@ export default class DogScene extends DefaultScene {
     const scaled = yScale * this.suitcaseYSize - this.suitcaseYSize;
 
     if (progress <= 0.65) {
-      y = -400 - 160 * progress - scaled;
+      y = -730 - 160 * progress - scaled;
     }
 
-    this.setPosition(this.suitcase, [-336, y, 756], scale, [0, 0, 0]);
+    this.setPosition(this.suitcase, [-336, y, 750], scale, [0, 0, 0]);
+    if (progress === 1) this.isSuitcaseApear = true;
   }
 
   chandlierMoveAnimationFunc(el, progress) {

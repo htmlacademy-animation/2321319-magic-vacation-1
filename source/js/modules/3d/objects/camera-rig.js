@@ -79,6 +79,10 @@ export default class CameraRig extends THREE.Group {
     this._cameraNull.add(object);
   }
 
+  addObjectToGroupRotation(object) {
+    this._groupRotationX.add(object);
+  }
+
   invalidate() {
     if (this._zShiftChanged) {
       this._groupMoveZ.position.z = this._zShift;

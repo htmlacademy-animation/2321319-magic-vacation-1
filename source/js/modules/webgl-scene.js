@@ -33,7 +33,7 @@ export default class WebGLScene extends CanvasAnimation {
     this.init();
   }
 
-  init() {
+  async init() {
     this.scene = new THREE.Scene();
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
@@ -82,8 +82,8 @@ export default class WebGLScene extends CanvasAnimation {
     //   this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     // }
 
+    await this.initObjects();
     this.initLight();
-    this.initObjects();
   }
 
   isMobile() {
@@ -93,53 +93,29 @@ export default class WebGLScene extends CanvasAnimation {
   }
 
   initLight() {
-    const light = new THREE.Group();
+    const lightDirection = new THREE.DirectionalLight(0xffffff, 0.84);
+    const directionalLightZ = this.far;
+    lightDirection.position.set(0, 0, directionalLightZ);
+    const lightHelper = new THREE.DirectionalLightHelper(lightDirection, 10);
+    this.scene.add(lightHelper);
+    this.cameraRig.addObjectToGroupRotation(lightDirection);
 
-    // const lightDirection = new THREE.DirectionalLight(0xffffff, 0.84);
-    // lightDirection.position.set(
-    //   this.camera.position.x,
-    //   this.camera.position.y,
-    //   this.camera.position.z
-    // );
-    // const targetForLight = new THREE.Object3D();
-    // const targetY =
-    //   this.camera.position.z * Math.tan(THREE.Math.degToRad(15.0));
-    // targetForLight.position.set(0, targetY, 0);
-    // this.scene.add(targetForLight);
-    // lightDirection.target = targetForLight;
-    // light.add(lightDirection);
+    const relatedCameraLight = new THREE.Group();
+    const lightPoint1 = new THREE.PointLight(0xf6f2ff, 1.0, 2600, 2);
+    lightPoint1.position.set(-785, -350, -710);
+    this.setShadowSettings(lightPoint1);
+    const lightHelper1 = new THREE.PointLightHelper(lightPoint1, 10);
+    this.scene.add(lightHelper1);
+    relatedCameraLight.add(lightPoint1);
 
-    // const lightHelper = new THREE.DirectionalLightHelper(lightDirection, 10);
-    // this.scene.add(lightHelper);
-
-    // const lightPoint1 = new THREE.PointLight(0xf6f2ff, 1.0, 2600, 2);
-    // lightPoint1.position.set(-785, -350, -710);
-    // this.setShadowSettings(lightPoint1);
-
-    // const lightHelper1 = new THREE.PointLightHelper(lightPoint1, 10);
-    // this.scene.add(lightHelper1);
-
-    // light.add(lightPoint1);
-
-    // const lightPoint2 = new THREE.PointLight(0xf5feff, 3.5, 2500, 2);
-    // lightPoint2.position.set(730, 800, -985);
-    // this.setShadowSettings(lightPoint2);
-
-    // const lightHelper2 = new THREE.PointLightHelper(lightPoint2, 10);
-    // this.scene.add(lightHelper2);
-
-    // light.add(lightPoint2);
-
-    // TODO: удалить после окончательной постановки света
-    const lightForTesting = new THREE.AmbientLight(`0xFFFF`, 1.0);
-    light.add(lightForTesting);
-
-    light.position.set(
-      this.camera.position.x,
-      this.camera.position.y,
-      this.camera.position.z
-    );
-    this.scene.add(light);
+    const lightPoint2 = new THREE.PointLight(0xf5feff, 3.5, 2500, 2);
+    lightPoint2.position.set(730, 800, -985);
+    this.setShadowSettings(lightPoint2);
+    const lightHelper2 = new THREE.PointLightHelper(lightPoint2, 10);
+    this.scene.add(lightHelper2);
+    relatedCameraLight.add(lightPoint2);
+    relatedCameraLight.position.set(0, 0, this.sceneObjects[ThemeColor.LIGHT_PURPLE].cameraSettings.z);
+    this.cameraRig.addObjectToGroupRotation(relatedCameraLight);
   }
 
   setShadowSettings(light) {
@@ -214,6 +190,9 @@ export default class WebGLScene extends CanvasAnimation {
     const sceneSettings = this.sceneObjects[sceneKey];
     if (sceneSettings.scene) {
       sceneSettings.scene.initObjects();
+      if (sceneKey === ThemeColor.LIGHT_PURPLE) {
+        this.cameraRig.addObjectToGroupRotation(sceneSettings.scene.suitcase);
+      }
       sceneSettings.scene.addToScene(scenesObject);
     }
   }
@@ -258,14 +237,16 @@ export default class WebGLScene extends CanvasAnimation {
   renderSceneObject(sceneObjectId) {
     this.cameraAnimation = null;
     if (this.currentSceneObject === Screen.TOP && this.currentSceneObject !== sceneObjectId) {
+      const introScene = this.sceneObjects[Screen.TOP].scene;
       this.cameraAnimation = {
         element: null,
         status: true,
-        durations: [1000],
-        finites: [true],
-        delays: [0],
+        durations: [1000, 600],
+        finites: [true, true],
+        delays: [0, 200],
         animationFunctions: [
           (el, progress) => this.cameraAnimationMove(el, progress),
+          (el, progress) => introScene.planeOpacityAnimationFunc(introScene.sceneGroup.children[0].children[0], progress),
         ],
       };
     } else if (this.currentSceneObject !== Screen.TOP && sceneObjectId !== Screen.TOP && this.currentSceneObject !== sceneObjectId) {

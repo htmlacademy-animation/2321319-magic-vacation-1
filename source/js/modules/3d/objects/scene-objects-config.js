@@ -35,6 +35,7 @@ export const SceneObjects = {
             materialType: MaterialType.BASIC.id,
             materialProps: {
               color: ObjectColor.PURPLE.id,
+              transparent: true
             }
           },
         ],
