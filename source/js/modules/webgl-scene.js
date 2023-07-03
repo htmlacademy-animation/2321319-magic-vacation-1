@@ -158,6 +158,7 @@ export default class WebGLScene extends CanvasAnimation {
 
     // TODO: отказаться от этого объекта в пользу SceneObject
     this.sceneObjects[Screen.TOP] = {
+      id: 0,
       scene: scenes[Screen.TOP],
       hue: 0.0,
       bubbles: [],
@@ -172,6 +173,7 @@ export default class WebGLScene extends CanvasAnimation {
     };
     Object.entries(ThemeColor).forEach(([_key, value], index) => {
       this.sceneObjects[value] = {
+        id: index + 1,
         scene: scenes[value] ? scenes[value] : null,
         hue: 0.0,
         cameraSettings: {
@@ -236,8 +238,8 @@ export default class WebGLScene extends CanvasAnimation {
 
   renderSceneObject(sceneObjectId) {
     this.cameraAnimation = null;
+    const introScene = this.sceneObjects[Screen.TOP] && this.sceneObjects[Screen.TOP].scene;
     if (this.currentSceneObject === Screen.TOP && this.currentSceneObject !== sceneObjectId) {
-      const introScene = this.sceneObjects[Screen.TOP].scene;
       this.cameraAnimation = {
         element: null,
         status: true,
@@ -253,11 +255,12 @@ export default class WebGLScene extends CanvasAnimation {
       this.cameraAnimation = {
         element: null,
         status: true,
-        durations: [1000],
-        finites: [true],
-        delays: [0],
+        durations: [1000, 100],
+        finites: [true, true],
+        delays: [0, 200],
         animationFunctions: [
           (el, progress) => this.cameraAnimationRotate(el, progress),
+          (el, progress) => introScene.planeOpacityAnimationFunc(introScene.sceneGroup.children[0].children[0], progress, false),
         ],
       };
     } else {
@@ -268,6 +271,27 @@ export default class WebGLScene extends CanvasAnimation {
     if (this.isLoading) {
       return;
     }
+    setTimeout(() => {
+      Object.values(this.sceneObjects).forEach((el) => {
+        el.scene.sceneGroup.visible = false;
+      });
+      const currentSceneIndex = this.sceneObjects[this.currentSceneObject].id;
+      if (this.currentSceneObject !== Screen.TOP) {
+        Object.values(this.sceneObjects).forEach((el) => {
+          const index = el.id;
+          if (currentSceneIndex === 1) {
+            el.scene.sceneGroup.visible = index === 2 || index === 4 || currentSceneIndex === index;
+          } else if (currentSceneIndex === 4) {
+            el.scene.sceneGroup.visible = index === 1 || index === 3 || currentSceneIndex === index;
+          } else {
+            el.scene.sceneGroup.visible = Math.abs(index - currentSceneIndex) <= 1;
+          }
+        });
+      } else {
+        this.sceneObjects[this.currentSceneObject].scene.sceneGroup.visible = true;
+        this.sceneObjects[ThemeColor.LIGHT_PURPLE].scene.sceneGroup.visible = true;
+      }
+    }, 500);
 
     this.render();
     this.startAnimation();

@@ -120,8 +120,9 @@ export default class IntroScene extends DefaultScene {
     };
   }
 
-  planeOpacityAnimationFunc(element, progress) {
-    element.material.opacity = 1 - progress;
+  planeOpacityAnimationFunc(element, progress, isRevert = true) {
+    element.material.opacity = isRevert ? 1 - progress : progress;
+    console.log(element.material.opacity)
   }
 
   suitcaseAnimationFunc(element, progress) {
