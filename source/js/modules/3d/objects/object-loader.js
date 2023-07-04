@@ -180,6 +180,7 @@ export default class ObjectLoader {
           color: new THREE.Color(
             ObjectColor[materialProps.color].value
           ),
+          transparent: !!materialProps.transparent,
           metalness: MaterialType[materialType].metalness,
           roughness: MaterialType[materialType].roughness,
           side: materialProps.side || THREE.FrontSide
