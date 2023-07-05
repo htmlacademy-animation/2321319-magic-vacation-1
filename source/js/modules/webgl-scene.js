@@ -317,7 +317,7 @@ export default class WebGLScene extends CanvasAnimation {
   mouseMoveHandler(e) {
     const windowHeight = window.innerHeight;
     const mouseY = (2 * e.pageY / windowHeight) - 1;
-    this.cameraRig.additionalAngleY = 15 * mouseY;
+    this.cameraRig.additionalAngleY = 25 * mouseY;
     this.cameraRig.invalidate();
   }
 

@@ -15,8 +15,8 @@ export default class CameraRig extends THREE.Group {
     this._zShift = 0;
     this._zShiftChanged = true;
 
-    this.minAdditionalAngleY = -15;
-    this.maxAdditionalAngleY = 15;
+    this.minAdditionalAngleY = -25;
+    this.maxAdditionalAngleY = 25;
     this._additionalAngleY = 0;
     this._additionalAngleYChanged = true;
 
