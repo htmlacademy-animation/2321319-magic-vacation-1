@@ -68835,8 +68835,8 @@ class CameraRig extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
     this._zShift = 0;
     this._zShiftChanged = true;
 
-    this.minAdditionalAngleY = -15;
-    this.maxAdditionalAngleY = 15;
+    this.minAdditionalAngleY = -25;
+    this.maxAdditionalAngleY = 25;
     this._additionalAngleY = 0;
     this._additionalAngleYChanged = true;
 
@@ -70672,7 +70672,7 @@ class DogScene extends _default_scene__WEBPACK_IMPORTED_MODULE_4__["default"] {
   constructor(objectLoader) {
     super(objectLoader);
     this.sceneId = _general_consts__WEBPACK_IMPORTED_MODULE_2__["ThemeColor"].LIGHT_PURPLE;
-    this.suitcaseStartPosition = [-336, -730, 750];
+    this.suitcaseStartPosition = [-336, -747, 750];
     this.chandlierAngle = 2;
     this.isSuitcaseApear = false;
     this.initAnimationsSettings();
@@ -70775,7 +70775,7 @@ class DogScene extends _default_scene__WEBPACK_IMPORTED_MODULE_4__["default"] {
     const scaled = yScale * this.suitcaseYSize - this.suitcaseYSize;
 
     if (progress <= 0.65) {
-      y = -730 - 160 * progress - scaled;
+      y = -747 - 160 * progress - scaled;
     }
 
     this.setPosition(this.suitcase, [-336, y, 750], scale, [0, 0, 0]);
@@ -73363,7 +73363,7 @@ class WebGLScene extends _canvas_animation__WEBPACK_IMPORTED_MODULE_10__["defaul
   mouseMoveHandler(e) {
     const windowHeight = window.innerHeight;
     const mouseY = (2 * e.pageY / windowHeight) - 1;
-    this.cameraRig.additionalAngleY = 15 * mouseY;
+    this.cameraRig.additionalAngleY = 25 * mouseY;
     this.cameraRig.invalidate();
   }
 
