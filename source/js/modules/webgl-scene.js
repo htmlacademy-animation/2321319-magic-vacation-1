@@ -10,7 +10,7 @@ import DogScene from "./3d/scenes/story-dog-scene";
 import IIScene from "./3d/scenes/story-ii-scene";
 import CanvasAnimation from "./canvas-animation";
 import { SceneObjects } from "./3d/objects/scene-objects-config";
-import { easeInExpo } from "../general/easing";
+import { easeInQuad } from "../general/easing";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 export default class WebGLScene extends CanvasAnimation {
@@ -22,7 +22,7 @@ export default class WebGLScene extends CanvasAnimation {
     this.sceneObjects = {};
     this.alpha = 1;
     this.backgroundColor = `#5f458c`;
-    this.near = 0.1;
+    this.near = 100;
     this.far = 4675;
     this.fov = 35;
     this.isLoading = true;
@@ -30,6 +30,8 @@ export default class WebGLScene extends CanvasAnimation {
     this.previousSceneObject = null;
 
     window.addEventListener(`resize`, () => this.setSizes());
+    window.addEventListener(`mousemove`, (e) => this.mouseMoveHandler(e));
+
     this.init();
   }
 
@@ -96,23 +98,23 @@ export default class WebGLScene extends CanvasAnimation {
     const lightDirection = new THREE.DirectionalLight(0xffffff, 0.84);
     const directionalLightZ = this.far;
     lightDirection.position.set(0, 0, directionalLightZ);
-    const lightHelper = new THREE.DirectionalLightHelper(lightDirection, 10);
-    this.scene.add(lightHelper);
+    // const lightHelper = new THREE.DirectionalLightHelper(lightDirection, 10);
+    // this.scene.add(lightHelper);
     this.cameraRig.addObjectToGroupRotation(lightDirection);
 
     const relatedCameraLight = new THREE.Group();
     const lightPoint1 = new THREE.PointLight(0xf6f2ff, 1.0, 2600, 2);
     lightPoint1.position.set(-785, -350, -710);
     this.setShadowSettings(lightPoint1);
-    const lightHelper1 = new THREE.PointLightHelper(lightPoint1, 10);
-    this.scene.add(lightHelper1);
+    // const lightHelper1 = new THREE.PointLightHelper(lightPoint1, 10);
+    // this.scene.add(lightHelper1);
     relatedCameraLight.add(lightPoint1);
 
     const lightPoint2 = new THREE.PointLight(0xf5feff, 3.5, 2500, 2);
     lightPoint2.position.set(730, 800, -985);
     this.setShadowSettings(lightPoint2);
-    const lightHelper2 = new THREE.PointLightHelper(lightPoint2, 10);
-    this.scene.add(lightHelper2);
+    // const lightHelper2 = new THREE.PointLightHelper(lightPoint2, 10);
+    // this.scene.add(lightHelper2);
     relatedCameraLight.add(lightPoint2);
     relatedCameraLight.position.set(0, 0, this.sceneObjects[ThemeColor.LIGHT_PURPLE].cameraSettings.z);
     this.cameraRig.addObjectToGroupRotation(relatedCameraLight);
@@ -123,7 +125,7 @@ export default class WebGLScene extends CanvasAnimation {
     light.shadow.bias = -0.001;
     light.shadow.mapSize.width = 1024;
     light.shadow.mapSize.height = 1024;
-    light.shadow.camera.near = 0.5;
+    light.shadow.camera.near = 100;
     light.shadow.camera.far = 3500;
     light.shadow.camera.visible = true;
   }
@@ -138,7 +140,7 @@ export default class WebGLScene extends CanvasAnimation {
     Object.entries(this.sceneObjects).map(([key, _value]) => {
       this.init3dSceneObjects(key, +key === Screen.TOP ? this.scene : this.sceneGroup);
     });
-    this.sceneGroup.position.y = 200;
+    this.sceneGroup.position.y = this.aspectRatio > 0 ? 185 : 258;
     this.scene.add(this.sceneGroup);
 
     this.isLoading = false;
@@ -167,7 +169,9 @@ export default class WebGLScene extends CanvasAnimation {
         y: 920,
         z: 4675,
         angleY: 0,
-        angleX: 0
+        angleX: 0,
+        targetForLookY: 920,
+        targetForLookZ: 3270
       },
       ...scenes[Screen.TOP].animationObjects,
     };
@@ -180,8 +184,10 @@ export default class WebGLScene extends CanvasAnimation {
           x: 0,
           y: 920,
           z: 2260,
-          angleY: -15,
-          angleX: SceneObjects[value].rotation[1]
+          angleY: this.aspectRatio > 0 ? -15 : -20,
+          angleX: SceneObjects[value].rotation[1],
+          targetForLookY: this.aspectRatio > 0 ? 130 : -160,
+          targetForLookZ: 0
         },
         ...this.getSceneObjectsSettings(index, scenes[value].animationObjects),
       };
@@ -243,24 +249,26 @@ export default class WebGLScene extends CanvasAnimation {
       this.cameraAnimation = {
         element: null,
         status: true,
-        durations: [1000, 600],
-        finites: [true, true],
-        delays: [0, 200],
+        durations: [1000, 600, 300],
+        finites: [true, true, true],
+        delays: [0, 200, 0],
         animationFunctions: [
           (el, progress) => this.cameraAnimationMove(el, progress),
           (el, progress) => introScene.planeOpacityAnimationFunc(introScene.sceneGroup.children[0].children[0], progress),
+          (el, progress) => this.resetAngleForMouseEvents(el, progress, this.cameraRig.additionalAngleY)
         ],
       };
     } else if (this.currentSceneObject !== Screen.TOP && sceneObjectId !== Screen.TOP && this.currentSceneObject !== sceneObjectId) {
       this.cameraAnimation = {
         element: null,
         status: true,
-        durations: [1000, 100],
-        finites: [true, true],
-        delays: [0, 200],
+        durations: [1000, 100, 300],
+        finites: [true, true, true],
+        delays: [0, 200, 0],
         animationFunctions: [
           (el, progress) => this.cameraAnimationRotate(el, progress),
           (el, progress) => introScene.planeOpacityAnimationFunc(introScene.sceneGroup.children[0].children[0], progress, false),
+          (el, progress) => this.resetAngleForMouseEvents(el, progress, this.cameraRig.additionalAngleY)
         ],
       };
     } else {
@@ -271,6 +279,13 @@ export default class WebGLScene extends CanvasAnimation {
     if (this.isLoading) {
       return;
     }
+
+    this.updateVisibleObjects();
+    this.render();
+    this.startAnimation();
+  }
+
+  updateVisibleObjects() {
     setTimeout(() => {
       Object.values(this.sceneObjects).forEach((el) => {
         el.scene.sceneGroup.visible = false;
@@ -292,9 +307,18 @@ export default class WebGLScene extends CanvasAnimation {
         this.sceneObjects[ThemeColor.LIGHT_PURPLE].scene.sceneGroup.visible = true;
       }
     }, 500);
+  }
 
-    this.render();
-    this.startAnimation();
+  resetAngleForMouseEvents(el, progress, startValue) {
+    this.cameraRig.additionalAngleY = startValue - startValue * progress;
+    this.cameraRig.invalidate();
+  }
+
+  mouseMoveHandler(e) {
+    const windowHeight = window.innerHeight;
+    const mouseY = (2 * e.pageY / windowHeight) - 1;
+    this.cameraRig.additionalAngleY = 15 * mouseY;
+    this.cameraRig.invalidate();
   }
 
   setColor() {
@@ -304,7 +328,10 @@ export default class WebGLScene extends CanvasAnimation {
 
   cameraAnimationMove(object, progress) {
     this.cameraRig.zShift = 4675 - 2415 * progress;
-    this.cameraRig.angleY = THREE.Math.degToRad(-15 * progress);
+    const angle = this.aspectRatio > 0 ? -15 : -20;
+    this.cameraRig.targetForLookY = this.aspectRatio > 0 ? 920 - 790 * easeInQuad(progress) : 920 - 1080 * easeInQuad(progress);
+    this.cameraRig.targetForLookZ = 3270 - 3270 * easeInQuad(progress);
+    this.cameraRig.angleY = THREE.Math.degToRad(angle * easeInQuad(progress));
     this.cameraRig.invalidate();
   }
 
@@ -319,8 +346,11 @@ export default class WebGLScene extends CanvasAnimation {
   setCameraPositionWithoutAnimation(sceneObjectId) {
     const sceneCameraSettings = this.sceneObjects[sceneObjectId].cameraSettings;
     this.cameraRig.zShift = sceneCameraSettings.z;
+    this.cameraRig.targetForLookY = this.sceneObjects[sceneObjectId].cameraSettings.targetForLookY;
+    this.cameraRig.targetForLookZ = this.sceneObjects[sceneObjectId].cameraSettings.targetForLookZ;
     this.cameraRig.angleY = THREE.Math.degToRad(sceneCameraSettings.angleY);
     this.cameraRig.angleX = THREE.Math.degToRad(sceneCameraSettings.angleX);
+    this.cameraRig.additionalAngleY = 0;
     this.cameraRig.invalidate();
   }
 

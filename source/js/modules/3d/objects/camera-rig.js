@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { rotateAboutPoint } from "./helpers";
 
 export default class CameraRig extends THREE.Group {
   constructor(object) {
@@ -14,8 +15,15 @@ export default class CameraRig extends THREE.Group {
     this._zShift = 0;
     this._zShiftChanged = true;
 
+    this.minAdditionalAngleY = -15;
+    this.maxAdditionalAngleY = 15;
+    this._additionalAngleY = 0;
+    this._additionalAngleYChanged = true;
+
     this._targetForLookY = 0;
     this._targetForLookYChanged = true;
+    this._targetForLookZ = 0;
+    this._targetForLookZChanged = true;
 
     this.invalidate();
   }
@@ -53,6 +61,22 @@ export default class CameraRig extends THREE.Group {
     return this._zShift;
   }
 
+  set additionalAngleY(value) {
+    if (
+      this._additionalAngleY === value ||
+      value < this.minAdditionalAngleY ||
+      value > this.maxAdditionalAngleY
+    )
+      return;
+
+    this._additionalAngleY = value;
+    this._additionalAngleYChanged = true;
+  }
+
+  get additionalAngleY() {
+    return this._additionalAngleY;
+  }
+
   set targetForLookY(value) {
     if (this._targetForLookY === value) return;
 
@@ -62,6 +86,17 @@ export default class CameraRig extends THREE.Group {
 
   get targetForLookY() {
     return this._targetForLookY;
+  }
+
+  set targetForLookZ(value) {
+    if (this._targetForLookZ === value) return;
+
+    this._targetForLookZ = value;
+    this._targetForLookZChanged = true;
+  }
+
+  get targetForLookZ() {
+    return this._targetForLookZ;
   }
 
   constructChildren(object) {
@@ -83,6 +118,16 @@ export default class CameraRig extends THREE.Group {
     this._groupRotationX.add(object);
   }
 
+  setCameraLookAt(
+    coordinates = new THREE.Vector3(
+      0,
+      this._targetForLookY,
+      this._targetForLookZ
+    )
+  ) {
+    this._camera.lookAt(coordinates);
+  }
+
   invalidate() {
     if (this._zShiftChanged) {
       this._groupMoveZ.position.z = this._zShift;
@@ -93,12 +138,13 @@ export default class CameraRig extends THREE.Group {
       this._angleXChanged = false;
     }
     if (this._angleYChanged) {
-      this._cameraNull.rotation.x = this._angleY;
+      this._camera.rotation.x = this._angleY;
       this._angleYChanged = false;
     }
-    if (this._targetForLookYChanged) {
-      this._camera.lookAt(0, this._targetForLookY, 0);
-      this._targetForLookYChanged = false;
+    if (this._additionalAngleYChanged) {
+      this._cameraNull.position.y = this._additionalAngleY;
+      this._additionalAngleYChanged = false;
     }
+    this.setCameraLookAt();
   }
 }
