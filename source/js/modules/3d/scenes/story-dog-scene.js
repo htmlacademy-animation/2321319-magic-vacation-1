@@ -12,7 +12,7 @@ export default class DogScene extends DefaultScene {
   constructor(objectLoader) {
     super(objectLoader);
     this.sceneId = ThemeColor.LIGHT_PURPLE;
-    this.suitcaseStartPosition = [-336, -730, 750];
+    this.suitcaseStartPosition = [-336, -747, 750];
     this.chandlierAngle = 2;
     this.isSuitcaseApear = false;
     this.initAnimationsSettings();
@@ -115,7 +115,7 @@ export default class DogScene extends DefaultScene {
     const scaled = yScale * this.suitcaseYSize - this.suitcaseYSize;
 
     if (progress <= 0.65) {
-      y = -730 - 160 * progress - scaled;
+      y = -747 - 160 * progress - scaled;
     }
 
     this.setPosition(this.suitcase, [-336, y, 750], scale, [0, 0, 0]);

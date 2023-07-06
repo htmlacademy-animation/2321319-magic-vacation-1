@@ -266,7 +266,7 @@ export const SceneObjects = {
           {
             id: `floorBody`,
             primitiveType: `CircleGeometry`,
-            primitiveSettings: [1350, 60, 0, Math.PI / 2],
+            primitiveSettings: [1400, 60, 0, Math.PI / 2],
             position: [0, -500, 0],
             scale: [1, 1, 1],
             rotation: [90, 0, 45],
@@ -513,7 +513,7 @@ export const SceneObjects = {
           {
             id: `floorBody`,
             primitiveType: `CircleGeometry`,
-            primitiveSettings: [1350, 60, 0, Math.PI / 2],
+            primitiveSettings: [1400, 60, 0, Math.PI / 2],
             position: [0, -500, 0],
             scale: [1, 1, 1],
             rotation: [90, 0, 45],
@@ -616,7 +616,7 @@ export const SceneObjects = {
           {
             id: `floorBody`,
             primitiveType: `CircleGeometry`,
-            primitiveSettings: [1350, 60, 0, Math.PI / 2],
+            primitiveSettings: [1400, 60, 0, Math.PI / 2],
             position: [0, -500, 0],
             scale: [1, 1, 1],
             rotation: [90, 0, 45],
@@ -762,7 +762,7 @@ export const SceneObjects = {
           {
             id: `floorBody`,
             primitiveType: `CircleGeometry`,
-            primitiveSettings: [1350, 60, 0, Math.PI / 2],
+            primitiveSettings: [1400, 60, 0, Math.PI / 2],
             position: [0, -500, 0],
             scale: [1, 1, 1],
             rotation: [90, 0, 45],
