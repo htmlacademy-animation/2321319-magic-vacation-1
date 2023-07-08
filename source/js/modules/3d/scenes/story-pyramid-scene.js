@@ -5,8 +5,8 @@ import DefaultScene from "./default-scene";
 import { easeOutQuad } from "../../../general/easing";
 
 export default class PyramidScene extends DefaultScene {
-  constructor(objectLoader) {
-    super(objectLoader);
+  constructor(objectLoader, aspectRatio) {
+    super(objectLoader, aspectRatio);
     this.sceneId = ThemeColor.BLUE;
     this.initAnimationsSettings();
   }

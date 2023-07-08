@@ -5,8 +5,8 @@ import DefaultScene from "./default-scene";
 import { easeInOutQuad } from "../../../general/easing";
 
 export default class SnowmanScene extends DefaultScene {
-  constructor(objectLoader) {
-    super(objectLoader);
+  constructor(objectLoader, aspectRatio) {
+    super(objectLoader, aspectRatio);
     this.sceneId = ThemeColor.LIGHT_BLUE;
     this.initAnimationsSettings();
   }
