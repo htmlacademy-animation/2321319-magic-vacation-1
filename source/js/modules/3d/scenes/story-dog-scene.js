@@ -129,10 +129,9 @@ export default class DogScene extends DefaultScene {
 
     if (progress === 1) {
       this.isSuitcaseApear = true;
-      y = this.isPortrait() ? -778 : -851; //TODO
+      y = this.isPortrait() ? -757 : -830; //TODO
     }
 
-    // console.log(y)
     this.setPosition(this.suitcase, [-336, y, 750], scale, [0, 0, 0]);
   }
 

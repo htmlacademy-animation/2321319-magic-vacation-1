@@ -133,12 +133,13 @@ export default class CameraRig extends THREE.Group {
 
   setCameraLookAt(
     coordinates = new THREE.Vector3(
-      this._targetForLookX,
+      0,
       this._targetForLookY,
       this._targetForLookZ
     )
   ) {
     this._camera.lookAt(coordinates);
+    this._camera.rotation.y = this._targetForLookX;
   }
 
   invalidate() {
@@ -158,6 +159,7 @@ export default class CameraRig extends THREE.Group {
       this._cameraNull.position.y = this._additionalAngleY;
       this._additionalAngleYChanged = false;
     }
+
     this.setCameraLookAt();
   }
 }
