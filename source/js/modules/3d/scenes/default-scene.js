@@ -17,7 +17,6 @@ export default class DefaultScene {
     this.initPrimitives();
     this.initSvgObjects();
     this.initPreparedObjects();
-    this.sceneGroup.visible = false;
   }
 
   isPortrait() {

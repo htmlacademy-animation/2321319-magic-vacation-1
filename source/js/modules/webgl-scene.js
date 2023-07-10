@@ -73,7 +73,7 @@ export default class WebGLScene extends CanvasAnimation {
         el.scene.onResizeUpdate(this.aspectRatio);
       });
       this.render();
-      this.startAnimation();
+      this.updateObjectsOnResize();
     }
   }
 
@@ -119,10 +119,10 @@ export default class WebGLScene extends CanvasAnimation {
     // });
     // this.controls.update();
 
-    if (!this.isMobile()) {
-      this.renderer.shadowMap.enabled = true;
-      this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    }
+    // if (!this.isMobile()) {
+    //   this.renderer.shadowMap.enabled = true;
+    //   this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    // }
 
     await this.initObjects();
     this.initLight();
@@ -317,11 +317,12 @@ export default class WebGLScene extends CanvasAnimation {
       this.cameraAnimation = {
         element: null,
         status: true,
-        durations: [1000, 600, 300],
-        finites: [true, true, true],
-        delays: [0, 200, 0],
+        durations: [1000, 1000, 600, 300],
+        finites: [true, true, true, true],
+        delays: [0, 1000, 200, 0],
         animationFunctions: [
           (el, progress) => this.cameraAnimationMove(el, progress),
+          (el, progress) => this.cameraAnimationRotate(el, progress),
           (el, progress) => introScene.planeOpacityAnimationFunc(introScene.sceneGroup.children[0].children[0], progress),
           (el, progress) => this.resetAngleForMouseEvents(el, progress, startMouseRelativeAngle)
         ],
@@ -339,6 +340,20 @@ export default class WebGLScene extends CanvasAnimation {
           (el, progress) => this.resetAngleForMouseEvents(el, progress, startMouseRelativeAngle)
         ],
       };
+    } else if (this.currentSceneObject !== Screen.TOP && sceneObjectId === Screen.TOP && this.currentSceneObject !== sceneObjectId) {
+      this.cameraAnimation = {
+        element: null,
+        status: true,
+        durations: [800, 100, 300, 100],
+        finites: [true, true, true, true],
+        delays: [0, 700, 0, 900],
+        animationFunctions: [
+          (el, progress) => this.cameraBackAnimation(el, progress),
+          (el, progress) => introScene.planeOpacityAnimationFunc(introScene.sceneGroup.children[0].children[0], progress, false),
+          (el, progress) => this.resetAngleForMouseEvents(el, progress, startMouseRelativeAngle),
+          () => this.setCameraPositionWithoutAnimation(sceneObjectId)
+        ],
+      };
     } else {
       if (!this.isLoading) this.setCameraPositionWithoutAnimation(sceneObjectId);
     }
@@ -348,33 +363,19 @@ export default class WebGLScene extends CanvasAnimation {
       return;
     }
 
-    this.updateVisibleObjects();
     this.render();
     this.startAnimation();
   }
 
-  updateVisibleObjects() {
-    setTimeout(() => {
-      Object.values(this.sceneObjects).forEach((el) => {
-        el.scene.sceneGroup.visible = false;
-      });
-      const currentSceneIndex = this.sceneObjects[this.currentSceneObject].id;
-      if (this.currentSceneObject !== Screen.TOP) {
-        Object.values(this.sceneObjects).forEach((el) => {
-          const index = el.id;
-          if (currentSceneIndex === 1) {
-            el.scene.sceneGroup.visible = index === 2 || index === 4 || currentSceneIndex === index;
-          } else if (currentSceneIndex === 4) {
-            el.scene.sceneGroup.visible = index === 1 || index === 3 || currentSceneIndex === index;
-          } else {
-            el.scene.sceneGroup.visible = Math.abs(index - currentSceneIndex) <= 1;
-          }
-        });
-      } else {
-        this.sceneObjects[this.currentSceneObject].scene.sceneGroup.visible = true;
-        this.sceneObjects[ThemeColor.LIGHT_PURPLE].scene.sceneGroup.visible = true;
-      }
-    }, 500);
+  cameraBackAnimation(el, progress) {
+    this.cameraRig.zShift = 2260 + 2415 * progress;
+    this.cameraRig.targetForLookY = this.isLandscape() ? 790 * progress : 1080 * progress;
+    this.cameraRig.targetForLookZ = this.sceneObjects[this.previousSceneObject].cameraSettings.targetForLookZ * (1 - progress);
+    this.cameraRig.targetForLookX = this.sceneObjects[this.previousSceneObject].cameraSettings.targetForLookX * (1 - progress);
+    const angle = this.sceneObjects[this.previousSceneObject].cameraSettings.angleY;
+    this.cameraRig.angleY = THREE.Math.degToRad(angle * easeInQuad(1 - progress));
+    this.cameraRig.angleX = THREE.Math.degToRad(this.sceneObjects[this.previousSceneObject].cameraSettings.angleX * (1 - progress));
+    this.cameraRig.invalidate();
   }
 
   resetAngleForMouseEvents(el, progress, startValue) {
@@ -400,7 +401,10 @@ export default class WebGLScene extends CanvasAnimation {
     this.cameraRig.targetForLookY = this.isLandscape()
       ? this.defaultCameraPosition[1] - 790 * easeInQuad(progress)
       : this.defaultCameraPosition[1] - 1080 * easeInQuad(progress);
-    this.cameraRig.targetForLookZ = 3270 - 3270 * easeInQuad(progress);
+    const diffZ = this.sceneObjects[this.previousSceneObject].cameraSettings.targetForLookZ - this.sceneObjects[this.currentSceneObject].cameraSettings.targetForLookZ;
+    const diffX = this.sceneObjects[this.previousSceneObject].cameraSettings.targetForLookX - this.sceneObjects[this.currentSceneObject].cameraSettings.targetForLookX;
+    this.cameraRig.targetForLookZ = this.sceneObjects[this.previousSceneObject].cameraSettings.targetForLookZ - diffZ * easeInQuad(progress);
+    this.cameraRig.targetForLookX = this.sceneObjects[this.previousSceneObject].cameraSettings.targetForLookX - diffX * easeInQuad(progress);
     this.cameraRig.angleY = THREE.Math.degToRad(angle * easeInQuad(progress));
     this.cameraRig.invalidate();
   }
@@ -408,19 +412,27 @@ export default class WebGLScene extends CanvasAnimation {
   cameraAnimationRotate(object, progress) {
     const targetDegree = this.sceneObjects[this.currentSceneObject].cameraSettings.angleX;
     const currentDegree = this.sceneObjects[this.previousSceneObject].cameraSettings.angleX;
-    const newDegree = currentDegree - targetDegree > 0 ? currentDegree - 90 * progress : currentDegree + 90 * progress;
-    this.cameraRig.angleX = THREE.Math.degToRad(newDegree);
+    const diff = currentDegree - targetDegree;
+    if (diff !== 0) {
+      const newDegree = currentDegree - diff * progress;
+      this.cameraRig.angleX = THREE.Math.degToRad(newDegree);
+    }
 
-    this.cameraRig.targetForLookX = this.getCoordinateForAnimation(
-      this.sceneObjects[this.previousSceneObject].cameraSettings.targetForLookX,
-      this.sceneObjects[this.currentSceneObject].cameraSettings.targetForLookX,
-      progress
-    );
-    this.cameraRig.targetForLookZ = this.getCoordinateForAnimation(
-      this.sceneObjects[this.previousSceneObject].cameraSettings.targetForLookZ,
-      this.sceneObjects[this.currentSceneObject].cameraSettings.targetForLookZ,
-      progress
-    );
+    if (this.cameraRig.targetForLookX !== this.sceneObjects[this.currentSceneObject].cameraSettings.targetForLookX) {
+      this.cameraRig.targetForLookX = this.getCoordinateForAnimation(
+        this.sceneObjects[this.previousSceneObject].cameraSettings.targetForLookX,
+        this.sceneObjects[this.currentSceneObject].cameraSettings.targetForLookX,
+        progress
+      );
+    }
+    if (this.cameraRig.targetForLookZ !== this.sceneObjects[this.currentSceneObject].cameraSettings.targetForLookZ) {
+      this.cameraRig.targetForLookZ = this.getCoordinateForAnimation(
+        this.sceneObjects[this.previousSceneObject].cameraSettings.targetForLookZ,
+        this.sceneObjects[this.currentSceneObject].cameraSettings.targetForLookZ,
+        progress
+      );
+    }
+
     this.cameraRig.invalidate();
   }
 
@@ -447,6 +459,14 @@ export default class WebGLScene extends CanvasAnimation {
 
   render() {
     this.renderer.render(this.scene, this.camera);
+  }
+
+  updateObjectsOnResize() {
+    this.elements.forEach((el) => {
+      el.animationFunctions.forEach((animation) => {
+        animation(el.element, 1);
+      });
+    });
   }
 
   startAnimation() {
