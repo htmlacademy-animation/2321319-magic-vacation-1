@@ -59,13 +59,13 @@ export default class WebGLScene extends CanvasAnimation {
         this.sceneObjects[key].cameraSettings.x = this.defaultCameraPosition[0];
         this.sceneObjects[key].cameraSettings.angleY = this.getAngleY();
         this.sceneObjects[key].cameraSettings.targetForLookY = this.getTargetY();
-        this.sceneObjects[key].cameraSettings.targetForLookX = this.getTargetX();
+        this.sceneObjects[key].cameraSettings.cameraRotationX = this.getTargetX();
       });
       this.cameraRig.position.x = this.currentSceneObject === Screen.TOP ? 0 : this.defaultCameraPosition[0];
       this.sceneGroup.position.y = this.getRoomCompositionY();
       this.cameraRig.angleY = this.currentSceneObject === Screen.TOP ? 0 : this.getAngleY();
       this.cameraRig.targetForLookY = this.currentSceneObject === Screen.TOP ? 920 : this.getTargetY();
-      this.cameraRig.targetForLookX = this.currentSceneObject === Screen.TOP ? 0 : this.getTargetX();
+      this.cameraRig.cameraRotationX = this.currentSceneObject === Screen.TOP ? 0 : this.getTargetX();
      
       this.cameraRig.invalidate();
       Object.values(this.sceneObjects).forEach((el) => {
@@ -219,7 +219,7 @@ export default class WebGLScene extends CanvasAnimation {
         z: 4675,
         angleY: 0,
         angleX: 0,
-        targetForLookX: 0,
+        cameraRotationX: 0,
         targetForLookY: 920,
         targetForLookZ: 3270
       },
@@ -236,7 +236,7 @@ export default class WebGLScene extends CanvasAnimation {
           z: 2260,
           angleY: this.getAngleY(),
           angleX: SceneObjects[value].rotation[1],
-          targetForLookX: this.getTargetX(),
+          cameraRotationX: this.getTargetX(),
           targetForLookY: this.getTargetY(),
           targetForLookZ: 0
         },
@@ -359,8 +359,8 @@ export default class WebGLScene extends CanvasAnimation {
     this.cameraRig.zShift = 2260 + 2415 * progress;
     this.cameraRig.targetForLookY = this.isLandscape() ? 130 + 790 * progress : -160 + 1080 * progress;
     // this.cameraRig.targetForLookZ = this.sceneObjects[Screen.TOP].cameraSettings.targetForLookZ * progress; // TODO
-    const diffX = this.sceneObjects[this.previousSceneObject].cameraSettings.targetForLookX - this.sceneObjects[this.currentSceneObject].cameraSettings.targetForLookX;
-    this.cameraRig.targetForLookX = diffX * (1 - progress);
+    const diffX = this.sceneObjects[this.previousSceneObject].cameraSettings.cameraRotationX - this.sceneObjects[this.currentSceneObject].cameraSettings.cameraRotationX;
+    this.cameraRig.cameraRotationX = diffX * (1 - progress);
     const angle = this.sceneObjects[this.previousSceneObject].cameraSettings.angleY;
     this.cameraRig.angleY = THREE.Math.degToRad(angle * easeInQuad(1 - progress));
     // console.log(this.cameraRig.targetForLookY)
@@ -391,10 +391,10 @@ export default class WebGLScene extends CanvasAnimation {
     this.cameraRig.targetForLookY = this.isLandscape()
       ? this.defaultCameraPosition[1] - 790 * easeInQuad(progress)
       : this.defaultCameraPosition[1] - 1080 * easeInQuad(progress);
-    
-    const diffX = this.sceneObjects[this.currentSceneObject].cameraSettings.targetForLookX - this.sceneObjects[this.previousSceneObject].cameraSettings.targetForLookX;
+
+    const diffX = this.sceneObjects[this.currentSceneObject].cameraSettings.cameraRotationX - this.sceneObjects[this.previousSceneObject].cameraSettings.cameraRotationX;
     this.cameraRig.targetForLookZ = 3270 - 3270 * easeInQuad(progress);
-    this.cameraRig.targetForLookX = diffX * easeInQuad(progress);
+    this.cameraRig.cameraRotationX = diffX * easeInQuad(progress);
     this.cameraRig.angleY = THREE.Math.degToRad(angle * easeInQuad(progress));
     this.cameraRig.invalidate();
   }
@@ -428,7 +428,7 @@ export default class WebGLScene extends CanvasAnimation {
     this.cameraRig.angleX = THREE.Math.degToRad(sceneCameraSettings.angleX);
     this.cameraRig.additionalAngleY = 0;
     this.cameraRig.targetForLookZ = this.sceneObjects[sceneObjectId].cameraSettings.targetForLookZ;
-    this.cameraRig.targetForLookX = this.sceneObjects[sceneObjectId].cameraSettings.targetForLookX;
+    this.cameraRig.cameraRotationX = this.sceneObjects[sceneObjectId].cameraSettings.cameraRotationX;
     this.cameraRig.invalidate();
   }
 

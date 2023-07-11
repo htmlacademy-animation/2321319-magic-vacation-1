@@ -24,8 +24,8 @@ export default class CameraRig extends THREE.Group {
     this._targetForLookYChanged = true;
     this._targetForLookZ = 0;
     this._targetForLookZChanged = true;
-    this._targetForLookX = 0;
-    this._targetForLookXChanged = true;
+    this._cameraRotationX = 0;
+    this._cameraRotationXChanged = true;
 
     this.invalidate();
   }
@@ -101,15 +101,15 @@ export default class CameraRig extends THREE.Group {
     return this._targetForLookZ;
   }
 
-  set targetForLookX(value) {
-    if (this._targetForLookX === value) return;
+  set cameraRotationX(value) {
+    if (this._cameraRotationX === value) return;
 
-    this._targetForLookX = value;
-    this._targetForLookXChanged = true;
+    this._cameraRotationX = value;
+    this._cameraRotationXChanged = true;
   }
 
-  get targetForLookX() {
-    return this._targetForLookX;
+  get cameraRotationX() {
+    return this._cameraRotationX;
   }
 
   constructChildren(object) {
@@ -139,7 +139,7 @@ export default class CameraRig extends THREE.Group {
     )
   ) {
     this._camera.lookAt(coordinates);
-    this._camera.rotation.y = this._targetForLookX;
+    this._camera.rotation.y = this._cameraRotationX;
   }
 
   invalidate() {
