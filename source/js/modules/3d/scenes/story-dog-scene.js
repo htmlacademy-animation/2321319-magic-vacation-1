@@ -9,13 +9,23 @@ import { easeInOutQuad, easeOutQuad } from "../../../general/easing";
 import DefaultScene from "./default-scene";
 
 export default class DogScene extends DefaultScene {
-  constructor(objectLoader) {
-    super(objectLoader);
+  constructor(objectLoader, aspectRatio) {
+    super(objectLoader, aspectRatio);
     this.sceneId = ThemeColor.LIGHT_PURPLE;
-    this.suitcaseStartPosition = [-336, -747, 750];
+    this.suitcaseStartPosition = this.getSuitcaseStartPosition();
     this.chandlierAngle = 2;
     this.isSuitcaseApear = false;
     this.initAnimationsSettings();
+  }
+
+  getSuitcaseStartPosition() {
+    return [-336, this.isPortrait() ? -674 : -747, 750];
+  }
+
+  onResizeUpdate(aspectRatio) {
+    super.onResizeUpdate(aspectRatio);
+    this.suitcaseStartPosition = this.getSuitcaseStartPosition();
+    this.suitcase.position.y = this.suitcaseStartPosition[1];
   }
 
   initObjects() {
@@ -101,7 +111,6 @@ export default class DogScene extends DefaultScene {
   }
 
   suitcaseAppearenceAnimationFunc(_el, progress) {
-    if (this.isSuitcaseApear) return;
     let y = this.suitcase.position.y;
     let scale = [1, 1, 1];
 
@@ -115,11 +124,15 @@ export default class DogScene extends DefaultScene {
     const scaled = yScale * this.suitcaseYSize - this.suitcaseYSize;
 
     if (progress <= 0.65) {
-      y = -747 - 160 * progress - scaled;
+      y = this.getSuitcaseStartPosition()[1] - 160 * progress - scaled;
+    }
+
+    if (progress === 1) {
+      this.isSuitcaseApear = true;
+      y = this.isPortrait() ? -757 : -830; //TODO
     }
 
     this.setPosition(this.suitcase, [-336, y, 750], scale, [0, 0, 0]);
-    if (progress === 1) this.isSuitcaseApear = true;
   }
 
   chandlierMoveAnimationFunc(el, progress) {

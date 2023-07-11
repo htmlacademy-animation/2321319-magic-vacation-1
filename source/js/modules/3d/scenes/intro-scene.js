@@ -7,8 +7,8 @@ import { easeOutQuad, easeInOutQuad, easeInQuad } from "../../../general/easing"
 import DefaultScene from "./default-scene";
 
 export default class IntroScene extends DefaultScene {
-  constructor(objectLoader) {
-    super(objectLoader);
+  constructor(objectLoader, aspectRatio) {
+    super(objectLoader, aspectRatio);
     this.sceneId = Screen.TOP;
     this.initAnimationsSettings();
   }
@@ -159,7 +159,7 @@ export default class IntroScene extends DefaultScene {
 
   chandelierAnimationFunc(element, progress) {
     // from 5, -20, 25 to 485 -140 105
-    const x = 5 + 480 * easeOutQuad(progress);
+    const x = 5 + 480 * easeOutQuad(progress) * Math.min(this.aspectRatio * 0.7, 1);
     const y = -20 - 120 * easeOutQuad(progress);
     const z = 25 + 80 * easeOutQuad(progress);
     // from 0 0 0 to 0.7, 0.7, 0.7
@@ -178,7 +178,7 @@ export default class IntroScene extends DefaultScene {
 
   flamingoAnimationFunc(element, progress) {
     // from -50, 30, 20 to -510, 384, 80
-    const x = -50 - 460 * easeOutQuad(progress);
+    const x = -50 - 460 * easeOutQuad(progress) * Math.min(this.aspectRatio * 0.7, 1);
     const y = 30 + 354 * easeOutQuad(progress);
     const z = 20 + 60 * easeOutQuad(progress);
     // from 0 0 0 to 0.8, 0.8, 0.8
@@ -190,7 +190,7 @@ export default class IntroScene extends DefaultScene {
 
   snowflakeAnimationFunc(element, progress) {
     // from -40, -20, 20 to -395, 100, 70
-    const x = -40 - 355 * easeOutQuad(progress);
+    const x = -40 - 355 * easeOutQuad(progress) * Math.min(this.aspectRatio * 0.7, 1);
     const y = -20 + 120 * easeOutQuad(progress);
     const z = 20 + 50 * easeOutQuad(progress);
     // from 0 0 0 to 1.4, 1.4, 1.4
@@ -202,7 +202,7 @@ export default class IntroScene extends DefaultScene {
 
   questionAnimationFunc(element, progress) {
     // from 10, -60, 20 to -115, -345, 65
-    const x = 20 - 135 * easeOutQuad(progress);
+    const x = 20 - 135 * easeOutQuad(progress) * Math.min(this.aspectRatio * 0.7, 1);
     const y = -60 - 285 * easeOutQuad(progress);
     const z = 20 + 45 * easeOutQuad(progress);
     // from 0 0 0 to 1.2, 1.2, 1.2
@@ -213,8 +213,8 @@ export default class IntroScene extends DefaultScene {
   }
 
   leafAnimationFunc(element, progress) {
-    // from 7, 40, 20 to 690, 360, 145
-    const x = 7 + 683 * easeOutQuad(progress);
+    // from 7, 40, 20 to 600, 360, 145
+    const x = 7 + 593 * easeOutQuad(progress) * Math.min(this.aspectRatio * 0.7, 1);
     const y = 40 + 320 * easeOutQuad(progress);
     const z = 20 + 125 * easeOutQuad(progress);
     // from 0 0 0 to 1.8, 1.8, 1.8
@@ -225,8 +225,8 @@ export default class IntroScene extends DefaultScene {
   }
 
   watermelonAnimationFunc(element, progress) {
-    // from -60, -70, 20 to -750, -265, 120
-    const x = -60 - 690 * easeOutQuad(progress);
+    // from -60, -70, 20 to -600, -265, 120
+    const x = -60 - 540 * easeOutQuad(progress) * Math.min(this.aspectRatio * 0.7, 1);
     const y = -70 - 195 * easeOutQuad(progress);
     const z = 20 + 100 * easeOutQuad(progress);
     // from 0 0 0 to 2.5, 2.5, 2.5

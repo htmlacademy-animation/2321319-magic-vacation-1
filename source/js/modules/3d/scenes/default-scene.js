@@ -2,7 +2,8 @@ import * as THREE from "three";
 import { SceneObjects } from "../objects/scene-objects-config";
 
 export default class DefaultScene {
-  constructor(objectLoader) {
+  constructor(objectLoader, aspectRatio) {
+    this.aspectRatio = aspectRatio;
     this.scene = null;
     this.objectLoader = objectLoader;
     this.sceneGroup = new THREE.Group();
@@ -16,7 +17,10 @@ export default class DefaultScene {
     this.initPrimitives();
     this.initSvgObjects();
     this.initPreparedObjects();
-    this.sceneGroup.visible = false;
+  }
+
+  isPortrait() {
+    return this.aspectRatio < 1;
   }
 
   setScenePosition() {
@@ -136,5 +140,9 @@ export default class DefaultScene {
     this.scene = scene;
     this.setScenePosition(this.sceneGroup);
     this.scene.add(this.sceneGroup);
+  }
+
+  onResizeUpdate(aspectRatio) {
+    this.aspectRatio = aspectRatio;
   }
 }
