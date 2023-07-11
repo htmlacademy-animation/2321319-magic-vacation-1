@@ -11,6 +11,7 @@ import IIScene from "./3d/scenes/story-ii-scene";
 import CanvasAnimation from "./canvas-animation";
 import { SceneObjects } from "./3d/objects/scene-objects-config";
 import { easeInQuad } from "../general/easing";
+import { isMobile } from "../general/helpers";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 export default class WebGLScene extends CanvasAnimation {
@@ -119,22 +120,17 @@ export default class WebGLScene extends CanvasAnimation {
     // });
     // this.controls.update();
 
-    // if (!this.isMobile()) {
-    //   this.renderer.shadowMap.enabled = true;
-    //   this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    // }
+    if (!isMobile()) {
+      this.renderer.shadowMap.enabled = true;
+      this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    }
 
     await this.initObjects();
     this.initLight();
   }
 
-  isMobile() {
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
-    );
-  }
-
   initLight() {
+    if (isMobile()) return;
     const lightDirection = new THREE.DirectionalLight(0xffffff, 0.84);
     const directionalLightZ = this.far;
     lightDirection.position.set(0, 0, directionalLightZ);
