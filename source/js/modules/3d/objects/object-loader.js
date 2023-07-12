@@ -10,6 +10,7 @@ import {
   Objects,
   ObjectLoadType
 } from "../../../general/consts";
+import { isMobile } from "../../../general/helpers";
 import { SceneObjects } from "./scene-objects-config";
 import { ExtrudeHelper } from "./helpers";
 
@@ -21,6 +22,7 @@ export default class ObjectLoader {
 
   async initObjects() {
     await this._initImages();
+    await this._initMaterial();
     await this._initPreparedObjects();
     await this._initSvgObjects();
     this.extrudeHelper = new ExtrudeHelper(this.objectMap);
@@ -42,6 +44,30 @@ export default class ObjectLoader {
             ObjectType.IMAGE,
             result.value,
             Object.keys(SceneObjects)[i]
+          );
+        }
+        // TODO: error handling
+      });
+    });
+  }
+
+  async _initMaterial() {
+    if (!isMobile()) return;
+    const loadingManager = new THREE.LoadingManager();
+    const textureLoader = new THREE.TextureLoader(loadingManager);
+
+    const fetches = Object.values(MaterialType).filter((material) => material.id !== MaterialType.CUSTOM.id).map((material) => {
+      return new Promise((resolve, reject) => {
+        textureLoader.load(material.matcapImg, resolve, reject);
+      });
+    });
+    await Promise.allSettled(fetches).then((results) => {
+      results.forEach((result, i) => {
+        if (result.status === `fulfilled`) {
+          this._addObject(
+            ObjectType.IMAGE,
+            result.value,
+            Object.keys(MaterialType)[i]
           );
         }
         // TODO: error handling
@@ -132,6 +158,13 @@ export default class ObjectLoader {
       }
       if (Objects[objectName].type === ObjectLoadType.OBJ && child.isMesh) {
         child.material = material.object;
+      } else if (isMobile() && Objects[objectName].type === ObjectLoadType.GLTF && child.isMesh) {
+        const map = child.material.map;
+        if (!map) {
+          child.material = this.getMaterialByProps(MaterialType.BASIC.id, { color: child.material.color }, true).object;
+        } else {
+          child.material = new THREE.MeshBasicMaterial({color: child.material.color, map});
+        }
       }
     });
     return object;
@@ -141,21 +174,43 @@ export default class ObjectLoader {
     return this.materialMap;
   }
 
-  getMaterialByProps(materialType, materialProps) {
+  getMatcapForType(type) {
+    return this.getObjectByName(type).object;
+  }
+
+  getMaterialByProps(materialType, materialProps, isNotInConfigColor = false) {
     if (!materialType || !materialProps) {
       return null;
     }
 
     const isCustomMatrial = materialType === MaterialType.CUSTOM.id;
     const key = isCustomMatrial
-      ? `${materialType.toUpperCase()}_${materialProps.mainColor}-${materialProps.secondaryColor}` 
-      : `${materialType.toUpperCase()}_${materialProps.color.toUpperCase()}`;
+      ? `${materialType.toUpperCase()}_${materialProps.mainColor}-${materialProps.secondaryColor}`
+      : `${materialType.toUpperCase()}_${isNotInConfigColor ? materialProps.color.getHexString() : materialProps.color.toUpperCase()}`;
     const materialFromMap = this.materialMap[key];
     if (materialFromMap) {
       return materialFromMap;
     }
 
     if (materialType === MaterialType.CUSTOM.id) {
+      if (!isMobile()) {
+        this.materialMap[key] = {
+          type: materialType,
+          color: `${materialProps.mainColor}-${materialProps.secondaryColor}`,
+          object: new materialProps[`materialConstructor`](
+            new THREE.Color(
+              ObjectColor[materialProps.mainColor].value
+            ),
+            new THREE.Color(
+              ObjectColor[materialProps.secondaryColor].value
+            ),
+            materialProps.textureFrequency,
+            MaterialType.SOFT.metalness,
+            MaterialType.SOFT.roughness,
+          ),
+        };
+        return this.materialMap[key];
+      }
       this.materialMap[key] = {
         type: materialType,
         color: `${materialProps.mainColor}-${materialProps.secondaryColor}`,
@@ -167,22 +222,35 @@ export default class ObjectLoader {
             ObjectColor[materialProps.secondaryColor].value
           ),
           materialProps.textureFrequency,
-          MaterialType.SOFT.metalness,
-          MaterialType.SOFT.roughness,
+          this.getMatcapForType(MaterialType.SOFT.id)
         ),
       };
       return this.materialMap[key];
     } else {
+      if (!isMobile()) {
+        this.materialMap[key] = {
+          type: materialType,
+          color: materialProps.color,
+          object: new THREE.MeshStandardMaterial({
+            color: new THREE.Color(
+              isNotInConfigColor ? materialProps.color : ObjectColor[materialProps.color].value
+            ),
+            transparent: !!materialProps.transparent,
+            metalness: MaterialType[materialType].metalness,
+            roughness: MaterialType[materialType].roughness,
+            side: materialProps.side || THREE.FrontSide
+          }),
+        };
+        return this.materialMap[key];
+      }
       this.materialMap[key] = {
         type: materialType,
         color: materialProps.color,
-        object: new THREE.MeshStandardMaterial({
+        object: new THREE.MeshMatcapMaterial({
           color: new THREE.Color(
-            ObjectColor[materialProps.color].value
+            isNotInConfigColor ? materialProps.color : ObjectColor[materialProps.color].value
           ),
-          transparent: !!materialProps.transparent,
-          metalness: MaterialType[materialType].metalness,
-          roughness: MaterialType[materialType].roughness,
+          matcap: this.getMatcapForType(materialType),
           side: materialProps.side || THREE.FrontSide
         }),
       };

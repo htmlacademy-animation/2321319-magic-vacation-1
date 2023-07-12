@@ -126,16 +126,19 @@ export const MaterialType = {
     id: `SOFT`,
     metalness: 0.15,
     roughness: 0.7,
+    matcapImg: `./img/module-7/matcaps/Soft-Mat.png`
   },
   BASIC: {
     id: `BASIC`,
     metalness: 0.3,
     roughness: 0.6,
+    matcapImg: `./img/module-7/matcaps/Basic-Mat.png`
   },
   STRONG: {
     id: `STRONG`,
     metalness: 0.15,
     roughness: 0.58,
+    matcapImg: `./img/module-7/matcaps/Strong-Mat-SnowColor.png`
   },
   CUSTOM: {
     id: `CUSTOM`,

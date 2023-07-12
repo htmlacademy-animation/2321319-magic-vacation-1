@@ -10,7 +10,10 @@ import {
 } from "../../../general/consts";
 import { getLathePointsBy } from "./helpers";
 import RoadMaterial from "../materials/road-material";
+import RoadMatcapMaterial from "../materials/road-matcap-material";
 import CarpetMaterial from "../materials/carpet-material";
+import CarpetMatcapMaterial from "../materials/carpet-matcap-material";
+import { isMobile } from "../../../general/helpers";
 
 export const SceneObjects = {
   [Screen.TOP]: {
@@ -249,7 +252,7 @@ export const SceneObjects = {
             rotation: [0, 0, 0],
             materialType: MaterialType.CUSTOM.id,
             materialProps: {
-              materialConstructor: CarpetMaterial,
+              materialConstructor: isMobile() ? CarpetMatcapMaterial : CarpetMaterial,
               mainColor: ObjectColor.LIGHT_PURPLE.id,
               secondaryColor: ObjectColor.ADDITIONAL_PURPLE.id,
               textureFrequency: 3.5
@@ -266,7 +269,7 @@ export const SceneObjects = {
           {
             id: `floorBody`,
             primitiveType: `CircleGeometry`,
-            primitiveSettings: [1400, 60, 0, Math.PI / 2],
+            primitiveSettings: [1800, 60, 0, Math.PI / 2],
             position: [0, -500, 0],
             scale: [1, 1, 1],
             rotation: [90, 0, 45],
@@ -513,7 +516,7 @@ export const SceneObjects = {
           {
             id: `floorBody`,
             primitiveType: `CircleGeometry`,
-            primitiveSettings: [1400, 60, 0, Math.PI / 2],
+            primitiveSettings: [1800, 60, 0, Math.PI / 2],
             position: [0, -500, 0],
             scale: [1, 1, 1],
             rotation: [90, 0, 45],
@@ -599,7 +602,7 @@ export const SceneObjects = {
             rotation: [0, 0, 0],
             materialType: MaterialType.CUSTOM.id,
             materialProps: {
-              materialConstructor: RoadMaterial,
+              materialConstructor: isMobile() ? RoadMatcapMaterial : RoadMaterial,
               mainColor: ObjectColor.GREY.id,
               secondaryColor: ObjectColor.WHITE.id,
               textureFrequency: 4.0,
@@ -616,7 +619,7 @@ export const SceneObjects = {
           {
             id: `floorBody`,
             primitiveType: `CircleGeometry`,
-            primitiveSettings: [1400, 60, 0, Math.PI / 2],
+            primitiveSettings: [1800, 60, 0, Math.PI / 2],
             position: [0, -500, 0],
             scale: [1, 1, 1],
             rotation: [90, 0, 45],
@@ -745,7 +748,7 @@ export const SceneObjects = {
             rotation: [0, 0, 0],
             materialType: MaterialType.CUSTOM.id,
             materialProps: {
-              materialConstructor: CarpetMaterial,
+              materialConstructor: isMobile() ? CarpetMatcapMaterial : CarpetMaterial,
               mainColor: ObjectColor.SHADOWED_LIGHT_PURPLE.id,
               secondaryColor: ObjectColor.SHADOWED_ADDITIONAL_PURPLE.id,
               textureFrequency: 3.5,
@@ -762,7 +765,7 @@ export const SceneObjects = {
           {
             id: `floorBody`,
             primitiveType: `CircleGeometry`,
-            primitiveSettings: [1400, 60, 0, Math.PI / 2],
+            primitiveSettings: [1800, 60, 0, Math.PI / 2],
             position: [0, -500, 0],
             scale: [1, 1, 1],
             rotation: [90, 0, 45],
