@@ -67,8 +67,8 @@
     overflow: hidden;
   }
 
-  .screen.active &,
-  .screen--transitioned & {
+  body.is-dom-loaded .screen.active &,
+  body.is-dom-loaded .screen--transitioned & {
     transform: translateX(0);
 
     &::placeholder {

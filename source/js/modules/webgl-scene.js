@@ -127,6 +127,7 @@ export default class WebGLScene extends CanvasAnimation {
 
     await this.initObjects();
     this.initLight();
+    this.triggerLoadedEvent();
   }
 
   initLight() {
@@ -177,6 +178,16 @@ export default class WebGLScene extends CanvasAnimation {
     if (this.currentSceneObject !== null) {
       this.renderSceneObject(this.currentSceneObject);
     }
+  }
+
+  triggerLoadedEvent() {
+    const event = new CustomEvent(`3dObjectsLoad`, {
+      detail: {
+        success: true
+      }
+    });
+
+    document.body.dispatchEvent(event);
   }
 
   isLandscape() {
@@ -297,7 +308,7 @@ export default class WebGLScene extends CanvasAnimation {
     this.cameraAnimation = null;
     const introScene = this.sceneObjects[Screen.TOP] && this.sceneObjects[Screen.TOP].scene;
     const startMouseRelativeAngle = this.cameraRig.additionalAngleY;
-    if (this.currentSceneObject === Screen.TOP && this.currentSceneObject !== sceneObjectId) {
+    if (this.currentSceneObject && this.currentSceneObject === Screen.TOP && this.currentSceneObject !== sceneObjectId) {
       this.cameraAnimation = {
         element: null,
         status: true,
@@ -311,7 +322,7 @@ export default class WebGLScene extends CanvasAnimation {
           (el, progress) => this.resetAngleForMouseEvents(el, progress, startMouseRelativeAngle)
         ],
       };
-    } else if (this.currentSceneObject !== Screen.TOP && sceneObjectId !== Screen.TOP && this.currentSceneObject !== sceneObjectId) {
+    } else if (this.currentSceneObject && this.currentSceneObject !== Screen.TOP && sceneObjectId !== Screen.TOP && this.currentSceneObject !== sceneObjectId) {
       this.cameraAnimation = {
         element: null,
         status: true,
@@ -324,7 +335,7 @@ export default class WebGLScene extends CanvasAnimation {
           (el, progress) => this.resetAngleForMouseEvents(el, progress, startMouseRelativeAngle)
         ],
       };
-    } else if (this.currentSceneObject !== Screen.TOP && sceneObjectId === Screen.TOP && this.currentSceneObject !== sceneObjectId) {
+    } else if (this.currentSceneObject && this.currentSceneObject !== Screen.TOP && sceneObjectId === Screen.TOP && this.currentSceneObject !== sceneObjectId) {
       this.cameraAnimation = {
         element: null,
         status: true,

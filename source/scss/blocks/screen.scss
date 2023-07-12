@@ -29,8 +29,8 @@
     animation-delay: $long-duration;
   }
 
-  &.active,
-  &--transitioned {
+ body.is-dom-loaded &.active,
+ body.is-dom-loaded &--transitioned {
     & .fade-in {
       animation-play-state: running;
     }

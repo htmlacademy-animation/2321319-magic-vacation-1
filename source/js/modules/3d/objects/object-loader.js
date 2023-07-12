@@ -21,11 +21,26 @@ export default class ObjectLoader {
   }
 
   async initObjects() {
+    this._triggerLoadEvent(3);
     await this._initImages();
+    this._triggerLoadEvent(10);
     await this._initMaterial();
+    this._triggerLoadEvent(17);
     await this._initPreparedObjects();
+    this._triggerLoadEvent(68);
     await this._initSvgObjects();
+    this._triggerLoadEvent(90);
     this.extrudeHelper = new ExtrudeHelper(this.objectMap);
+  }
+
+  _triggerLoadEvent(progress) {
+    const event = new CustomEvent(`3dObjectsLoadProgress`, {
+      detail: {
+        progress
+      }
+    });
+
+    document.body.dispatchEvent(event);
   }
 
   async _initImages() {
