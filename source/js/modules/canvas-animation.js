@@ -13,7 +13,12 @@ export default class CanvasAnimation {
     this.runnungAnimation = null;
     this.startTime = null;
     this.lastFrameTime = null;
-    window.addEventListener(`resize`, () => this.setSizes());
+    this.setSizes = this.setSizes.bind(this);
+    window.addEventListener(`resize`, this.setSizes);
+  }
+
+  removeEventListeners() {
+    window.removeEventListener(`resize`, this.setSizes);
   }
 
   startAnimation() {
