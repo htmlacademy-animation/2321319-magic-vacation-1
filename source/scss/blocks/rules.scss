@@ -190,7 +190,7 @@
       font-size: 1.4rem;
     }
 
-    .screen.active & {
+    body.is-dom-loaded .screen.active & {
       opacity: 1;
     }
   }
@@ -202,7 +202,7 @@
     transform: scale(0);
     transition: transform $long-duration $timing-exscess-before-end;
 
-    .screen.active & {
+    body.is-dom-loaded .screen.active & {
       transform: scale(1);
     }
   }
@@ -212,7 +212,7 @@
     animation: fade-in-left $standart-duration ease-out 1 both;
     animation-play-state: paused;
 
-    .screen.active & {
+    body.is-dom-loaded .screen.active & {
       animation-play-state: running;
     }
 
@@ -262,7 +262,7 @@
     opacity: 0;
   }
 
-  .screen.active & {
+  body.is-dom-loaded .screen.active & {
     &::before {
       transform: translateX(0);
       opacity: 1;

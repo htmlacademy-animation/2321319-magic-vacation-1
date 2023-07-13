@@ -100,19 +100,29 @@
   .swiper-slide-active &,
   .swiper-slide-next & {
     animation: fade-in-left $standart-duration ease-out $short-duration 1 both;
+    animation-play-state: paused;
+  }
+
+  body.is-dom-loaded .swiper-slide-active &,
+  body.is-dom-loaded .swiper-slide-next & {
+    animation-play-state: running;
+  }
+
+  .swiper-slide-active & {
+    animation-delay: 1300ms;
   }
 
   .swiper-slide-next & {
     animation-duration: $middle-duration;
-    animation-delay: $long-duration;
+    animation-delay: 1600ms;
   }
 
   .swiper-slide-active &.fade--delayed {
-    animation-delay: $long-duration;
+    animation-delay: 1600ms;
   }
 
   .swiper-slide-next &.fade--delayed {
-    animation-delay: $extra-long-duration;
+    animation-delay: 1800ms;
   }
 
   @media (min-width: $stop-scaling) {
@@ -181,13 +191,15 @@
 
   &:first-child {
     animation: rolling_out-left $middle-duration ease-out $long-duration 1 both;
+    animation-play-state: paused;
   }
 
   &:last-child {
     animation: rolling_out-right $middle-duration ease-out $long-duration 1 both;
+    animation-play-state: paused;
   }
 
-  .screen.active & {
+  body.is-dom-loaded .screen.active & {
     animation-play-state: running;
   }
 
@@ -226,7 +238,7 @@
     animation: fade-in $standart-duration ease-out $long-duration 1 both;
     animation-play-state: paused;
 
-    .screen.active & {
+    body.is-dom-loaded .screen.active & {
       animation-play-state: running;
     }
 
@@ -330,7 +342,7 @@
     animation: fade-in $standart-duration ease-out $long-duration 1 both;
     animation-play-state: paused;
 
-    .screen.active & {
+    body.is-dom-loaded .screen.active & {
       animation-play-state: running;
     }
   }

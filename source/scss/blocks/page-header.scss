@@ -5,6 +5,13 @@
   right: 0;
   padding: 2.7rem 0;
   z-index: 10;
+  opacity: 0;
+  pointer-events: none;
+
+  body.is-dom-loaded & {
+    opacity: 1;
+    pointer-events: all;
+  }
 
   @media (min-width: $stop-scaling) {
     padding: 27px 0;

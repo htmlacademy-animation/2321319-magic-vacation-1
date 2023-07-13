@@ -25,6 +25,9 @@ export default class Page {
     this.gameTimer = new GameTimer(5, 1);
     this.setTheme();
 
+    this.progress = 0;
+    this.progressBar = document.querySelector(`.progress-bar-percent`);
+
     this.accentTypographyItems = [];
     [].forEach.call(this.screenElements, (screen) => {
       let accentTypographyElements = screen.querySelectorAll(`.accent-typography`);
@@ -46,32 +49,89 @@ export default class Page {
     this.initJsAnimations();
 
     window.addEventListener(`load`, () => {
-      setTimeout(() => {
-        this.bodyElement.classList.add(DOM_LOADED_CLASS);
-      }, 100);
+      this.isDomLoaded = true;
+    });
+
+    document.body.addEventListener(`3dObjectsLoadProgress`, (event) => {
+      this.on3dObjectsChangeProgress(event);
+    });
+
+    document.body.addEventListener(`3dObjectsLoad`, () => {
+      this.on3dObjectsLoaded();
     });
 
     document.body.addEventListener(`screenResultChanged`, (event) => {
-      this.destroyAnimationsForPrevScreen(event);
-      setTimeout(() => {
-        this.runAnimationsForScreen(event);
-      }, 200);
+      if (!this.bodyElement.classList.contains(DOM_LOADED_CLASS)) {
+        this.currentHandler = this.onScreenResultChanged;
+        this.currentEvent = event;
+        return;
+      }
+      this.onScreenResultChanged(event);
     });
 
     document.body.addEventListener(`screenChanged`, (event) => {
-      this.reinitTheme(event);
-      this.destroyAnimationsForPrevScreen(event);
-      setTimeout(() => {
-        this.runAnimationsForScreen(event);
-      }, 200);
-      this.updateTimerStatus(event.detail.screenId);
+      if (!this.bodyElement.classList.contains(DOM_LOADED_CLASS)) {
+        this.currentHandler = this.onScreenChanged;
+        this.currentEvent = event;
+        return;
+      }
+      this.onScreenChanged(event);
     });
 
     document.body.addEventListener(`slideChanged`, (event) => {
-      this.clearTheme();
-      this.setTheme(event.detail.theme);
-      this.renderSceen3D(event.detail.theme);
+      if (!this.bodyElement.classList.contains(DOM_LOADED_CLASS)) {
+        this.currentHandler = this.onSlideChanged;
+        this.currentEvent = event;
+        return;
+      }
+      this.onSlideChanged(event);
     });
+  }
+
+  on3dObjectsChangeProgress(event) {
+    this.progress = event.detail.progress;
+    this.progressBar.textContent = `${this.progress}%`;
+  }
+
+  on3dObjectsLoaded() {
+    this.is3dObjectsLoaded = true;
+    if (this.isDomLoaded) {
+      this.progress = 99;
+      this.progressBar.textContent = `${this.progress}%`;
+      setTimeout(() => {
+        this.progressBar.parentElement.classList.add(`hidden`);
+        this.bodyElement.classList.add(DOM_LOADED_CLASS);
+        if (this.currentHandler && this.currentEvent) {
+          this.currentHandler(this.currentEvent);
+        }
+      }, 100);
+    } else {
+      setTimeout(() => {
+        this.on3dObjectsLoaded();
+      }, 100);
+    }
+  }
+
+  onScreenResultChanged(event) {
+    this.destroyAnimationsForPrevScreen(event);
+    setTimeout(() => {
+      this.runAnimationsForScreen(event);
+    }, 200);
+  }
+
+  onScreenChanged(event) {
+    this.reinitTheme(event);
+    this.destroyAnimationsForPrevScreen(event);
+    setTimeout(() => {
+      this.runAnimationsForScreen(event);
+    }, 200);
+    this.updateTimerStatus(event.detail.screenId);
+  }
+
+  onSlideChanged(event) {
+    this.clearTheme();
+    this.setTheme(event.detail.theme);
+    this.renderSceen3D(event.detail.theme);
   }
 
   setTheme(theme = ThemeColor.PURPLE) {
