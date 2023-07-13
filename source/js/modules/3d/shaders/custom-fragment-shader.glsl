@@ -19,7 +19,6 @@ uniform Bubble bubbles[3];
 
 varying vec2 vUv;
 
-const float IMAGE_RATIO = 2.0;
 const float BORDER_WIDTH = 0.0025;
 const float STRENGTH = 0.5;
 const vec4 BORDER_COLOR = vec4(1.0, 1.0, 1.0, 0.15);
@@ -52,9 +51,18 @@ void mixColor(vec4 color, inout vec4 texel) {
     texel = vec4(mix(texel.rgb, color.rgb, color.a), 1.0);
 }
 
+vec2 getPositionWithRatio(float x, float y, float canvasW, float canvasH) {
+	float ratio = canvasSize.x / canvasSize.y;
+	if (ratio < 1.0) {
+		ratio = canvasSize.y / canvasSize.x;
+		return vec2(x, ratio * y);
+	}
+	return vec2(ratio * x , y);
+}
+
 void drawBubble(Bubble bubble, inout vec4 texel) {
-	vec2 uv = vec2(vUv.x * IMAGE_RATIO, vUv.y);
-	vec2 bubbleCenter = vec2(bubble.center.x * IMAGE_RATIO, bubble.center.y);
+	vec2 uv = getPositionWithRatio(vUv.x, vUv.y, canvasSize.x, canvasSize.y);
+	vec2 bubbleCenter = getPositionWithRatio(bubble.center.x, bubble.center.y, canvasSize.x, canvasSize.y);
 	float glareRadius = 0.85 * bubble.radius;
 	vec2 currentToBubbleCenter = uv - bubbleCenter;
     float distToBubbleCenter = length(currentToBubbleCenter);

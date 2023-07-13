@@ -18,12 +18,10 @@ export default class CustomMaterial extends THREE.RawShaderMaterial {
       hasBubbles: {
         value: hasBubbles,
       },
-    };
-    if (hasBubbles) {
-      options.bubbles = {
+      bubbles: {
         value: bubbles,
-      };
-    }
+      }
+    };
     super({ uniforms: options, vertexShader, fragmentShader });
   }
 }
