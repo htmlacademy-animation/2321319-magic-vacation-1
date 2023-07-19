@@ -174,12 +174,21 @@ export default class CanvasAnimation {
     }
   }
 
+  getHeightByWidth(realWidth, realHeight, renderWidth) {
+    const ratio = realWidth / realHeight;
+    return renderWidth / ratio;
+  }
+
+  getScaledTranslate(scale, valueBeforeScale) {
+    const scaled = scale * valueBeforeScale - valueBeforeScale;
+    return -scaled / 2;
+  }
+
   _getElementAbsolutePosition(element) {
     const elementPosition = element.position;
     const width = this.canvasWidth * (elementPosition.width / 100);
-    const ratio = element.image.width / element.image.height;
     const x = this.canvasWidth * (elementPosition.x / 100) - width / 2;
-    const height = width / ratio;
+    const height = this.getHeightByWidth(element.image.width, element.image.height, width);
     const y = this.canvasHeight * (elementPosition.y / 100) - height / 2;
     return [x, y, width, height];
   }

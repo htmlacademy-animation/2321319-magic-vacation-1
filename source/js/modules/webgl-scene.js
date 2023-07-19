@@ -111,10 +111,10 @@ export default class WebGLScene extends CanvasAnimation {
     this.initPass();
     this.cameraRig.position.set(this.defaultCameraPosition[0], this.defaultCameraPosition[1], this.defaultCameraPosition[2]);
 
-    // if (!isMobile()) {
-    //   this.renderer.shadowMap.enabled = true;
-    //   this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    // }
+    if (!isMobile()) {
+      this.renderer.shadowMap.enabled = true;
+      this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    }
 
     await this.initObjects();
     this.initLight();
@@ -274,7 +274,7 @@ export default class WebGLScene extends CanvasAnimation {
     this.cameraAnimation = null;
     const introScene = this.sceneObjects[Screen.TOP] && this.sceneObjects[Screen.TOP].scene;
     const startMouseRelativeAngle = this.cameraRig.additionalAngleY;
-    if (this.currentSceneObject && this.currentSceneObject === Screen.TOP && this.currentSceneObject !== sceneObjectId) {
+    if (this.currentSceneObject !== null && this.currentSceneObject === Screen.TOP && this.currentSceneObject !== sceneObjectId) {
       this.cameraAnimation = {
         element: null,
         status: true,
@@ -288,7 +288,7 @@ export default class WebGLScene extends CanvasAnimation {
           (el, progress) => this.resetAngleForMouseEvents(el, progress, startMouseRelativeAngle)
         ],
       };
-    } else if (this.currentSceneObject && this.currentSceneObject !== Screen.TOP && sceneObjectId !== Screen.TOP && this.currentSceneObject !== sceneObjectId) {
+    } else if (this.currentSceneObject !== null && this.currentSceneObject !== Screen.TOP && sceneObjectId !== Screen.TOP && this.currentSceneObject !== sceneObjectId) {
       this.cameraAnimation = {
         element: null,
         status: true,

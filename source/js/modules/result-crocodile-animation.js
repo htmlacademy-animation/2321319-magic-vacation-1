@@ -5,6 +5,7 @@ export default class ResultSealAnimation extends ResultAnimation {
   constructor(canvasElement) {
     super(canvasElement, 50);
     this._initElements();
+    this.dropTastTranslateY = 0;
   }
 
   setContainerWidth() {
@@ -58,7 +59,7 @@ export default class ResultSealAnimation extends ResultAnimation {
       {
         id: `drop`,
         imagePath: `./img/module-4/lose-images/drop.png`,
-        position: { x: 47, y: 64.2, width: 3 },
+        position: { x: 46, y: 65, width: 3 },
         transforms: {
           opacity: 0,
           scaleX: 0.1,
@@ -213,9 +214,10 @@ export default class ResultSealAnimation extends ResultAnimation {
     element.transforms.opacity = easeInOutQuad(progress);
     element.transforms.scaleX = 0.7 + 0.3 * easeInOutQuad(progress);
     element.transforms.scaleY = 0.7 + 0.3 * easeInOutQuad(progress);
-    element.transforms.translateY = element.transforms.scaleY;
-    element.transforms.translateX = -element.transforms.scaleX;
-    // TODO: скейлинг из центра
+    const curScaleY = this.getHeightByWidth(element.image.width, element.image.height, element.position.width);
+    const curScaleX = element.position.width;
+    element.transforms.translateY = this.getScaledTranslate(element.transforms.scaleY, curScaleY);
+    element.transforms.translateX = this.getScaledTranslate(element.transforms.scaleX, curScaleX);
   }
 
   crocodileAnimationFunc(element, progress) {
@@ -229,18 +231,23 @@ export default class ResultSealAnimation extends ResultAnimation {
       element.transforms.opacity = 1;
       element.transforms.scaleX = 0.6 + progress;
       element.transforms.scaleY = 0.6 + progress;
-      element.transforms.translateY = element.transforms.scaleY;
-      element.transforms.translateX = -element.transforms.scaleX;
+      const curScaleY = this.getHeightByWidth(element.image.width, element.image.height, element.position.width);
+      const curScaleX = element.position.width;
+      element.transforms.translateY = this.getScaledTranslate(element.transforms.scaleY, curScaleY);
+      element.transforms.translateX = this.getScaledTranslate(element.transforms.scaleX, curScaleX);
     } else if (progress > 0.4 && progress < 0.6) {
       element.transforms.scaleX = 1;
       element.transforms.scaleY = 1;
       element.transforms.translateY += 1;
+      this.dropTastTranslateY = element.transforms.translateY;
     } else if (progress >= 0.6 && progress < 0.7) {
       element.transforms.opacity = (1 - progress) / 0.6;
       element.transforms.scaleX = (1 - progress) / 0.6;
       element.transforms.scaleY = (1 - progress) / 0.6;
-      element.transforms.translateY += element.transforms.scaleY + 0.1;
-      element.transforms.translateX = -element.transforms.scaleX;
+      const curScaleY = this.getHeightByWidth(element.image.width, element.image.height, element.position.width);
+      const curScaleX = element.position.width;
+      element.transforms.translateY = this.dropTastTranslateY + this.getScaledTranslate(element.transforms.scaleY, curScaleY);
+      element.transforms.translateX = this.getScaledTranslate(element.transforms.scaleX, curScaleX);
     } else {
       element.transforms.opacity = 0;
     }

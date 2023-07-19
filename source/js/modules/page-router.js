@@ -3,13 +3,14 @@ import {Screen} from "../general/consts";
 
 const cssTransitionClass = `screen--background-transitioned`;
 
-export default class FullPageScroll {
+export default class PageRouter {
   constructor(screens) {
     this.THROTTLE_TIMEOUT = 1000;
     this.scrollFlag = true;
     this.timeout = null;
 
-    this.screenElements = screens;
+    const screenResultsElements = document.querySelectorAll(`.screen--result`);
+    this.screenElements = [...screens, ...screenResultsElements];
     this.menuElements = document.querySelectorAll(`.page-header__menu .js-menu-link`);
     this.transitionedBackground = document.querySelector(`.screen--background`);
 
@@ -22,6 +23,8 @@ export default class FullPageScroll {
   init() {
     document.addEventListener(`wheel`, throttle(this.onScrollHandler, this.THROTTLE_TIMEOUT, {trailing: true}));
     window.addEventListener(`popstate`, this.onUrlHashChengedHandler);
+    document.body.addEventListener(`toScreenResult`, this.toScreenResultHandler.bind(this));
+    document.body.addEventListener(`fromScreenResult`, this.fromScreenResultHandler.bind(this));
 
     this.onUrlHashChanged();
   }
@@ -32,6 +35,9 @@ export default class FullPageScroll {
       this.reCalculateActiveScreenPosition(evt.deltaY);
       if (currentPosition !== this.activeScreen) {
         this.prevScreen = currentPosition;
+        if (this.isResultScreen(this.prevScreen)) {
+          this.resetResultScreen(this.screenElements[this.prevScreen]);
+        }
         this.changePageDisplay();
       }
     }
@@ -49,7 +55,54 @@ export default class FullPageScroll {
     const newIndex = Array.from(this.screenElements).findIndex((screen) => location.hash.slice(1) === screen.id);
     this.prevScreen = this.activeScreen;
     this.activeScreen = (newIndex < 0) ? 0 : newIndex;
+    if (this.isResultScreen(this.prevScreen)) {
+      this.resetResultScreen(this.screenElements[this.prevScreen]);
+    }
     this.changePageDisplay();
+  }
+
+  toScreenResultHandler(e) {
+    const nextScreenId = e.detail.screenId;
+    this.prevScreen = this.activeScreen;
+    if (this.isResultScreen(this.prevScreen)) {
+      this.resetResultScreen(this.screenElements[this.prevScreen]);
+    }
+    this.activeScreen = nextScreenId;
+    this.showScreenResult(this.screenElements[this.activeScreen]);
+
+    const event = new CustomEvent(`screenResultChanged`, {
+      detail: {
+        'screenId': nextScreenId,
+        'prevScreenId': e.detail.prevScreenId,
+      }
+    });
+    document.body.dispatchEvent(event);
+  }
+
+  fromScreenResultHandler(e) {
+    const nextScreenId = e.detail.screenId;
+    this.prevScreen = this.activeScreen;
+    this.resetResultScreen(this.screenElements[this.prevScreen]);
+    this.activeScreen = nextScreenId;
+    this.changePageDisplay();
+  }
+
+  isResultScreen(screenId) {
+    return [Screen.RESULT, Screen.RESULT2, Screen.RESULT3].indexOf(screenId) !== -1;
+  }
+
+  resetResultScreen(screen) {
+    screen.classList.remove(`screen--show`);
+    screen.classList.remove(`screen--transitioned`);
+    screen.classList.add(`screen--hidden`);
+  }
+
+  showScreenResult(screen) {
+    screen.classList.add(`screen--show`);
+    screen.classList.remove(`screen--hidden`);
+    setTimeout(function () {
+      screen.classList.add(`screen--transitioned`);
+    }, 150);
   }
 
   changePageDisplay() {
@@ -138,9 +191,9 @@ export default class FullPageScroll {
 
   reCalculateActiveScreenPosition(delta) {
     if (delta > 0) {
-      this.activeScreen = Math.min(this.screenElements.length - 1, ++this.activeScreen);
+      this.activeScreen = Math.min(Screen.GAME, ++this.activeScreen);
     } else {
-      this.activeScreen = Math.max(0, --this.activeScreen);
+      this.activeScreen = Math.max(0, Math.min(Screen.GAME, --this.activeScreen));
     }
   }
 }

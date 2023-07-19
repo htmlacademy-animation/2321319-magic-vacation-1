@@ -1,6 +1,7 @@
-import FullPageScroll from "./full-page-scroll";
+import PageRouter from "./page-router";
 import GameTimer from "./game-timer";
 import WebGLScene from "./webgl-scene";
+import Chat from './chat.js';
 import PrizeCountAnimation from "./prize-count-animation";
 import ResultSealAnimation from "./result-seal-animation";
 import ResultCrocodileAnimation from "./result-crocodile-animation";
@@ -15,13 +16,14 @@ export default class Page {
     this.screenElements = document.querySelectorAll(`.screen:not(.screen--result)`);
     this.bodyElement = document.querySelector(`body`);
 
-    this.fullPageScroll = new FullPageScroll(this.screenElements);
-    this.fullPageScroll.init();
+    this.pageRouter = new PageRouter(this.screenElements);
+    this.pageRouter.init();
     this.swiper = new Slider();
 
     this.svgAnimations = {};
     this.jsAnimations = {};
     this.webGLScene = new WebGLScene(document.getElementById(`3d-scene`));
+    this.gameChat = new Chat();
     this.gameTimer = new GameTimer(5, 1);
     this.setTheme();
 
@@ -29,21 +31,7 @@ export default class Page {
     this.progressBar = document.querySelector(`.progress-bar-percent`);
 
     this.accentTypographyItems = [];
-    [].forEach.call(this.screenElements, (screen) => {
-      let accentTypographyElements = screen.querySelectorAll(`.accent-typography`);
-      [].forEach.call(accentTypographyElements, (el, index) => {
-        this.accentTypographyItems.push({
-          _element: new AccentTypography(
-              el,
-              500,
-              `accent-typography--transitioned`,
-              `transform`,
-              100 * index
-          ),
-          _screenId: Screen[screen.id.toUpperCase()],
-        });
-      });
-    });
+    this.initAccentTypographyAnimation();
 
     this.initSvgAnimations();
     this.initJsAnimations();
@@ -99,7 +87,7 @@ export default class Page {
       this.progress = 99;
       this.progressBar.textContent = `${this.progress}%`;
       setTimeout(() => {
-        this.progressBar.parentElement.classList.add(`hidden`);
+        this.progressBar.parentElement.remove();
         this.bodyElement.classList.add(DOM_LOADED_CLASS);
         if (this.currentHandler && this.currentEvent) {
           this.currentHandler(this.currentEvent);
@@ -217,6 +205,24 @@ export default class Page {
     } else {
       this.gameTimer.stopTimer();
     }
+  }
+
+  initAccentTypographyAnimation() {
+    [].forEach.call(this.screenElements, (screen) => {
+      let accentTypographyElements = screen.querySelectorAll(`.accent-typography`);
+      [].forEach.call(accentTypographyElements, (el, index) => {
+        this.accentTypographyItems.push({
+          _element: new AccentTypography(
+              el,
+              500,
+              `accent-typography--transitioned`,
+              `transform`,
+              100 * index
+          ),
+          _screenId: Screen[screen.id.toUpperCase()],
+        });
+      });
+    });
   }
 
   initSvgAnimations() {
