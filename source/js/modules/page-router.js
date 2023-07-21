@@ -14,8 +14,8 @@ export default class PageRouter {
     this.menuElements = document.querySelectorAll(`.page-header__menu .js-menu-link`);
     this.transitionedBackground = document.querySelector(`.screen--background`);
 
-    this.activeScreen = 0;
-    this.prevScreen = 0;
+    this.activeScreen = -1;
+    this.prevScreen = -1;
     this.onScrollHandler = this.onScroll.bind(this);
     this.onUrlHashChengedHandler = this.onUrlHashChanged.bind(this);
   }
@@ -117,13 +117,17 @@ export default class PageRouter {
   }
 
   runHiddenScreenTransition() {
+    if (this.prevScreen === -1) {
+      return new Promise((resolve, _reject) => resolve());
+    }
     return new Promise((resolve, _reject) => {
       this.screenElements[this.prevScreen].classList.add(`screen--hidden-transitioned`);
+      this.emitChangeDisplayEvent(`beforeScreenChanged`);
       setTimeout(() => {
         this.screenElements[this.prevScreen].classList.add(`screen--hidden`);
         this.screenElements[this.prevScreen].classList.remove(`screen--hidden-transitioned`);
         resolve();
-      }, 200);
+      }, 400);
     });
   }
 
@@ -175,14 +179,14 @@ export default class PageRouter {
     }
   }
 
-  emitChangeDisplayEvent() {
-    const event = new CustomEvent(`screenChanged`, {
+  emitChangeDisplayEvent(eventName = `screenChanged`) {
+    const event = new CustomEvent(eventName, {
       detail: {
         'screenId': this.activeScreen,
         'screenName': this.screenElements[this.activeScreen].id,
         'screenElement': this.screenElements[this.activeScreen],
         'prevScreenId': this.prevScreen,
-        'prevScreenName': this.screenElements[this.prevScreen].id,
+        'prevScreenName': this.screenElements[this.prevScreen] && this.screenElements[this.prevScreen].id,
       }
     });
 

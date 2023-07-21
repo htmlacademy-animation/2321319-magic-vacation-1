@@ -139,6 +139,14 @@
     @media (min-width: $stop-scaling) {
       height: 15px;
     }
+
+    @media (max-width: $tablet) and (orientation: portrait) {
+      display: none;
+    }
+
+    @media (max-width: $mobile) and (orientation: landscape) {
+      display: none;
+    }
   }
 
   &:hover {
@@ -195,11 +203,13 @@
   @media (max-width: $tablet) and (orientation: portrait) {
     color: $c-light;
     background-color: $c-dark;
+    opacity: 1;
   }
 
   @media (max-width: $mobile) and (orientation: landscape) {
     color: $c-light;
     background-color: $c-dark;
+    opacity: 1;
   }
 
   &:hover {

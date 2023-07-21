@@ -5,10 +5,12 @@ export default class Slider {
   constructor() {
     this.sliderContainer = document.getElementById(`story`);
     window.addEventListener(`resize`, () => {
+      const currentSlide = this.storySlider.activeIndex;
       if (this.storySlider) {
         this.storySlider.destroy();
       }
       this.setSlider();
+      this.storySlider.slideTo(currentSlide, 0);
     });
     this.setSlider();
   }

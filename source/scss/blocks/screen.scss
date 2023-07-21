@@ -44,8 +44,15 @@
     }
   }
 
+  &.screen--hidden-transitioned {
+    .screen__wrapper {
+      animation: quit-fade-scaling-down $middle-duration ease-out 1 both;
+    }
+  }
+
   @media (max-width: $tablet) and (orientation: portrait) {
     min-height: calc(var(--vh, 1vh) * 100);
+    max-height: 100vh;
   }
 
   @media (max-width: $tablet - 1) and (orientation: landscape) {
@@ -501,19 +508,6 @@
   }
 }
 
-// .screen--story {
-//   background-color: $c-dark;
-//   background-image: url("../img/slide1.jpg"), url("../img/slide2.jpg"), url("../img/slide3.jpg"), url("../img/slide4.jpg");
-//   background-repeat: no-repeat;
-//   background-size: cover;
-//   background-position: center;
-
-//   @media (orientation: portrait) {
-//     background-size: auto calc(100vh - 13.8rem), 100% 25rem;
-//     background-position: top center, bottom center;
-//   }
-// }
-
 .screen--prizes {
   background-color: $c-dark;
 }
@@ -522,29 +516,54 @@
   position: relative;
   background-color: $c-dark;
 
-  &::before {
-    content: "";
+  &.screen--hidden-transitioned {
+    .screen__wrapper {
+      animation: none;
+    }
+
+    .game__title {
+      animation: quit-fade-in-left ease-out $short-duration 1 both;
+    }
+
+    .game__counter {
+      animation: quit-fade-in-right ease-out $short-duration 1 both;
+    }
+
+    .chat__footer {
+      animation: quit-fade-in-bottom ease-out $short-duration 1 both;
+    }
+
+    .chat__body {
+      animation: quit-fade-in ease-out $middle-duration 1 both;
+    }
+  }
+
+  .game_ai {
     position: absolute;
     right: -8.5rem;
     bottom: 0;
-    width: 32.7rem;
+    width: 32.5rem;
     height: 36.9rem;
-    background-image: url("../img/sonya.png");
-    background-repeat: no-repeat;
-    background-size: contain;
-
-    @include retina {
-      background-image: url("../img/sonya@2x.png");
-    }
+    z-index: -1;
 
     @media (min-width: $stop-scaling) {
       right: -85px;
-      width: 327px;
+      width: 325px;
       height: 369px;
     }
 
     @media (max-width: $tablet) and (orientation: portrait) {
-      opacity: 0;
+      right: -5rem;
+      width: 17.6rem;
+      height: 20rem;
+    }
+  }
+}
+
+.screen--intro {
+  &.screen--hidden-transitioned {
+    .screen__wrapper {
+      animation-name: quit-fade-scaling-up;
     }
   }
 }

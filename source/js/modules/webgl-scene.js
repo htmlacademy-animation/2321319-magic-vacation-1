@@ -480,6 +480,7 @@ export default class WebGLScene extends CanvasAnimation {
         this.sceneObjects[ThemeColor.BLUE].scene.updateUniforms();
       }
     }
+    if (this.elements && this.elements.length) {
     this.elements.forEach((el) => {
       el.animationFunctions.forEach((animation, index) => {
         if (el.finites[index]) {
@@ -488,6 +489,7 @@ export default class WebGLScene extends CanvasAnimation {
       });
     });
     super.stopAnimation();
+    }
   }
 
   clearScene() {}

@@ -1,7 +1,6 @@
 import PageRouter from "./page-router";
-import GameTimer from "./game-timer";
 import WebGLScene from "./webgl-scene";
-import Chat from './chat.js';
+import GameScreenAnimation from "./game-screen-animation";
 import PrizeCountAnimation from "./prize-count-animation";
 import ResultSealAnimation from "./result-seal-animation";
 import ResultCrocodileAnimation from "./result-crocodile-animation";
@@ -22,9 +21,10 @@ export default class Page {
 
     this.svgAnimations = {};
     this.jsAnimations = {};
+    this.quitAnimations = {};
     this.webGLScene = new WebGLScene(document.getElementById(`3d-scene`));
-    this.gameChat = new Chat();
-    this.gameTimer = new GameTimer(5, 1);
+
+    this.gameScreenAnimation = new GameScreenAnimation(document.querySelector(`.screen--game`));
     this.setTheme();
 
     this.progress = 0;
@@ -35,6 +35,7 @@ export default class Page {
 
     this.initSvgAnimations();
     this.initJsAnimations();
+    this.initQuitAnimations();
 
     window.addEventListener(`load`, () => {
       this.isDomLoaded = true;
@@ -55,6 +56,10 @@ export default class Page {
         return;
       }
       this.onScreenResultChanged(event);
+    });
+
+    document.body.addEventListener(`beforeScreenChanged`, (event) => {
+      this.onBeforeScreenChanged(event);
     });
 
     document.body.addEventListener(`screenChanged`, (event) => {
@@ -107,9 +112,13 @@ export default class Page {
     }, 200);
   }
 
+  onBeforeScreenChanged(event) {
+    this.destroyAnimationsForPrevScreen(event);
+    this.runQuitAnimationsForScreen(event);
+  }
+
   onScreenChanged(event) {
     this.reinitTheme(event);
-    this.destroyAnimationsForPrevScreen(event);
     setTimeout(() => {
       this.runAnimationsForScreen(event);
     }, 200);
@@ -176,6 +185,14 @@ export default class Page {
     // }
   }
 
+  runQuitAnimationsForScreen(event) {
+    if (this.quitAnimations[event.detail.prevScreenId]) {
+      [].forEach.call(this.quitAnimations[event.detail.prevScreenId], (animation) => {
+        setTimeout(() => animation.element.startQuitAnimation(), animation.delay);
+      });
+    }
+  }
+
   runAnimationsForScreen(event) {
     this.accentTypographyItems.forEach((item) => {
       if (item._screenId === event.detail.screenId) {
@@ -199,11 +216,9 @@ export default class Page {
 
   updateTimerStatus(screenId) {
     if (screenId === Screen.GAME) {
-      setTimeout(() => {
-        this.gameTimer.startTimer();
-      }, 450); // TODO: уточнить время после завершения работы над экраном
+      this.gameScreenAnimation.updateTimerStatus();
     } else {
-      this.gameTimer.stopTimer();
+      this.gameScreenAnimation.stopTimer();
     }
   }
 
@@ -256,6 +271,21 @@ export default class Page {
         element: new ResultCrocodileAnimation(document.getElementById(`crocodile-scene`)),
         delay: 0
       }
+    ];
+    this.jsAnimations[Screen.GAME] = [
+      {
+        element: this.gameScreenAnimation,
+        delay: 200
+      }
+    ];
+  }
+
+  initQuitAnimations() {
+    this.quitAnimations[Screen.GAME] = [
+      {
+        element: this.gameScreenAnimation,
+        delay: 0
+      },
     ];
   }
 
