@@ -46,7 +46,7 @@ export default class PyramidScene extends DefaultScene {
     return {
       durations: [2000, 2500, 2700, 2800],
       finites: [false, true, true, true],
-      delays: [0, 1200, 1700, 1900],
+      delays: [0, 1800, 2300, 2500],
       animationFunctions: [
         (_el, progress) => this.hueBlinkAnimationFunc(progress),
         (_el, progress) => this.bubbleMoveAnimation(0, progress),

@@ -40,7 +40,9 @@ export default class GameScreenAnimation {
       },
     };
     this.isReversedAnimation = false;
+    this.setBtnWidth();
     this.initAnimation();
+    window.addEventListener(`resize`, () => this.setBtnWidth());
   }
 
   updateTimerStatus() {
@@ -90,10 +92,33 @@ export default class GameScreenAnimation {
   }
 
   stopAnimation() {
-    this.backgroundAnimation.cancel();
+    if (this.backgroundAnimation) {
+      this.backgroundAnimation.cancel();
+    }
+
     this.showAnimation.onfinish = null;
     this.showAnimation.finish();
   }
 
-  setContainerWidth() {}
+  setContainerWidth() {
+
+  }
+
+  setBtnWidth() {
+    const gameScreenBtn = this.screenElement.querySelector(`.form__button`);
+    if (window.innerWidth / window.innerHeight < 1 || window.innerWidth < 1024) {
+      const isHidden = this.screenElement.classList.contains(`screen--hidden`);
+      if (isHidden) this.screenElement.classList.remove(`screen--hidden`);
+      gameScreenBtn.style.width = `${gameScreenBtn.clientHeight}px`;
+      if (isHidden) this.screenElement.classList.add(`screen--hidden`);
+    } else {
+      const rulesScreen = document.querySelector(`.screen--rules`);
+      const rulesScreenBtn = rulesScreen.querySelector(`.rules__link`);
+      const isHidden = rulesScreen.classList.contains(`screen--hidden`);
+      if (isHidden) rulesScreen.classList.remove(`screen--hidden`);
+      gameScreenBtn.style.width = `${rulesScreenBtn.clientWidth}px`;
+      rulesScreenBtn.style.width = `${rulesScreenBtn.clientWidth}px`;
+      if (isHidden) rulesScreen.classList.add(`screen--hidden`);
+    }
+  }
 }

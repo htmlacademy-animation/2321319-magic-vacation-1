@@ -180,9 +180,9 @@ export default class Page {
       });
     }
 
-    // if (event.detail.prevScreenId === Screen.STORY || event.detail.prevScreenId === Screen.TOP) {
-    //   this.webGLScene.stopAnimation();
-    // }
+    if (event.detail.prevScreenId === Screen.STORY || event.detail.prevScreenId === Screen.TOP) {
+      this.webGLScene.stopAnimation();
+    }
   }
 
   runQuitAnimationsForScreen(event) {

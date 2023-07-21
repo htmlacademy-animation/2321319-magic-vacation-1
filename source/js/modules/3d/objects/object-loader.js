@@ -61,7 +61,6 @@ export default class ObjectLoader {
             Object.keys(SceneObjects)[i]
           );
         }
-        // TODO: error handling
       });
     });
   }
@@ -85,7 +84,6 @@ export default class ObjectLoader {
             Object.keys(MaterialType)[i]
           );
         }
-        // TODO: error handling
       });
     });
   }
@@ -115,7 +113,6 @@ export default class ObjectLoader {
             Object.values(Objects)[i].id
           );
         }
-        // TODO: error handling
       });
     });
   }
@@ -138,7 +135,6 @@ export default class ObjectLoader {
             Object.values(SvgShape)[i].id
           );
         }
-        // TODO: error handling
       });
     });
   }

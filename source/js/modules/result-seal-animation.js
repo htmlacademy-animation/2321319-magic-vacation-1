@@ -183,35 +183,6 @@ export default class ResultSealAnimation extends ResultAnimation {
     element.transforms.translateY = 5 - 5 * progress;
   }
 
-  drawBezierCurve(x0, y0, Ax, Ay, Bx, By, x1, y1, color) {
-    this.ctx.lineWidth = 3;
-    this.ctx.strokeStyle = '#e83d3b'; //red
-    this.ctx.beginPath();
-    this.ctx.moveTo(x0, y0);
-    this.ctx.lineTo(Ax, Ay);
-    this.ctx.stroke();
-
-    this.ctx.strokeStyle = '#58a83b';//green
-    this.ctx.beginPath();
-    this.ctx.moveTo(Bx, By);
-    this.ctx.lineTo(x1, y1);
-    this.ctx.stroke();
-
-    this.ctx.strokeStyle = color;
-    this.ctx.beginPath();
-    this.ctx.moveTo(x0, y0);
-    this.ctx.bezierCurveTo(
-        Ax,
-        Ay,
-        Bx,
-        By,
-        x1,
-        y1
-    );
-    this.ctx.stroke();
-  }
-
-
   drawTrack(element) {
     this.ctx.save();
     this.ctx.globalCompositeOperation = `destination-over`;
@@ -234,23 +205,6 @@ export default class ResultSealAnimation extends ResultAnimation {
       (3 * Math.PI) / 2,
       false
     );
-
-    // this.ctx.fill();
-    // this.drawBezierCurve(
-    //  canvasCenterX, canvasCenterY + radiusCanvas,
-    //  canvasCenterX + radiusCanvas, canvasCenterY + 1.1 * radiusCanvas,
-    //   this.elements[6].position.curX - 0.9 * radiusCanvas, this.elements[6].position.curY + 1.2 * radiusCanvas,
-    //   endX, endY,
-    //   '#ffffff'
-    // );
-    // this.drawBezierCurve(
-    //   endX, endY,
-    //  canvasCenterX + 1.2 * radiusCanvas, canvasCenterY + 0.3 * radiusCanvas,
-    //  canvasCenterX + 1.2 * radiusCanvas, canvasCenterY - 0.9 * radiusCanvas,
-    //  canvasCenterX, canvasCenterY - radiusCanvas,
-    //   '#ffffff'
-    // );
-
 
     this.ctx.moveTo(canvasCenterX, canvasCenterY + radiusCanvas);
     this.ctx.bezierCurveTo(

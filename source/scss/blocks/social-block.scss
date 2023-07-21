@@ -34,6 +34,7 @@
     transform: translate(-50%, -50%) scale(1);
     border: 2px solid $c-light;
     transition: transform $long-duration $timing-exscess-before-end;
+    @include reduce-motion;
     border-radius: 50%;
     background-color: $c-light;
     z-index: -1;
@@ -97,6 +98,7 @@
   pointer-events: none;
   transform: translateY(-1rem);
   transition: opacity $middle-duration ease;
+  @include reduce-motion;
 
   .social-block--active & {
     transform: translateY(0);
@@ -188,11 +190,13 @@
   opacity: 0;
   transform: translateY(1rem);
   transition: opacity $middle-duration ease;
+  @include reduce-motion;
 
   .social-block--active & {
     opacity: 1;
     transition: color $middle-duration ease, transform $middle-duration ease, opacity $middle-duration ease;
     transform: translateY(0);
+    @include reduce-motion;
   }
 
   @media (min-width: $stop-scaling) {

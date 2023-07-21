@@ -127,7 +127,7 @@ export default class PageRouter {
         this.screenElements[this.prevScreen].classList.add(`screen--hidden`);
         this.screenElements[this.prevScreen].classList.remove(`screen--hidden-transitioned`);
         resolve();
-      }, 400);
+      }, this.prevScreen === Screen.TOP ? 100 : 400);
     });
   }
 

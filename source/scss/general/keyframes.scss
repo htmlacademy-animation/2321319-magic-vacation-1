@@ -68,6 +68,21 @@
   }
 }
 
+@keyframes fade-scaling-down-sm {
+  0% {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
 @keyframes quit-fade-scaling-down {
   0% {
     opacity: 1;
@@ -96,6 +111,7 @@
 
   100% {
     opacity: 0;
+    transform: scale(2);
   }
 }
 

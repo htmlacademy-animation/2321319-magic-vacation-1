@@ -68,3 +68,12 @@
     transform: translateX($width / 2 * 3.14) rotate(180deg);
   }
 }
+
+@mixin reduce-motion {
+  @media (prefers-reduced-motion: reduce) {
+    & {
+      animation: none;
+      transition: none;
+    }
+  }
+}

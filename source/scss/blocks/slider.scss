@@ -101,6 +101,7 @@
   .swiper-slide-next & {
     animation: fade-in-left $standart-duration ease-out $short-duration 1 both;
     animation-play-state: paused;
+    @include reduce-motion;
   }
 
   body.is-dom-loaded .swiper-slide-active &,
@@ -192,11 +193,13 @@
   &:first-child {
     animation: rolling_out-left $middle-duration ease-out $long-duration 1 both;
     animation-play-state: paused;
+    @include reduce-motion;
   }
 
   &:last-child {
     animation: rolling_out-right $middle-duration ease-out $long-duration 1 both;
     animation-play-state: paused;
+    @include reduce-motion;
   }
 
   body.is-dom-loaded .screen.active & {
@@ -223,6 +226,7 @@
     height: 100%;
     transform: translate(-50%, -50%) scale(1);
     transition: transform $long-duration $timing-exscess-before-end;
+    @include reduce-motion;
     background-color: $c-light;
     border: 2px solid $c-light;
     border-radius: 50%;
@@ -237,6 +241,7 @@
     pointer-events: none;
     animation: fade-in $standart-duration ease-out $long-duration 1 both;
     animation-play-state: paused;
+    @include reduce-motion;
 
     body.is-dom-loaded .screen.active & {
       animation-play-state: running;
@@ -341,6 +346,7 @@
   &-fraction {
     animation: fade-in $standart-duration ease-out $long-duration 1 both;
     animation-play-state: paused;
+    @include reduce-motion;
 
     body.is-dom-loaded .screen.active & {
       animation-play-state: running;
