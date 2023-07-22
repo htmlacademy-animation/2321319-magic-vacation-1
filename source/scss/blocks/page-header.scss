@@ -44,8 +44,8 @@
   color: $c-light;
   opacity: 0;
   transform: translateX(-3rem);
-  transition: opacity $short-duration $timing-fast-progress,
-              transform $short-duration $timing-fast-progress;
+  transition: opacity $short-duration $timing-fast-progress, transform $short-duration $timing-fast-progress;
+
   @include reduce-motion;
 
   body.is-dom-loaded & {
@@ -149,6 +149,7 @@
   align-items: center;
   opacity: 0;
   transition: opacity $long-duration $timing-fast-progress;
+
   @include reduce-motion;
 
   body.is-dom-loaded & {
@@ -266,6 +267,7 @@
     color: inherit;
     padding: 0 0.5em 0.5em;
     transition: color $standart-duration ease-in-out;
+
     @include reduce-motion;
 
     &::after {
@@ -276,9 +278,9 @@
       height: 2px;
       background-color: $c-light;
       right: 0;
-      transition: width $standart-duration ease-in-out,
-                  background-color $standart-duration ease-in-out;
+      transition: width $standart-duration ease-in-out, background-color $standart-duration ease-in-out;
       transition-delay: 0s;
+
       @include reduce-motion;
 
       body:not(.is-dom-loaded) & {

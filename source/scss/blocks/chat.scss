@@ -135,6 +135,7 @@
       word-break: break-word;
       opacity: 0;
       transition: opacity $middle-duration $timing-fast-progress;
+
       @include reduce-motion;
 
       &.showed {
@@ -155,6 +156,7 @@
   background-color: $c-purple;
   border-radius: 3rem;
   transition: opacity $middle-duration $long-duration $timing-fast-progress;
+
   @include reduce-motion;
 
   @media (min-width: $stop-scaling) {
@@ -181,11 +183,13 @@
     background-color: $c-light;
     border-radius: 50%;
     animation: dot-loader $answer-show-delay ease-out infinite both;
+
     @include reduce-motion;
 
     &:nth-child(2) {
       animation-delay: $answer-show-delay / 4;
     }
+
     &:nth-child(3) {
       animation-delay: $answer-show-delay / 2;
     }
@@ -209,6 +213,7 @@
 
   &--hidden {
     opacity: 0;
+
     span {
       animation-play-state: paused;
       visibility: hidden;
@@ -218,8 +223,4 @@
 
 .chat__footer {
   margin-top: auto;
-
-  // .btn {
-  //   width: calc(2.4rem * 7.4 - 0.04em);
-  // }
 }

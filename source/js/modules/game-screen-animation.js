@@ -1,3 +1,4 @@
+import { hasReduceMotion } from "../general/helpers";
 import Chat from './chat.js';
 import GameTimer from "./game-timer";
 
@@ -20,7 +21,7 @@ export default class GameScreenAnimation {
         { transform: `translate(0, 0) rotate(0deg)`, offset: 1 },
       ],
       options: {
-        duration: 600,
+        duration: hasReduceMotion() ? 0 : 600,
         easing: `ease-out`,
         fill: `both`,
       },
@@ -72,10 +73,12 @@ export default class GameScreenAnimation {
       this.isReversedAnimation = false;
     }
     this.showAnimation.onfinish = () => {
-      this.backgroundAnimation = this.aiElement.animate(
-        this.backgroundAnimationSettings.keyframes,
-        this.backgroundAnimationSettings.options
-      );
+      if (!hasReduceMotion()) {
+        this.backgroundAnimation = this.aiElement.animate(
+          this.backgroundAnimationSettings.keyframes,
+          this.backgroundAnimationSettings.options
+        );
+      }
     };
     this.showAnimation.play();
   }

@@ -1,3 +1,5 @@
+import { hasReduceMotion } from "../general/helpers";
+
 export default class AccentTypography {
   constructor(
     element,
@@ -8,7 +10,7 @@ export default class AccentTypography {
     timeOffsetDelta = 20
   ) {
     this.element = element;
-    this.duration = duration;
+    this.duration = hasReduceMotion() ? 0 : duration;
     this.classForActivate = classForActivate;
     this.property = property;
     this.delay = delay;
@@ -19,7 +21,7 @@ export default class AccentTypography {
 
   createElement(letter, indexOfLetter) {
     const span = document.createElement(`span`);
-    const timeOffset = this.generateTimeOffset(indexOfLetter + 1);
+    const timeOffset = hasReduceMotion() ? 0 : this.generateTimeOffset(indexOfLetter + 1);
 
     span.textContent = letter;
     span.style.transition = this.getTransition(timeOffset);

@@ -1,4 +1,5 @@
-import {Screen} from "../general/consts";
+import { Screen } from "../general/consts";
+import { hasReduceMotion } from "../general/helpers";
 
 export default class Chat {
   constructor() {
@@ -196,7 +197,7 @@ export default class Chat {
         { transform: `translateY(-${offset}px)`, offset: 1 },
       ],
       options: {
-        duration: 200,
+        duration: hasReduceMotion() ? 0 : 200,
         delay: index * 100,
         easing: `ease-out`,
         fill: `forwards`,

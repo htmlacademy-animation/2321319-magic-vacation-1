@@ -5,13 +5,20 @@ export function isMobile() {
 }
 
 export function debounce(fn, delay) {
-  var timeoutID = null;
+  let timeoutID = null;
   return function () {
     clearTimeout(timeoutID);
-    var args = arguments;
-    var that = this;
+    const args = arguments;
+    const that = this;
     timeoutID = setTimeout(function () {
       fn.apply(that, args);
     }, delay);
   };
+}
+
+export function hasReduceMotion() {
+  return (
+    window.matchMedia(`(prefers-reduced-motion: reduce)`) === true ||
+    window.matchMedia(`(prefers-reduced-motion: reduce)`).matches === true
+  );
 }

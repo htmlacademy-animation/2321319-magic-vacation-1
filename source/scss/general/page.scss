@@ -49,9 +49,11 @@ body {
         border-top: 6px solid $c-purple;
         border-right: 6px solid transparent;
         animation: loader 1s linear infinite;
+
         @include reduce-motion;
+
         &::after {
-          content: '';
+          content: "";
           position: absolute;
           left: 0;
           top: -6px;

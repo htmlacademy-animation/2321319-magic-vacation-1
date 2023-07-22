@@ -72,8 +72,8 @@
 @mixin reduce-motion {
   @media (prefers-reduced-motion: reduce) {
     & {
-      animation: none;
-      transition: none;
+      animation-duration: 0s;
+      transition-duration: 0s;
     }
   }
 }

@@ -180,6 +180,7 @@
     text-align: center;
     opacity: 0;
     transition: opacity $standart-duration ease-out;
+
     @include reduce-motion;
 
     @media (max-width: $tablet) and (orientation: portrait) {
@@ -203,6 +204,7 @@
     border-radius: 50%;
     transform: scale(0);
     transition: transform $long-duration $timing-exscess-before-end;
+
     @include reduce-motion;
 
     body.is-dom-loaded .screen.active & {
@@ -214,6 +216,7 @@
     margin: 0;
     animation: fade-in-left $standart-duration ease-out 1 both;
     animation-play-state: paused;
+
     @include reduce-motion;
 
     body.is-dom-loaded .screen.active & {
@@ -257,9 +260,9 @@
     right: 0;
     transform-origin: left;
     transform: translateX(101%);
-    transition: transform $long-duration ease-in $long-duration,
-                  opacity $extra-short-duration ease 0.835s;
+    transition: transform $long-duration ease-in $long-duration, opacity $extra-short-duration ease 0.835s;
     border-radius: 3rem 0 0 3rem;
+
     @include reduce-motion;
   }
 
@@ -276,6 +279,7 @@
     &-text {
       opacity: 1;
       transition: opacity $long-duration ease $long-delay;
+
       @include reduce-motion;
     }
   }

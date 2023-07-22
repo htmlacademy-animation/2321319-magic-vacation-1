@@ -27,10 +27,7 @@ export default class Slider {
           enabled: true,
         },
         on: {
-          slideChange: () => {
-            const themeName = this.getStylesByActiveSlide();
-            this.emitSlideChangedEvent(themeName);
-          },
+          slideChange: () => this.onSlideChange(),
           resize: () => {
             this.storySlider.update();
           },
@@ -55,10 +52,7 @@ export default class Slider {
           enabled: true,
         },
         on: {
-          slideChange: () => {
-            const themeName = this.getStylesByActiveSlide();
-            this.emitSlideChangedEvent(themeName);
-          },
+          slideChange: () => this.onSlideChange(),
           resize: () => {
             this.storySlider.update();
           },
@@ -75,6 +69,11 @@ export default class Slider {
 
   getStylesByActiveSlide() {
     return Object.values(ThemeColor)[Math.floor(this.storySlider.activeIndex / 2)];
+  }
+
+  onSlideChange() {
+    const themeName = this.getStylesByActiveSlide();
+    this.emitSlideChangedEvent(themeName);
   }
 
   emitSlideChangedEvent(themeName) {

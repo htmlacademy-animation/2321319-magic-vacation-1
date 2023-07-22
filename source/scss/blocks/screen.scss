@@ -15,18 +15,21 @@ $footerBorderRadius: 0 3.6rem 0 0;
   .fade-in {
     animation: fade-in $standart-duration ease-out $standart-duration 1 both;
     animation-play-state: paused;
+
     @include reduce-motion;
   }
 
   .fade-in-top {
     animation: fade-in-top $extra-long-duration ease-out $standart-duration 1 both;
     animation-play-state: paused;
+
     @include reduce-motion;
   }
 
   .fade-in-left {
     animation: fade-in-left $standart-duration ease-out $standart-duration 1 both;
     animation-play-state: paused;
+
     @include reduce-motion;
   }
 
@@ -34,8 +37,8 @@ $footerBorderRadius: 0 3.6rem 0 0;
     animation-delay: $long-duration;
   }
 
- body.is-dom-loaded &.active,
- body.is-dom-loaded &--transitioned {
+  body.is-dom-loaded &.active,
+  body.is-dom-loaded &--transitioned {
     & .fade-in {
       animation-play-state: running;
     }
@@ -52,6 +55,7 @@ $footerBorderRadius: 0 3.6rem 0 0;
   &.screen--hidden-transitioned {
     .screen__wrapper {
       animation: quit-fade-scaling-down $middle-duration ease-out 1 both;
+
       @include reduce-motion;
     }
   }
@@ -86,8 +90,8 @@ $footerBorderRadius: 0 3.6rem 0 0;
   z-index: 1;
   opacity: 0;
   transform: translateY(4rem);
-  transition: opacity $standart-duration $timing-fast-progress,
-              transform $standart-duration $timing-fast-progress;
+  transition: opacity $standart-duration $timing-fast-progress, transform $standart-duration $timing-fast-progress;
+
   @include reduce-motion;
 
   @media (max-width: $tablet) and (orientation: portrait) {
@@ -104,6 +108,7 @@ $footerBorderRadius: 0 3.6rem 0 0;
     .disclaimer {
       opacity: 0;
       transition: opacity $standart-duration;
+
       @include reduce-motion;
     }
 
@@ -138,8 +143,8 @@ $footerBorderRadius: 0 3.6rem 0 0;
   opacity: 0;
   overflow: hidden;
   transform: translateY(4rem);
-  transition: opacity $standart-duration $timing-fast-progress,
-              transform $standart-duration $timing-fast-progress;
+  transition: opacity $standart-duration $timing-fast-progress, transform $standart-duration $timing-fast-progress;
+
   @include reduce-motion;
 
   &.no-transform {
@@ -147,6 +152,7 @@ $footerBorderRadius: 0 3.6rem 0 0;
 
     .screen__footer-wrapper {
       transition: opacity $standart-duration;
+
       @include reduce-motion;
       opacity: 1;
     }
@@ -191,6 +197,7 @@ $footerBorderRadius: 0 3.6rem 0 0;
       transform: translate(-100vh, 50vh);
       transition: transform $middle-duration ease-out;
       transform-origin: left;
+
       @include reduce-motion;
     }
 
@@ -232,6 +239,7 @@ $footerBorderRadius: 0 3.6rem 0 0;
       transform: translate(-100vw, 50vh);
       transition: transform $middle-duration ease-out;
       transform-origin: left;
+
       @include reduce-motion;
     }
 
@@ -261,6 +269,7 @@ $footerBorderRadius: 0 3.6rem 0 0;
   @media (max-width: $tablet) and (orientation: portrait) {
     opacity: 0;
     transition: opacity $standart-duration ease-out $middle-duration;
+
     @include reduce-motion;
 
     .screen__footer--full & {
@@ -276,6 +285,7 @@ $footerBorderRadius: 0 3.6rem 0 0;
   @media (max-width: $mobile) and (orientation: landscape) {
     opacity: 0;
     transition: opacity $standart-duration ease-out $middle-duration;
+
     @include reduce-motion;
 
     .screen__footer--full & {
@@ -305,6 +315,7 @@ $footerBorderRadius: 0 3.6rem 0 0;
     display: block;
     border-radius: $footerBorderRadius;
     transition: opacity 0.1s ease-out $middle-duration;
+
     @include reduce-motion;
 
     .screen__footer--full & {
@@ -326,6 +337,7 @@ $footerBorderRadius: 0 3.6rem 0 0;
     display: block;
     border-radius: $footerBorderRadius;
     transition: opacity 0.1s ease-out $middle-duration;
+
     @include reduce-motion;
 
     .screen__footer--full & {
@@ -368,6 +380,7 @@ $footerBorderRadius: 0 3.6rem 0 0;
     display: block;
     opacity: 0;
     transition: opacity $standart-duration ease-out $middle-duration;
+
     @include reduce-motion;
     pointer-events: none;
 
@@ -386,6 +399,7 @@ $footerBorderRadius: 0 3.6rem 0 0;
     display: block;
     opacity: 0;
     transition: opacity $standart-duration ease-out $middle-duration;
+
     @include reduce-motion;
     pointer-events: none;
 
@@ -541,21 +555,25 @@ $footerBorderRadius: 0 3.6rem 0 0;
 
     .game__title {
       animation: quit-fade-in-left ease-out $short-duration 1 both;
+
       @include reduce-motion;
     }
 
     .game__counter {
       animation: quit-fade-in-right ease-out $short-duration 1 both;
+
       @include reduce-motion;
     }
 
     .chat__footer {
       animation: quit-fade-in-bottom ease-out $short-duration 1 both;
+
       @include reduce-motion;
     }
 
     .chat__body {
       animation: quit-fade-in ease-out $middle-duration 1 both;
+
       @include reduce-motion;
     }
   }
@@ -613,14 +631,18 @@ $footerBorderRadius: 0 3.6rem 0 0;
       animation: none;
     }
 
-    .rules__title, .rules__lead, .rules__list {
+    .rules__title,
+    .rules__lead,
+    .rules__list {
       animation: quit-fade-scaling-down $middle-duration ease-out 1 both;
+
       @include reduce-motion;
     }
 
     .rules__link {
       &-text {
         animation: quit-fade-in $standart-duration ease-out 1 both;
+
         @include reduce-motion;
       }
 
@@ -632,7 +654,7 @@ $footerBorderRadius: 0 3.6rem 0 0;
       }
 
       @media (max-width: $tablet) and (orientation: landscape) {
-       body.is-dom-loaded &::before {
+        body.is-dom-loaded &::before {
           transition-delay: 0s;
           transform: translateX(101%);
         }
@@ -661,6 +683,7 @@ $footerBorderRadius: 0 3.6rem 0 0;
   z-index: -1;
   transform: translateY(100vh);
   transition: transform $long-duration ease-in;
+
   @include reduce-motion;
 
   &-transitioned {
