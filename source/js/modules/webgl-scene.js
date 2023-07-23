@@ -18,7 +18,7 @@ import {isMobile, debounce} from "../general/helpers";
 
 export default class WebGLScene extends CanvasAnimation {
   constructor(canvasElement) {
-    super(canvasElement, 60, AnimationType._3D);
+    super(canvasElement, 60, AnimationType._3D, true);
     this.storyScenes = null;
     this.sceneObjects = {};
     this.alpha = 1;
@@ -81,7 +81,6 @@ export default class WebGLScene extends CanvasAnimation {
       Object.values(this.sceneObjects).forEach((el) => {
         el.scene.onResizeUpdate(this.aspectRatio);
       });
-      this.render();
       this.updateObjectsOnResize();
       this.startAnimation(true);
     }
@@ -329,7 +328,6 @@ export default class WebGLScene extends CanvasAnimation {
       return;
     }
 
-    this.render();
     this.startAnimation();
   }
 

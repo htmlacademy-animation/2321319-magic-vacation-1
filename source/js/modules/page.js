@@ -106,7 +106,6 @@ export default class Page {
   }
 
   onScreenResultChanged(event) {
-    this.destroyAnimationsForPrevScreen(event);
     setTimeout(() => {
       this.runAnimationsForScreen(event);
     }, 200);

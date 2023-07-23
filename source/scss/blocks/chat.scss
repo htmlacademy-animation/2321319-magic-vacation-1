@@ -155,7 +155,7 @@
   height: 6rem;
   background-color: $c-purple;
   border-radius: 3rem;
-  transition: opacity $middle-duration $long-duration $timing-fast-progress;
+  transition: opacity $middle-duration $timing-fast-progress $long-duration;
 
   @include reduce-motion;
 

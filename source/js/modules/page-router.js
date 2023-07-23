@@ -68,15 +68,17 @@ export default class PageRouter {
       this.resetResultScreen(this.screenElements[this.prevScreen]);
     }
     this.activeScreen = nextScreenId;
-    this.showScreenResult(this.screenElements[this.activeScreen]);
-
-    const event = new CustomEvent(`screenResultChanged`, {
-      detail: {
-        "screenId": nextScreenId,
-        "prevScreenId": e.detail.prevScreenId,
-      }
+    this.runHiddenScreenTransition()
+    .then(() => {
+      this.showScreenResult(this.screenElements[this.activeScreen]);
+      const event = new CustomEvent(`screenResultChanged`, {
+        detail: {
+          "screenId": nextScreenId,
+          "prevScreenId": e.detail.prevScreenId,
+        }
+      });
+      document.body.dispatchEvent(event);
     });
-    document.body.dispatchEvent(event);
   }
 
   fromScreenResultHandler(e) {

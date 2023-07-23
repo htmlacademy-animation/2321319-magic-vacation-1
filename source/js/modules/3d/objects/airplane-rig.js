@@ -158,7 +158,7 @@ export default class AirplaneRig extends THREE.Group {
       this._angleXChanged = false;
     }
 
-    if (this._scaleDiffChanged) {
+    if (this._scaleDiffChanged && this._scaleDiff >= 0) {
       this.scale.set(this._scaleDiff, this._scaleDiff, this._scaleDiff);
       this._scaleDiffChanged = false;
     }

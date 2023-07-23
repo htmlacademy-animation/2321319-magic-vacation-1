@@ -3,7 +3,7 @@ import {easeOutElastic, easeInOutQuad} from "../general/easing";
 
 export default class ResultSealAnimation extends ResultAnimation {
   constructor(canvasElement) {
-    super(canvasElement, 50);
+    super(canvasElement, 50, true);
     this._initElements();
   }
 

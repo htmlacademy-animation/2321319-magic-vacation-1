@@ -2,8 +2,8 @@ import CanvasAnimation from "./canvas-animation";
 import {AnimationType} from "../general/consts";
 
 export default class ResultAnimation extends CanvasAnimation {
-  constructor(canvasElement, fps) {
-    super(canvasElement, fps, AnimationType._2D);
+  constructor(canvasElement, fps, withAlpha = false) {
+    super(canvasElement, fps, AnimationType._2D, withAlpha);
   }
 
   startAnimation() {

@@ -101,16 +101,16 @@ export default class SuitcaseRig extends THREE.Group {
 
   constructChildren(object) {
     this._suitcaseObject = object;
-    this._groupRotation = new THREE.Group(); // group for rotation by z
+    this._groupRotation = new THREE.Group();
     this._groupRotation.name = object.name;
     this._groupRotation.add(object);
-    this._groupMoving = new THREE.Group(); // group for vertical movement and rotation by y
+    this._groupMoving = new THREE.Group();
     this._groupMoving.add(this._groupRotation);
-    this.add(this._groupMoving); // main group for horisontal movement and scaling
+    this.add(this._groupMoving);
   }
 
   invalidate() {
-    if (this._scaleDiffChanged) {
+    if (this._scaleDiffChanged && this._scaleDiff >= 0) {
       this.scale.set(
           this._scaleDiff,
           this._scaleDiff,

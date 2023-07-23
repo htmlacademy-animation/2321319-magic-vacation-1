@@ -123,6 +123,7 @@
     margin-top: 0;
     opacity: 1;
     pointer-events: auto;
+    transform: none;
   }
 
   @media (max-width: $mobile) and (orientation: landscape) {
@@ -133,6 +134,7 @@
     margin-top: 0;
     opacity: 1;
     pointer-events: auto;
+    transform: none;
   }
 
   &::before {
@@ -215,12 +217,14 @@
     color: $c-light;
     background-color: $c-dark;
     opacity: 1;
+    transform: none;
   }
 
   @media (max-width: $mobile) and (orientation: landscape) {
     color: $c-light;
     background-color: $c-dark;
     opacity: 1;
+    transform: none;
   }
 
   &:hover {

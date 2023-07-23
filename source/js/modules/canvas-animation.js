@@ -1,12 +1,13 @@
 import {AnimationType} from "../general/consts";
 
 export default class CanvasAnimation {
-  constructor(canvasElement, fps, type) {
+  constructor(canvasElement, fps, type, withAlpha = false) {
     this.type = type;
     this.frameInterval = 1000 / fps;
     this.canvas = canvasElement;
     this.ctx = this.canvas.getContext(
-        this.type === AnimationType._2D ? `2d` : `3d`
+        this.type === AnimationType._2D ? `2d` : `3d`,
+        {alpha: withAlpha}
     );
     this.canvasWidth = this.canvasHeight = null;
     this.elements = null;

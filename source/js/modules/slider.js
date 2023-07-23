@@ -61,6 +61,7 @@ export default class Slider {
         observeParents: true,
       });
     }
+    this.prevTheme = this.getStylesByActiveSlide();
   }
 
   isMobileSlider() {
@@ -96,12 +97,15 @@ export default class Slider {
   }
 
   emitSlideChangedEvent(themeName) {
-    const event = new CustomEvent(`slideChanged`, {
-      detail: {
-        theme: themeName
-      }
-    });
+    if (this.prevTheme !== themeName) {
+      const event = new CustomEvent(`slideChanged`, {
+        detail: {
+          theme: themeName
+        }
+      });
 
-    document.body.dispatchEvent(event);
+      document.body.dispatchEvent(event);
+      this.prevTheme = themeName;
+    }
   }
 }
