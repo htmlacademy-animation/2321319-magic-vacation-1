@@ -131,6 +131,18 @@
   }
 }
 
+@keyframes quit-fade-in-left-sm {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(-2rem);
+  }
+}
+
 @keyframes quit-fade-in-right {
   0% {
     opacity: 1;

@@ -6,6 +6,7 @@
   .swiper-wrapper {
     min-height: 100vh;
     box-sizing: border-box;
+    transition-delay: $middle-duration;
 
     @media (max-width: $tablet) and (orientation: portrait) {
       min-height: calc(var(--vh, 1vh) * 100);
@@ -34,6 +35,16 @@
     display: flex;
     flex-direction: column;
     padding: 5rem 2rem 0 5rem;
+  }
+
+  &.slide-hidden-transitioned {
+    animation: quit-fade-in-left-sm $short-duration ease-out 1 both;
+
+    & + & {
+      animation-delay: $extra-short-duration;
+    }
+
+    @include reduce-motion;
   }
 
   &:nth-child(even) {
