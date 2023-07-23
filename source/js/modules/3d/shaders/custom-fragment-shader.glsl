@@ -2,6 +2,8 @@
 
 precision mediump float;
 
+precision mediump int;
+
 uniform vec2 canvasSize;
 
 uniform sampler2D map;

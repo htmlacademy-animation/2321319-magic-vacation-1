@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { rotateAboutPoint } from "./helpers";
 
 export default class CameraRig extends THREE.Group {
   constructor(object) {
@@ -31,7 +30,9 @@ export default class CameraRig extends THREE.Group {
   }
 
   set angleX(value) {
-    if (this._angleX === value) return;
+    if (this._angleX === value) {
+      return;
+    }
 
     this._angleX = value;
     this._angleXChanged = true;
@@ -42,7 +43,9 @@ export default class CameraRig extends THREE.Group {
   }
 
   set angleY(value) {
-    if (this._angleY === value) return;
+    if (this._angleY === value) {
+      return;
+    }
 
     this._angleY = value;
     this._angleYChanged = true;
@@ -53,7 +56,9 @@ export default class CameraRig extends THREE.Group {
   }
 
   set zShift(value) {
-    if (this._zShift === value) return;
+    if (this._zShift === value) {
+      return;
+    }
 
     this._zShift = value;
     this._zShiftChanged = true;
@@ -68,8 +73,9 @@ export default class CameraRig extends THREE.Group {
       this._additionalAngleY === value ||
       value < this.minAdditionalAngleY ||
       value > this.maxAdditionalAngleY
-    )
+    ) {
       return;
+    }
 
     this._additionalAngleY = value;
     this._additionalAngleYChanged = true;
@@ -80,7 +86,9 @@ export default class CameraRig extends THREE.Group {
   }
 
   set targetForLookY(value) {
-    if (this._targetForLookY === value) return;
+    if (this._targetForLookY === value) {
+      return;
+    }
 
     this._targetForLookY = value;
     this._targetForLookYChanged = true;
@@ -91,7 +99,9 @@ export default class CameraRig extends THREE.Group {
   }
 
   set targetForLookZ(value) {
-    if (this._targetForLookZ === value) return;
+    if (this._targetForLookZ === value) {
+      return;
+    }
 
     this._targetForLookZ = value;
     this._targetForLookZChanged = true;
@@ -102,7 +112,9 @@ export default class CameraRig extends THREE.Group {
   }
 
   set cameraRotationX(value) {
-    if (this._cameraRotationX === value) return;
+    if (this._cameraRotationX === value) {
+      return;
+    }
 
     this._cameraRotationX = value;
     this._cameraRotationXChanged = true;
@@ -131,13 +143,7 @@ export default class CameraRig extends THREE.Group {
     this._groupRotationX.add(object);
   }
 
-  setCameraLookAt(
-    coordinates = new THREE.Vector3(
-      0,
-      this._targetForLookY,
-      this._targetForLookZ
-    )
-  ) {
+  setCameraLookAt(coordinates = new THREE.Vector3(0, this._targetForLookY, this._targetForLookZ)) {
     this._camera.lookAt(coordinates);
     this._camera.rotation.y = this._cameraRotationX;
   }

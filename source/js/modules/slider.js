@@ -79,7 +79,7 @@ export default class Slider {
   emitSlideChangedEvent(themeName) {
     const event = new CustomEvent(`slideChanged`, {
       detail: {
-        'theme': themeName
+        theme: themeName
       }
     });
 

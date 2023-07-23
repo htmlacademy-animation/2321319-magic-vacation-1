@@ -1,7 +1,7 @@
 import * as THREE from "three";
-import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader.js";
-import { OBJLoader  } from "three/examples/jsm/loaders/OBJLoader.js";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import {SVGLoader} from "three/examples/jsm/loaders/SVGLoader.js";
+import {OBJLoader} from "three/examples/jsm/loaders/OBJLoader.js";
+import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader.js";
 import {
   MaterialType,
   ObjectType,
@@ -10,9 +10,9 @@ import {
   Objects,
   ObjectLoadType
 } from "../../../general/consts";
-import { isMobile } from "../../../general/helpers";
-import { SceneObjects } from "./scene-objects-config";
-import { ExtrudeHelper } from "./helpers";
+import {isMobile} from "../../../general/helpers";
+import {SceneObjects} from "./scene-objects-config";
+import {ExtrudeHelper} from "./helpers";
 
 export default class ObjectLoader {
   constructor() {
@@ -56,9 +56,9 @@ export default class ObjectLoader {
       results.forEach((result, i) => {
         if (result.status === `fulfilled`) {
           this._addObject(
-            ObjectType.IMAGE,
-            result.value,
-            Object.keys(SceneObjects)[i]
+              ObjectType.IMAGE,
+              result.value,
+              Object.keys(SceneObjects)[i]
           );
         }
       });
@@ -66,7 +66,9 @@ export default class ObjectLoader {
   }
 
   async _initMaterial() {
-    if (!isMobile()) return;
+    if (!isMobile()) {
+      return;
+    }
     const loadingManager = new THREE.LoadingManager();
     const textureLoader = new THREE.TextureLoader(loadingManager);
 
@@ -79,9 +81,9 @@ export default class ObjectLoader {
       results.forEach((result, i) => {
         if (result.status === `fulfilled`) {
           this._addObject(
-            ObjectType.IMAGE,
-            result.value,
-            Object.keys(MaterialType)[i]
+              ObjectType.IMAGE,
+              result.value,
+              Object.keys(MaterialType)[i]
           );
         }
       });
@@ -108,9 +110,9 @@ export default class ObjectLoader {
       results.forEach((result, i) => {
         if (result.status === `fulfilled`) {
           this._addObject(
-            ObjectType.OBJECT,
-            result.value,
-            Object.values(Objects)[i].id
+              ObjectType.OBJECT,
+              result.value,
+              Object.values(Objects)[i].id
           );
         }
       });
@@ -130,9 +132,9 @@ export default class ObjectLoader {
       results.forEach((result, i) => {
         if (result.status === `fulfilled`) {
           this._addObject(
-            ObjectType.SVG,
-            result.value,
-            Object.values(SvgShape)[i].id
+              ObjectType.SVG,
+              result.value,
+              Object.values(SvgShape)[i].id
           );
         }
       });
@@ -172,7 +174,7 @@ export default class ObjectLoader {
       } else if (isMobile() && Objects[objectName].type === ObjectLoadType.GLTF && child.isMesh) {
         const map = child.material.map;
         if (!map) {
-          child.material = this.getMaterialByProps(MaterialType.BASIC.id, { color: child.material.color }, true).object;
+          child.material = this.getMaterialByProps(MaterialType.BASIC.id, {color: child.material.color}, true).object;
         } else {
           child.material = new THREE.MeshBasicMaterial({color: child.material.color, map});
         }
@@ -209,15 +211,15 @@ export default class ObjectLoader {
           type: materialType,
           color: `${materialProps.mainColor}-${materialProps.secondaryColor}`,
           object: new materialProps[`materialConstructor`](
-            new THREE.Color(
-              ObjectColor[materialProps.mainColor].value
-            ),
-            new THREE.Color(
-              ObjectColor[materialProps.secondaryColor].value
-            ),
-            materialProps.textureFrequency,
-            MaterialType.SOFT.metalness,
-            MaterialType.SOFT.roughness,
+              new THREE.Color(
+                  ObjectColor[materialProps.mainColor].value
+              ),
+              new THREE.Color(
+                  ObjectColor[materialProps.secondaryColor].value
+              ),
+              materialProps.textureFrequency,
+              MaterialType.SOFT.metalness,
+              MaterialType.SOFT.roughness,
           ),
         };
         return this.materialMap[key];
@@ -226,14 +228,14 @@ export default class ObjectLoader {
         type: materialType,
         color: `${materialProps.mainColor}-${materialProps.secondaryColor}`,
         object: new materialProps[`materialConstructor`](
-          new THREE.Color(
-            ObjectColor[materialProps.mainColor].value
-          ),
-          new THREE.Color(
-            ObjectColor[materialProps.secondaryColor].value
-          ),
-          materialProps.textureFrequency,
-          this.getMatcapForType(MaterialType.SOFT.id)
+            new THREE.Color(
+                ObjectColor[materialProps.mainColor].value
+            ),
+            new THREE.Color(
+                ObjectColor[materialProps.secondaryColor].value
+            ),
+            materialProps.textureFrequency,
+            this.getMatcapForType(MaterialType.SOFT.id)
         ),
       };
       return this.materialMap[key];
@@ -244,7 +246,7 @@ export default class ObjectLoader {
           color: materialProps.color,
           object: new THREE.MeshStandardMaterial({
             color: new THREE.Color(
-              isNotInConfigColor ? materialProps.color : ObjectColor[materialProps.color].value
+                isNotInConfigColor ? materialProps.color : ObjectColor[materialProps.color].value
             ),
             transparent: !!materialProps.transparent,
             metalness: MaterialType[materialType].metalness,
@@ -259,7 +261,7 @@ export default class ObjectLoader {
         color: materialProps.color,
         object: new THREE.MeshMatcapMaterial({
           color: new THREE.Color(
-            isNotInConfigColor ? materialProps.color : ObjectColor[materialProps.color].value
+              isNotInConfigColor ? materialProps.color : ObjectColor[materialProps.color].value
           ),
           matcap: this.getMatcapForType(materialType),
           side: materialProps.side || THREE.FrontSide

@@ -1,4 +1,4 @@
-import throttle from 'lodash/throttle';
+import throttle from "lodash/throttle";
 import {Screen} from "../general/consts";
 
 const cssTransitionClass = `screen--background-transitioned`;
@@ -72,8 +72,8 @@ export default class PageRouter {
 
     const event = new CustomEvent(`screenResultChanged`, {
       detail: {
-        'screenId': nextScreenId,
-        'prevScreenId': e.detail.prevScreenId,
+        "screenId": nextScreenId,
+        "prevScreenId": e.detail.prevScreenId,
       }
     });
     document.body.dispatchEvent(event);
@@ -182,11 +182,11 @@ export default class PageRouter {
   emitChangeDisplayEvent(eventName = `screenChanged`) {
     const event = new CustomEvent(eventName, {
       detail: {
-        'screenId': this.activeScreen,
-        'screenName': this.screenElements[this.activeScreen].id,
-        'screenElement': this.screenElements[this.activeScreen],
-        'prevScreenId': this.prevScreen,
-        'prevScreenName': this.screenElements[this.prevScreen] && this.screenElements[this.prevScreen].id,
+        "screenId": this.activeScreen,
+        "screenName": this.screenElements[this.activeScreen].id,
+        "screenElement": this.screenElements[this.activeScreen],
+        "prevScreenId": this.prevScreen,
+        "prevScreenName": this.screenElements[this.prevScreen] && this.screenElements[this.prevScreen].id,
       }
     });
 

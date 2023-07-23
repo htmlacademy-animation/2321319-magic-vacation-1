@@ -59,8 +59,8 @@ export default class GameTimer {
   triggerLoseScreen() {
     const event = new CustomEvent(`toScreenResult`, {
       detail: {
-        'screenId': Screen.RESULT3,
-        'prevScreenId': Screen.GAME,
+        "screenId": Screen.RESULT3,
+        "prevScreenId": Screen.GAME,
       }
     });
     document.body.dispatchEvent(event);

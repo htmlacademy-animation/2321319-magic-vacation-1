@@ -1,5 +1,5 @@
 import ResultAnimation from "./result-animation";
-import { easeInQuad, easeOutQuad, easeInOutQuad } from "../general/easing";
+import {easeInQuad, easeOutQuad, easeInOutQuad} from "../general/easing";
 
 export default class ResultSealAnimation extends ResultAnimation {
   constructor(canvasElement) {
@@ -25,7 +25,7 @@ export default class ResultSealAnimation extends ResultAnimation {
       {
         id: `key`,
         imagePath: `./img/module-4/lose-images/key.png`,
-        position: { x: 50, y: 50, width: 15 },
+        position: {x: 50, y: 50, width: 15},
         transforms: {
           opacity: 0,
           scaleX: 0.7,
@@ -43,7 +43,7 @@ export default class ResultSealAnimation extends ResultAnimation {
         drawElement: (element, animations) =>
           this.drawMask(element, animations),
         imagePath: `./img/module-4/lose-images/crocodile.png`,
-        position: { x: 48, y: 61, width: 55 },
+        position: {x: 48, y: 61, width: 55},
         transforms: {
           opacity: 0,
           translateX: 15,
@@ -59,7 +59,7 @@ export default class ResultSealAnimation extends ResultAnimation {
       {
         id: `drop`,
         imagePath: `./img/module-4/lose-images/drop.png`,
-        position: { x: 46, y: 65, width: 3 },
+        position: {x: 46, y: 65, width: 3},
         transforms: {
           opacity: 0,
           scaleX: 0.1,
@@ -75,7 +75,7 @@ export default class ResultSealAnimation extends ResultAnimation {
       {
         id: `flamingo`,
         imagePath: `./img/module-4/lose-images/flamingo.png`,
-        position: { x: 30, y: 45, width: 15 },
+        position: {x: 30, y: 45, width: 15},
         transforms: {
           opacity: 0,
           translateY: 20,
@@ -96,7 +96,7 @@ export default class ResultSealAnimation extends ResultAnimation {
       {
         id: `watermelon`,
         imagePath: `./img/module-4/lose-images/watermelon.png`,
-        position: { x: 15, y: 80, width: 12 },
+        position: {x: 15, y: 80, width: 12},
         transforms: {
           opacity: 0,
           translateY: -10,
@@ -118,7 +118,7 @@ export default class ResultSealAnimation extends ResultAnimation {
       {
         id: `leaf`,
         imagePath: `./img/module-4/lose-images/leaf.png`,
-        position: { x: 80, y: 40, width: 15 },
+        position: {x: 80, y: 40, width: 15},
         transforms: {
           opacity: 0,
           translateY: 15,
@@ -139,7 +139,7 @@ export default class ResultSealAnimation extends ResultAnimation {
       {
         id: `snowflake`,
         imagePath: `./img/module-4/lose-images/snowflake.png`,
-        position: { x: 65, y: 55, width: 12 },
+        position: {x: 65, y: 55, width: 12},
         transforms: {
           opacity: 0,
           translateY: 5,
@@ -160,7 +160,7 @@ export default class ResultSealAnimation extends ResultAnimation {
       {
         id: `saturn`,
         imagePath: `./img/module-4/lose-images/saturn.png`,
-        position: { x: 85, y: 80, width: 15 },
+        position: {x: 85, y: 80, width: 15},
         transforms: {
           opacity: 0,
           translateY: -4,

@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { SceneObjects } from "../objects/scene-objects-config";
+import {SceneObjects} from "../objects/scene-objects-config";
 
 export default class DefaultScene {
   constructor(objectLoader, aspectRatio) {
@@ -12,7 +12,9 @@ export default class DefaultScene {
   }
 
   initObjects() {
-    if (this.sceneId === null) return;
+    if (this.sceneId === null) {
+      return;
+    }
     this.sceneGroup.name = this.sceneId;
     this.initPrimitives();
     this.initSvgObjects();
@@ -25,10 +27,10 @@ export default class DefaultScene {
 
   setScenePosition() {
     this.setPosition(
-      this.sceneGroup,
-      SceneObjects[this.sceneId].position,
-      SceneObjects[this.sceneId].scale,
-      SceneObjects[this.sceneId].rotation
+        this.sceneGroup,
+        SceneObjects[this.sceneId].position,
+        SceneObjects[this.sceneId].scale,
+        SceneObjects[this.sceneId].rotation
     );
   }
 
@@ -38,26 +40,24 @@ export default class DefaultScene {
       group.name = el.name || el.id;
       el.children.forEach((object) => {
         if (typeof THREE[object.primitiveType] === `function`) {
-          const geometry = new THREE[object.primitiveType](
-            ...object.primitiveSettings
-          );
+          const geometry = new THREE[object.primitiveType](...object.primitiveSettings);
           const material = this.objectLoader.getMaterialByProps(
-            object.materialType,
-            object.materialProps
+              object.materialType,
+              object.materialProps
           );
           const mesh = new THREE.Mesh(
-            geometry,
-            (material && material.object) || this.baseMaterial
+              geometry,
+              (material && material.object) || this.baseMaterial
           );
           mesh.name = object.name || object.id;
           mesh.castShadow = true;
           mesh.receiveShadow = true;
 
           this.setPosition(
-            mesh,
-            object.position,
-            object.scale,
-            object.rotation
+              mesh,
+              object.position,
+              object.scale,
+              object.rotation
           );
           group.add(mesh);
         }
@@ -70,13 +70,13 @@ export default class DefaultScene {
   initSvgObjects() {
     SceneObjects[this.sceneId].svgShapes.forEach((el) => {
       const material = this.objectLoader.getMaterialByProps(
-        el.materialType,
-        el.materialProps
+          el.materialType,
+          el.materialProps
       );
       const object = this.objectLoader.extrudeObject(
-        el.id,
-        el.extrudeSettings,
-        (material && material.object) || this.baseMaterial
+          el.id,
+          el.extrudeSettings,
+          (material && material.object) || this.baseMaterial
       );
       object.castShadow = true;
       object.receiveShadow = true;
@@ -86,7 +86,9 @@ export default class DefaultScene {
 
   initPreparedObjects() {
     SceneObjects[this.sceneId].objects.forEach((el) => {
-      if (el.isRiggingObject) return;
+      if (el.isRiggingObject) {
+        return;
+      }
       const object = this.objectLoader
         .getPreparedObjectWithMateral(el.id, el.materialType, el.materialProps)
         .clone();
@@ -98,9 +100,9 @@ export default class DefaultScene {
   createGroupWrapper(targetObject, settings) {
     if (settings.hasGroupTransform) {
       this.setPosition(targetObject,
-        settings.groupTransformSettings.objectPosition,
-        settings.groupTransformSettings.objectScale,
-        settings.groupTransformSettings.objectRotation
+          settings.groupTransformSettings.objectPosition,
+          settings.groupTransformSettings.objectScale,
+          settings.groupTransformSettings.objectRotation
       );
       const group = new THREE.Group();
       group.name = settings.name || settings.id;
@@ -108,9 +110,9 @@ export default class DefaultScene {
       internalGroup.name = `internalGroup`;
       internalGroup.add(targetObject);
       this.setPosition(internalGroup,
-        settings.groupTransformSettings.groupPosition,
-        settings.groupTransformSettings.groupScale,
-        settings.groupTransformSettings.groupRotation
+          settings.groupTransformSettings.groupPosition,
+          settings.groupTransformSettings.groupScale,
+          settings.groupTransformSettings.groupRotation
       );
       group.add(internalGroup);
       this.setPosition(group, settings.position, settings.scale, settings.rotation);
@@ -125,11 +127,11 @@ export default class DefaultScene {
   }
 
   setPosition(
-    object,
-    position = [0, 0, 0],
-    scale = [1, 1, 1],
-    rotation = [0, 0, 0],
-    notCastDegToRad = false
+      object,
+      position = [0, 0, 0],
+      scale = [1, 1, 1],
+      rotation = [0, 0, 0],
+      notCastDegToRad = false
   ) {
     object.position.set(...position);
     object.scale.set(...scale);

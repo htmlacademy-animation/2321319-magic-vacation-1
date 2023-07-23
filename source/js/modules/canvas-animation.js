@@ -1,4 +1,4 @@
-import { AnimationType } from "../general/consts";
+import {AnimationType} from "../general/consts";
 
 export default class CanvasAnimation {
   constructor(canvasElement, fps, type) {
@@ -6,7 +6,7 @@ export default class CanvasAnimation {
     this.frameInterval = 1000 / fps;
     this.canvas = canvasElement;
     this.ctx = this.canvas.getContext(
-      this.type === AnimationType._2D ? `2d` : `3d`
+        this.type === AnimationType._2D ? `2d` : `3d`
     );
     this.canvasWidth = this.canvasHeight = null;
     this.elements = null;
@@ -61,11 +61,11 @@ export default class CanvasAnimation {
             const progress = el.finites[index]
               ? pastProgress
               : pastProgress - Math.trunc(pastProgress);
-            animations.push({ animationFunction: animation, progress });
+            animations.push({animationFunction: animation, progress});
           }
           if (isAnimationFinished && !animation.hasEndPosition) {
             this.elements[elIndex].animationFunctions[index].hasEndPosition = true;
-            animations.push({ animationFunction: animation, progress: 1 }); // чтобы анимация гарантировано закончилась конечными настройками
+            animations.push({animationFunction: animation, progress: 1}); // чтобы анимация гарантировано закончилась конечными настройками
           }
         });
         this.runAnimationTick(el, animations);
@@ -199,13 +199,13 @@ export default class CanvasAnimation {
 
   rotateElement(element, direction = 1) {
     this.ctx.translate(
-      element.position.curX + element.position.curW / 2,
-      element.position.curY + element.position.curH / 2
+        element.position.curX + element.position.curW / 2,
+        element.position.curY + element.position.curH / 2
     );
     this.ctx.rotate((direction * (element.transforms.rotate * Math.PI)) / 180);
     this.ctx.translate(
-      -element.position.curX - element.position.curW / 2,
-      -element.position.curY - element.position.curH / 2
+        -element.position.curX - element.position.curW / 2,
+        -element.position.curY - element.position.curH / 2
     );
   }
 }

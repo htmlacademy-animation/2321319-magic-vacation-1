@@ -1,8 +1,7 @@
 import * as THREE from "three";
-import { SceneObjects } from "../objects/scene-objects-config";
-import { ThemeColor, SvgShape } from "../../../general/consts";
+import {ThemeColor, SvgShape} from "../../../general/consts";
 import DefaultScene from "./default-scene";
-import { easeOutQuad } from "../../../general/easing";
+import {easeOutQuad} from "../../../general/easing";
 
 export default class PyramidScene extends DefaultScene {
   constructor(objectLoader, aspectRatio, customMaterial) {
@@ -28,15 +27,15 @@ export default class PyramidScene extends DefaultScene {
   getInitialBubblesPosition() {
     return [
       {
-        center: { x: 0.45, y: -0.16 },
+        center: {x: 0.45, y: -0.16},
         radius: 0.08,
       },
       {
-        center: { x: 0.3, y: -0.12 },
+        center: {x: 0.3, y: -0.12},
         radius: 0.06,
       },
       {
-        center: { x: 0.49, y: -0.06 },
+        center: {x: 0.49, y: -0.06},
         radius: 0.03,
       },
     ];
@@ -78,7 +77,9 @@ export default class PyramidScene extends DefaultScene {
   }
 
   firstLeafMoveAnimationFunc(el, progress) {
-    if (progress < 0.05) return;
+    if (progress < 0.05) {
+      return;
+    }
     const progressWithEasing = easeOutQuad(progress - 0.05);
     const rotation =
       (5 * Math.sin(Math.PI * 5 * progressWithEasing + 12.5)) /
@@ -122,8 +123,8 @@ export default class PyramidScene extends DefaultScene {
 
   firstBubbleMoveAnimationFunc(progress) {
     const newY = this.getProgressedValue(
-      progress,
-      2 * this.getInitialBubblesPosition()[0].radius
+        progress,
+        2 * this.getInitialBubblesPosition()[0].radius
     );
     const newX =
       0.035 * Math.sin(15 * progress + 1.5) * Math.exp(-0.8 * progress);
@@ -132,8 +133,8 @@ export default class PyramidScene extends DefaultScene {
 
   secondBubbleMoveAnimationFunc(progress) {
     const newY = this.getProgressedValue(
-      progress,
-      2 * this.getInitialBubblesPosition()[1].radius
+        progress,
+        2 * this.getInitialBubblesPosition()[1].radius
     );
     const newX =
       0.025 * Math.sin(18 * progress + 1.5) * Math.exp(-0.8 * progress);
@@ -142,8 +143,8 @@ export default class PyramidScene extends DefaultScene {
 
   thirdBubbleMoveAnimationFunc(progress) {
     const newY = this.getProgressedValue(
-      progress,
-      2 * this.getInitialBubblesPosition()[2].radius
+        progress,
+        2 * this.getInitialBubblesPosition()[2].radius
     );
     const newX =
       0.02 * Math.sin(18 * progress + 1.5) * Math.exp(-0.8 * progress);

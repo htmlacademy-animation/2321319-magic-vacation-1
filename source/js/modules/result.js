@@ -10,8 +10,8 @@ export default () => {
 
         const event = new CustomEvent(`toScreenResult`, {
           detail: {
-            'screenId': Screen[target.toUpperCase()],
-            'prevScreenId': Screen.GAME,
+            "screenId": Screen[target.toUpperCase()],
+            "prevScreenId": Screen.GAME,
           }
         });
         document.body.dispatchEvent(event);
@@ -23,8 +23,8 @@ export default () => {
       playBtn.addEventListener(`click`, function () {
         const event = new CustomEvent(`fromScreenResult`, {
           detail: {
-            'screenId': Screen.GAME,
-            'prevScreenId': Screen.RESULT3,
+            "screenId": Screen.GAME,
+            "prevScreenId": Screen.RESULT3,
           }
         });
         document.body.dispatchEvent(event);

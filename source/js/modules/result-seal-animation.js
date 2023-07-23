@@ -1,5 +1,5 @@
 import ResultAnimation from "./result-animation";
-import { easeOutElastic, easeInOutQuad } from "../general/easing";
+import {easeOutElastic, easeInOutQuad} from "../general/easing";
 
 export default class ResultSealAnimation extends ResultAnimation {
   constructor(canvasElement) {
@@ -24,7 +24,7 @@ export default class ResultSealAnimation extends ResultAnimation {
       {
         id: `treeLeft`,
         imagePath: `./img/module-4/win-primary-images/tree-2.png`,
-        position: { x: 55, y: 62, width: 3 },
+        position: {x: 55, y: 62, width: 3},
         transforms: {
           opacity: 0,
           translateY: 5,
@@ -39,7 +39,7 @@ export default class ResultSealAnimation extends ResultAnimation {
       {
         id: `treeRight`,
         imagePath: `./img/module-4/win-primary-images/tree.png`,
-        position: { x: 58, y: 64, width: 3 },
+        position: {x: 58, y: 64, width: 3},
         transforms: {
           opacity: 0,
           translateY: 5,
@@ -54,7 +54,7 @@ export default class ResultSealAnimation extends ResultAnimation {
       {
         id: `ice`,
         imagePath: `./img/module-4/win-primary-images/ice.png`,
-        position: { x: 50, y: 72, width: 30 },
+        position: {x: 50, y: 72, width: 30},
         transforms: {
           rotate: 10,
           translateY: 82,
@@ -71,7 +71,7 @@ export default class ResultSealAnimation extends ResultAnimation {
       {
         id: `seal`,
         imagePath: `./img/module-4/win-primary-images/sea-calf-2.png`,
-        position: { x: 48, y: 63, width: 32 },
+        position: {x: 48, y: 63, width: 32},
         transforms: {
           rotate: 10,
           translateY: 73,
@@ -88,7 +88,7 @@ export default class ResultSealAnimation extends ResultAnimation {
       {
         id: `snowflakeLeft`,
         imagePath: `./img/module-4/win-primary-images/snowflake.png`,
-        position: { x: 33, y: 57, width: 15 },
+        position: {x: 33, y: 57, width: 15},
         transforms: {
           opacity: 0,
           translateY: 0,
@@ -105,7 +105,7 @@ export default class ResultSealAnimation extends ResultAnimation {
       {
         id: `snowflakeRight`,
         imagePath: `./img/module-4/win-primary-images/snowflake.png`,
-        position: { x: 63, y: 65, width: 12 },
+        position: {x: 63, y: 65, width: 12},
         transforms: {
           scaleY: -1,
           scaleX: -1,
@@ -198,24 +198,24 @@ export default class ResultSealAnimation extends ResultAnimation {
     this.ctx.beginPath();
     this.rotateElement(element, -1);
     this.ctx.arc(
-      canvasCenterX,
-      canvasCenterY,
-      radiusCanvas,
-      Math.PI / 2,
-      (3 * Math.PI) / 2,
-      false
+        canvasCenterX,
+        canvasCenterY,
+        radiusCanvas,
+        Math.PI / 2,
+        (3 * Math.PI) / 2,
+        false
     );
 
     this.ctx.moveTo(canvasCenterX, canvasCenterY + radiusCanvas);
     this.ctx.bezierCurveTo(
-      canvasCenterX + 0.9 * radiusCanvas, canvasCenterY + 1.1 * radiusCanvas,
-      this.elements[6].position.curX - 0.9 * radiusCanvas, this.elements[6].position.curY + 0.9 * radiusCanvas,
-      endX, endY
+        canvasCenterX + 0.9 * radiusCanvas, canvasCenterY + 1.1 * radiusCanvas,
+        this.elements[6].position.curX - 0.9 * radiusCanvas, this.elements[6].position.curY + 0.9 * radiusCanvas,
+        endX, endY
     );
     this.ctx.bezierCurveTo(
-      canvasCenterX + 1.2 * radiusCanvas, canvasCenterY + 0.3 * radiusCanvas,
-      canvasCenterX + 1.2 * radiusCanvas, canvasCenterY - 0.9 * radiusCanvas,
-      canvasCenterX, canvasCenterY - radiusCanvas,
+        canvasCenterX + 1.2 * radiusCanvas, canvasCenterY + 0.3 * radiusCanvas,
+        canvasCenterX + 1.2 * radiusCanvas, canvasCenterY - 0.9 * radiusCanvas,
+        canvasCenterX, canvasCenterY - radiusCanvas,
     );
     this.ctx.fill();
     this.rotateElement(element);

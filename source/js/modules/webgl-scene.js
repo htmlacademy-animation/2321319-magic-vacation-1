@@ -1,9 +1,9 @@
 import * as THREE from "three";
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
-import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer.js";
+import {RenderPass} from "three/examples/jsm/postprocessing/RenderPass.js";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass.js";
 import CustomMaterial from "./3d/materials/custom-material";
-import { Screen, ThemeColor, AnimationType } from "../general/consts";
+import {Screen, ThemeColor, AnimationType} from "../general/consts";
 import ObjectLoader from "./3d/objects/object-loader";
 import PyramidScene from "./3d/scenes/story-pyramid-scene";
 import SnowmanScene from "./3d/scenes/story-snowman-scene";
@@ -12,9 +12,9 @@ import IntroScene from "./3d/scenes/intro-scene";
 import DogScene from "./3d/scenes/story-dog-scene";
 import IIScene from "./3d/scenes/story-ii-scene";
 import CanvasAnimation from "./canvas-animation";
-import { SceneObjects } from "./3d/objects/scene-objects-config";
-import { easeInQuad } from "../general/easing";
-import { isMobile, debounce } from "../general/helpers";
+import {SceneObjects} from "./3d/objects/scene-objects-config";
+import {easeInQuad} from "../general/easing";
+import {isMobile, debounce} from "../general/helpers";
 
 export default class WebGLScene extends CanvasAnimation {
   constructor(canvasElement) {
@@ -99,10 +99,10 @@ export default class WebGLScene extends CanvasAnimation {
     this.setColor();
 
     const cameraMain = new THREE.PerspectiveCamera(
-      this.fov,
-      this.aspectRatio,
-      this.near,
-      this.far
+        this.fov,
+        this.aspectRatio,
+        this.near,
+        this.far
     );
     this.cameraRig = new CameraRig(cameraMain);
     this.scene.add(this.cameraRig);
@@ -125,11 +125,11 @@ export default class WebGLScene extends CanvasAnimation {
   initPass() {
     const renderPass = new RenderPass(this.scene, this.camera);
     this.customMaterial = new CustomMaterial(
-      new THREE.Vector2(this.canvas.width, this.canvas.height),
-      this.scene,
-      THREE.Math.degToRad(0),
-      0,
-      []
+        new THREE.Vector2(this.canvas.width, this.canvas.height),
+        this.scene,
+        THREE.Math.degToRad(0),
+        0,
+        []
     );
     const effectPass = new ShaderPass(this.customMaterial, `map`);
     this.composer.addPass(renderPass);
@@ -137,7 +137,9 @@ export default class WebGLScene extends CanvasAnimation {
   }
 
   initLight() {
-    if (isMobile()) return;
+    if (isMobile()) {
+      return;
+    }
     const lightDirection = new THREE.DirectionalLight(0xffffff, 0.84);
     const directionalLightZ = this.far;
     lightDirection.position.set(0, 0, directionalLightZ);
@@ -317,7 +319,9 @@ export default class WebGLScene extends CanvasAnimation {
         ],
       };
     } else {
-      if (!this.isLoading) this.setCameraPositionWithoutAnimation(sceneObjectId);
+      if (!this.isLoading) {
+        this.setCameraPositionWithoutAnimation(sceneObjectId);
+      }
     }
     this.previousSceneObject = this.currentSceneObject;
     this.currentSceneObject = sceneObjectId;
@@ -388,8 +392,8 @@ export default class WebGLScene extends CanvasAnimation {
   getCoordinateForAnimation(prevCoordinate, currentCoordinate, progress) {
     if (currentCoordinate !== prevCoordinate) {
       return currentCoordinate > prevCoordinate
-      ? prevCoordinate + (currentCoordinate - prevCoordinate) * progress
-      : prevCoordinate - (prevCoordinate - currentCoordinate) * progress;
+        ? prevCoordinate + (currentCoordinate - prevCoordinate) * progress
+        : prevCoordinate - (prevCoordinate - currentCoordinate) * progress;
     }
     return currentCoordinate;
   }
@@ -411,13 +415,19 @@ export default class WebGLScene extends CanvasAnimation {
   }
 
   updateObjectsOnResize() {
-    if (!this.elements) return;
+    if (!this.elements) {
+      return;
+    }
     this.elements.forEach((el) => {
       el.animationFunctions.forEach((animation, index) => {
-        if (el.finites[index]) animation(el, 1);
+        if (el.finites[index]) {
+          animation(el, 1);
+        }
       });
     });
-    if (this.currentSceneObject !== ThemeColor.LIGHT_PURPLE) this.sceneObjects[ThemeColor.LIGHT_PURPLE].scene.suitcaseAppearenceAnimationFunc(null, 1);
+    if (this.currentSceneObject !== ThemeColor.LIGHT_PURPLE) {
+      this.sceneObjects[ThemeColor.LIGHT_PURPLE].scene.suitcaseAppearenceAnimationFunc(null, 1);
+    }
   }
 
   startAnimation(withoutCameraAnimation = false) {
@@ -442,7 +452,9 @@ export default class WebGLScene extends CanvasAnimation {
   }
 
   initAnimations() {
-    if (this.currentSceneObject === null) return;
+    if (this.currentSceneObject === null) {
+      return;
+    }
     const scene = this.sceneObjects[this.currentSceneObject].scene;
     this.animationsByScene[this.currentSceneObject] = [
       ...SceneObjects[this.currentSceneObject].primitives,
@@ -483,15 +495,15 @@ export default class WebGLScene extends CanvasAnimation {
       this.sceneObjects[ThemeColor.BLUE].scene.updateUniforms();
     }
     if (this.elements && this.elements.length) {
-    this.elements.forEach((el) => {
-      el.animationFunctions.forEach((animation, index) => {
-        if (el.finites[index]) {
-          el.isStopped = true;
-        }
+      this.elements.forEach((el) => {
+        el.animationFunctions.forEach((animation, index) => {
+          if (el.finites[index]) {
+            el.isStopped = true;
+          }
+        });
       });
-    });
-    super.stopAnimation();
-    window.removeEventListener(`mousemove`, this.mouseMoveHandler);
+      super.stopAnimation();
+      window.removeEventListener(`mousemove`, this.mouseMoveHandler);
     }
   }
 

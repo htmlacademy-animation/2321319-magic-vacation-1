@@ -1,5 +1,5 @@
-import { hasReduceMotion } from "../general/helpers";
-import Chat from './chat.js';
+import {hasReduceMotion} from "../general/helpers";
+import Chat from "./chat.js";
 import GameTimer from "./game-timer";
 
 export default class GameScreenAnimation {
@@ -12,13 +12,13 @@ export default class GameScreenAnimation {
     const translateY = this.aiElement.height;
     this.showAnimationSettings = {
       keyframes: [
-        { opacity: 0, offset: 0 },
+        {opacity: 0, offset: 0},
         {
           opacity: 1,
           transform: `translate(${translateX}px, ${translateY}px) rotate(-30deg)`,
           offset: 0.01,
         },
-        { transform: `translate(0, 0) rotate(0deg)`, offset: 1 },
+        {transform: `translate(0, 0) rotate(0deg)`, offset: 1},
       ],
       options: {
         duration: hasReduceMotion() ? 0 : 600,
@@ -29,8 +29,8 @@ export default class GameScreenAnimation {
 
     this.backgroundAnimationSettings = {
       keyframes: [
-        { transform: `translate(0, 0) rotate(0deg)`, offset: 0 },
-        { transform: `translate(0, 2rem) rotate(0deg)`, offset: 1 },
+        {transform: `translate(0, 0) rotate(0deg)`, offset: 0},
+        {transform: `translate(0, 2rem) rotate(0deg)`, offset: 1},
       ],
       options: {
         duration: 1500,
@@ -61,8 +61,8 @@ export default class GameScreenAnimation {
       return;
     }
     this.showAnimation = this.aiElement.animate(
-      this.showAnimationSettings.keyframes,
-      this.showAnimationSettings.options
+        this.showAnimationSettings.keyframes,
+        this.showAnimationSettings.options
     );
     this.showAnimation.pause();
   }
@@ -75,8 +75,8 @@ export default class GameScreenAnimation {
     this.showAnimation.onfinish = () => {
       if (!hasReduceMotion()) {
         this.backgroundAnimation = this.aiElement.animate(
-          this.backgroundAnimationSettings.keyframes,
-          this.backgroundAnimationSettings.options
+            this.backgroundAnimationSettings.keyframes,
+            this.backgroundAnimationSettings.options
         );
       }
     };
@@ -111,17 +111,25 @@ export default class GameScreenAnimation {
     const gameScreenBtn = this.screenElement.querySelector(`.form__button`);
     if (window.innerWidth / window.innerHeight < 1 || window.innerWidth < 1024) {
       const isHidden = this.screenElement.classList.contains(`screen--hidden`);
-      if (isHidden) this.screenElement.classList.remove(`screen--hidden`);
+      if (isHidden) {
+        this.screenElement.classList.remove(`screen--hidden`);
+      }
       gameScreenBtn.style.width = `${gameScreenBtn.clientHeight}px`;
-      if (isHidden) this.screenElement.classList.add(`screen--hidden`);
+      if (isHidden) {
+        this.screenElement.classList.add(`screen--hidden`);
+      }
     } else {
       const rulesScreen = document.querySelector(`.screen--rules`);
       const rulesScreenBtn = rulesScreen.querySelector(`.rules__link`);
       const isHidden = rulesScreen.classList.contains(`screen--hidden`);
-      if (isHidden) rulesScreen.classList.remove(`screen--hidden`);
+      if (isHidden) {
+        rulesScreen.classList.remove(`screen--hidden`);
+      }
       gameScreenBtn.style.width = `${rulesScreenBtn.clientWidth}px`;
       rulesScreenBtn.style.width = `${rulesScreenBtn.clientWidth}px`;
-      if (isHidden) rulesScreen.classList.add(`screen--hidden`);
+      if (isHidden) {
+        rulesScreen.classList.add(`screen--hidden`);
+      }
     }
   }
 }

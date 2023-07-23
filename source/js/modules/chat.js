@@ -1,5 +1,5 @@
-import { Screen } from "../general/consts";
-import { hasReduceMotion } from "../general/helpers";
+import {Screen} from "../general/consts";
+import {hasReduceMotion} from "../general/helpers";
 
 export default class Chat {
   constructor() {
@@ -59,16 +59,16 @@ export default class Chat {
       if (this.currentQuestion.toLowerCase().includes(`это антарктида?`)) {
         const event = new CustomEvent(`toScreenResult`, {
           detail: {
-            'screenId': Screen.RESULT,
-            'prevScreenId': Screen.GAME,
+            "screenId": Screen.RESULT,
+            "prevScreenId": Screen.GAME,
           }
         });
         document.body.dispatchEvent(event);
       } else if (this.currentQuestion.toLowerCase().includes(`антарктида?`)) {
         const event = new CustomEvent(`toScreenResult`, {
           detail: {
-            'screenId': Screen.RESULT2,
-            'prevScreenId': Screen.GAME,
+            "screenId": Screen.RESULT2,
+            "prevScreenId": Screen.GAME,
           }
         });
         document.body.dispatchEvent(event);
@@ -193,8 +193,8 @@ export default class Chat {
   getAnimationSettings(offset, index) {
     return {
       keyframes: [
-        { transform: `translateY(0)`, offset: 0 },
-        { transform: `translateY(-${offset}px)`, offset: 1 },
+        {transform: `translateY(0)`, offset: 0},
+        {transform: `translateY(-${offset}px)`, offset: 1},
       ],
       options: {
         duration: hasReduceMotion() ? 0 : 200,
@@ -208,8 +208,8 @@ export default class Chat {
   getAnimationUnsetSettings(offset) {
     return {
       keyframes: [
-        { transform: `translateY(-${offset}px)`, offset: 0 },
-        { transform: `translateY(0)`, offset: 1 },
+        {transform: `translateY(-${offset}px)`, offset: 0},
+        {transform: `translateY(0)`, offset: 1},
       ],
       options: {
         duration: 0,

@@ -22,7 +22,9 @@ export default class SuitcaseRig extends THREE.Group {
   }
 
   set angleZ(value) {
-    if (this._angleZ === value) return;
+    if (this._angleZ === value) {
+      return;
+    }
 
     this._angleZ = value;
     this._angleZChanged = true;
@@ -33,7 +35,9 @@ export default class SuitcaseRig extends THREE.Group {
   }
 
   set angleY(value) {
-    if (this._angleY === value) return;
+    if (this._angleY === value) {
+      return;
+    }
 
     this._angleY = value;
     this._angleYChanged = true;
@@ -44,7 +48,9 @@ export default class SuitcaseRig extends THREE.Group {
   }
 
   set scaleDiff(value) {
-    if (this._scaleDiff === value) return;
+    if (this._scaleDiff === value) {
+      return;
+    }
 
     this._scaleDiff = value;
     this._scaleDiffChanged = true;
@@ -55,7 +61,9 @@ export default class SuitcaseRig extends THREE.Group {
   }
 
   set yShift(value) {
-    if (this._yShift === value) return;
+    if (this._yShift === value) {
+      return;
+    }
 
     this._yShift = value;
     this._yShiftChanged = true;
@@ -66,7 +74,9 @@ export default class SuitcaseRig extends THREE.Group {
   }
 
   set xShift(value) {
-    if (this._xShift === value) return;
+    if (this._xShift === value) {
+      return;
+    }
 
     this._xShift = value;
     this._xShiftChanged = true;
@@ -77,7 +87,9 @@ export default class SuitcaseRig extends THREE.Group {
   }
 
   set zShift(value) {
-    if (this._zShift === value) return;
+    if (this._zShift === value) {
+      return;
+    }
 
     this._zShift = value;
     this._zShiftChanged = true;
@@ -100,9 +112,9 @@ export default class SuitcaseRig extends THREE.Group {
   invalidate() {
     if (this._scaleDiffChanged) {
       this.scale.set(
-        this._scaleDiff,
-        this._scaleDiff,
-        this._scaleDiff
+          this._scaleDiff,
+          this._scaleDiff,
+          this._scaleDiff
       );
       this._scaleDiffChanged = false;
     }
