@@ -21,12 +21,3 @@ export function easeOutElastic(x) {
     return Math.pow(2, -10 * x) * Math.sin((x * 10 - 0.75) * c4) + 1;
   }
 }
-
-export function easeOutExpo(x) {
-  return x === 1 ? 1 : 1 - Math.pow(2, -10 * x);
-}
-
-export function easeInExpo(x) {
-  return x === 0 ? 0 : Math.pow(2, 10 * x - 10);
-}
-

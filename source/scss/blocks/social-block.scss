@@ -17,6 +17,9 @@
   height: 4rem;
   color: $c-secondary;
   border-radius: 50%;
+  transition: color $standart-duration ease-in-out;
+
+  @include reduce-motion;
 
   @media (max-width: $tablet) and (orientation: portrait) {
     display: none;
@@ -34,6 +37,8 @@
     transform: translate(-50%, -50%) scale(1);
     border: 2px solid $c-light;
     transition: transform $long-duration $timing-exscess-before-end;
+
+    @include reduce-motion;
     border-radius: 50%;
     background-color: $c-light;
     z-index: -1;
@@ -98,6 +103,8 @@
   transform: translateY(-1rem);
   transition: opacity $middle-duration ease;
 
+  @include reduce-motion;
+
   .social-block--active & {
     transform: translateY(0);
     opacity: 1;
@@ -116,6 +123,7 @@
     margin-top: 0;
     opacity: 1;
     pointer-events: auto;
+    transform: none;
   }
 
   @media (max-width: $mobile) and (orientation: landscape) {
@@ -126,6 +134,7 @@
     margin-top: 0;
     opacity: 1;
     pointer-events: auto;
+    transform: none;
   }
 
   &::before {
@@ -138,6 +147,14 @@
 
     @media (min-width: $stop-scaling) {
       height: 15px;
+    }
+
+    @media (max-width: $tablet) and (orientation: portrait) {
+      display: none;
+    }
+
+    @media (max-width: $mobile) and (orientation: landscape) {
+      display: none;
     }
   }
 
@@ -181,10 +198,14 @@
   transform: translateY(1rem);
   transition: opacity $middle-duration ease;
 
+  @include reduce-motion;
+
   .social-block--active & {
     opacity: 1;
     transition: color $middle-duration ease, transform $middle-duration ease, opacity $middle-duration ease;
     transform: translateY(0);
+
+    @include reduce-motion;
   }
 
   @media (min-width: $stop-scaling) {
@@ -195,11 +216,15 @@
   @media (max-width: $tablet) and (orientation: portrait) {
     color: $c-light;
     background-color: $c-dark;
+    opacity: 1;
+    transform: none;
   }
 
   @media (max-width: $mobile) and (orientation: landscape) {
     color: $c-light;
     background-color: $c-dark;
+    opacity: 1;
+    transform: none;
   }
 
   &:hover {

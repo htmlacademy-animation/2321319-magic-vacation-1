@@ -1,9 +1,9 @@
 import * as THREE from "three";
-import { SceneObjects } from "../objects/scene-objects-config";
+import {SceneObjects} from "../objects/scene-objects-config";
 import SuitcaseRig from "../objects/suitcase-rig";
 import AirplaneRig from "../objects/airplane-rig";
-import { Screen, AnimatedPrimitives, SvgShape, Objects } from "../../../general/consts";
-import { easeOutQuad, easeInOutQuad, easeInQuad } from "../../../general/easing";
+import {Screen, AnimatedPrimitives, SvgShape, Objects} from "../../../general/consts";
+import {easeOutQuad, easeInOutQuad, easeInQuad} from "../../../general/easing";
 import DefaultScene from "./default-scene";
 
 export default class IntroScene extends DefaultScene {
@@ -21,7 +21,9 @@ export default class IntroScene extends DefaultScene {
 
   initSuitcaseObject() {
     const suitcaseSettings = SceneObjects[this.sceneId].objects.find((el) => el.id === Objects.SUITCASE.id);
-    if (!suitcaseSettings) return;
+    if (!suitcaseSettings) {
+      return;
+    }
     const object = this.objectLoader
       .getPreparedObjectWithMateral(suitcaseSettings.id, suitcaseSettings.materialType, suitcaseSettings.materialProps)
       .clone();
@@ -33,7 +35,9 @@ export default class IntroScene extends DefaultScene {
 
   initAirplaneObject() {
     const airplaneSettings = SceneObjects[this.sceneId].objects.find((el) => el.id === Objects.AIRPLANE.id);
-    if (!airplaneSettings) return;
+    if (!airplaneSettings) {
+      return;
+    }
     const object = this.objectLoader
       .getPreparedObjectWithMateral(airplaneSettings.id, airplaneSettings.materialType, airplaneSettings.materialProps)
       .clone();

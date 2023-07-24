@@ -47,6 +47,8 @@
   outline: none;
   transition: transform $standart-duration ease-in-out $middle-duration;
 
+  @include reduce-motion;
+
   &:focus {
     border: 1px solid $c-purple;
   }
@@ -54,6 +56,8 @@
   &::placeholder {
     color: transparent;
     transition: color $standart-duration ease-in-out $long-delay;
+
+    @include reduce-motion;
   }
 
   &__wrapper {

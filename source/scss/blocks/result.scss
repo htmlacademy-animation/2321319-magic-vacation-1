@@ -9,6 +9,19 @@
     animation: fade-scaling-down ease-out $standart-duration 1 both;
     animation-play-state: paused;
 
+    @include reduce-motion;
+
+    .screen--transitioned & {
+      animation-play-state: running;
+    }
+  }
+
+  .fade-scaling-down-sm {
+    animation: fade-scaling-down-sm ease-out $standart-duration $short-duration 1 both;
+    animation-play-state: paused;
+
+    @include reduce-motion;
+
     .screen--transitioned & {
       animation-play-state: running;
     }
@@ -59,6 +72,8 @@
     animation-play-state: paused;
     backface-visibility: hidden;
 
+    @include reduce-motion;
+
     .screen--transitioned & {
       animation-play-state: running;
     }
@@ -74,6 +89,8 @@
     animation-play-state: paused;
     transform-origin: left center;
     backface-visibility: hidden;
+
+    @include reduce-motion;
 
     .screen--transitioned & {
       animation-play-state: running;
@@ -91,6 +108,8 @@
     transform-origin: left center;
     backface-visibility: hidden;
 
+    @include reduce-motion;
+
     .screen--transitioned & {
       animation-play-state: running;
     }
@@ -106,6 +125,8 @@
     animation-play-state: paused;
     backface-visibility: hidden;
 
+    @include reduce-motion;
+
     .screen--transitioned & {
       animation-play-state: running;
     }
@@ -117,12 +138,13 @@
     bottom: -2%;
     width: 46%;
     height: auto;
-    animation: flamingo-up $middle-duration 1 both $short-duration,
-               flamingo-dance 2s infinite backwards $extra-long-duration;
+    animation: flamingo-up $middle-duration 1 both $short-duration, flamingo-dance 2s infinite backwards $extra-long-duration;
     animation-play-state: paused;
     transform-origin: center center;
     will-change: transform, opacity;
     backface-visibility: hidden;
+
+    @include reduce-motion;
 
     .screen--transitioned & {
       animation-play-state: running;
@@ -267,6 +289,8 @@
     animation: rolling_out-right $middle-duration ease-out $long-duration 1 both;
     animation-play-state: paused;
 
+    @include reduce-motion;
+
     .screen--transitioned & {
       animation-play-state: running;
     }
@@ -297,6 +321,8 @@
     height: 1.9rem;
     animation: fade-in $standart-duration ease-out $short-duration 1 both;
     animation-play-state: paused;
+
+    @include reduce-motion;
 
     .screen--transitioned & {
       animation-play-state: running;
@@ -408,6 +434,8 @@
     .letter-drawing {
       animation: letter-falling ease-out $extra-long-duration 1 both;
       animation-play-state: paused;
+
+      @include reduce-motion;
 
       @for $i from 1 through 9 {
         &:nth-child(#{$i}) {

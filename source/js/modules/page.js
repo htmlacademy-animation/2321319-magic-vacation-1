@@ -1,6 +1,6 @@
-import FullPageScroll from "./full-page-scroll";
-import GameTimer from "./game-timer";
+import PageRouter from "./page-router";
 import WebGLScene from "./webgl-scene";
+import GameScreenAnimation from "./game-screen-animation";
 import PrizeCountAnimation from "./prize-count-animation";
 import ResultSealAnimation from "./result-seal-animation";
 import ResultCrocodileAnimation from "./result-crocodile-animation";
@@ -15,38 +15,27 @@ export default class Page {
     this.screenElements = document.querySelectorAll(`.screen:not(.screen--result)`);
     this.bodyElement = document.querySelector(`body`);
 
-    this.fullPageScroll = new FullPageScroll(this.screenElements);
-    this.fullPageScroll.init();
+    this.pageRouter = new PageRouter(this.screenElements);
+    this.pageRouter.init();
     this.swiper = new Slider();
 
     this.svgAnimations = {};
     this.jsAnimations = {};
+    this.quitAnimations = {};
     this.webGLScene = new WebGLScene(document.getElementById(`3d-scene`));
-    this.gameTimer = new GameTimer(5, 1);
+
+    this.gameScreenAnimation = new GameScreenAnimation(document.querySelector(`.screen--game`));
     this.setTheme();
 
     this.progress = 0;
     this.progressBar = document.querySelector(`.progress-bar-percent`);
 
     this.accentTypographyItems = [];
-    [].forEach.call(this.screenElements, (screen) => {
-      let accentTypographyElements = screen.querySelectorAll(`.accent-typography`);
-      [].forEach.call(accentTypographyElements, (el, index) => {
-        this.accentTypographyItems.push({
-          _element: new AccentTypography(
-              el,
-              500,
-              `accent-typography--transitioned`,
-              `transform`,
-              100 * index
-          ),
-          _screenId: Screen[screen.id.toUpperCase()],
-        });
-      });
-    });
+    this.initAccentTypographyAnimation();
 
     this.initSvgAnimations();
     this.initJsAnimations();
+    this.initQuitAnimations();
 
     window.addEventListener(`load`, () => {
       this.isDomLoaded = true;
@@ -67,6 +56,10 @@ export default class Page {
         return;
       }
       this.onScreenResultChanged(event);
+    });
+
+    document.body.addEventListener(`beforeScreenChanged`, (event) => {
+      this.onBeforeScreenChanged(event);
     });
 
     document.body.addEventListener(`screenChanged`, (event) => {
@@ -99,7 +92,7 @@ export default class Page {
       this.progress = 99;
       this.progressBar.textContent = `${this.progress}%`;
       setTimeout(() => {
-        this.progressBar.parentElement.classList.add(`hidden`);
+        this.progressBar.parentElement.remove();
         this.bodyElement.classList.add(DOM_LOADED_CLASS);
         if (this.currentHandler && this.currentEvent) {
           this.currentHandler(this.currentEvent);
@@ -113,15 +106,18 @@ export default class Page {
   }
 
   onScreenResultChanged(event) {
-    this.destroyAnimationsForPrevScreen(event);
     setTimeout(() => {
       this.runAnimationsForScreen(event);
     }, 200);
   }
 
+  onBeforeScreenChanged(event) {
+    this.destroyAnimationsForPrevScreen(event);
+    this.runQuitAnimationsForScreen(event);
+  }
+
   onScreenChanged(event) {
     this.reinitTheme(event);
-    this.destroyAnimationsForPrevScreen(event);
     setTimeout(() => {
       this.runAnimationsForScreen(event);
     }, 200);
@@ -183,9 +179,17 @@ export default class Page {
       });
     }
 
-    // if (event.detail.prevScreenId === Screen.STORY || event.detail.prevScreenId === Screen.TOP) {
-    //   this.webGLScene.stopAnimation();
-    // }
+    if (event.detail.prevScreenId === Screen.STORY || event.detail.prevScreenId === Screen.TOP) {
+      this.webGLScene.stopAnimation();
+    }
+  }
+
+  runQuitAnimationsForScreen(event) {
+    if (this.quitAnimations[event.detail.prevScreenId]) {
+      [].forEach.call(this.quitAnimations[event.detail.prevScreenId], (animation) => {
+        setTimeout(() => animation.element.startQuitAnimation(), animation.delay);
+      });
+    }
   }
 
   runAnimationsForScreen(event) {
@@ -211,12 +215,28 @@ export default class Page {
 
   updateTimerStatus(screenId) {
     if (screenId === Screen.GAME) {
-      setTimeout(() => {
-        this.gameTimer.startTimer();
-      }, 450); // TODO: уточнить время после завершения работы над экраном
+      this.gameScreenAnimation.updateTimerStatus();
     } else {
-      this.gameTimer.stopTimer();
+      this.gameScreenAnimation.stopTimer();
     }
+  }
+
+  initAccentTypographyAnimation() {
+    [].forEach.call(this.screenElements, (screen) => {
+      let accentTypographyElements = screen.querySelectorAll(`.accent-typography`);
+      [].forEach.call(accentTypographyElements, (el, index) => {
+        this.accentTypographyItems.push({
+          _element: new AccentTypography(
+              el,
+              500,
+              `accent-typography--transitioned`,
+              `transform`,
+              100 * index
+          ),
+          _screenId: Screen[screen.id.toUpperCase()],
+        });
+      });
+    });
   }
 
   initSvgAnimations() {
@@ -250,6 +270,21 @@ export default class Page {
         element: new ResultCrocodileAnimation(document.getElementById(`crocodile-scene`)),
         delay: 0
       }
+    ];
+    this.jsAnimations[Screen.GAME] = [
+      {
+        element: this.gameScreenAnimation,
+        delay: 200
+      }
+    ];
+  }
+
+  initQuitAnimations() {
+    this.quitAnimations[Screen.GAME] = [
+      {
+        element: this.gameScreenAnimation,
+        delay: 0
+      },
     ];
   }
 

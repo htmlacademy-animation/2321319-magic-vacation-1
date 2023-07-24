@@ -1,3 +1,5 @@
+import {Screen} from "../general/consts";
+
 export default class GameTimer {
   constructor(sessionTime, fps) {
     this.sessionTime = sessionTime;
@@ -33,6 +35,7 @@ export default class GameTimer {
 
     if (now >= this.endTime) {
       this.stopTimer();
+      this.triggerLoseScreen();
       return;
     }
 
@@ -51,6 +54,16 @@ export default class GameTimer {
       this.runnungAnimation = this.endTime = this.lastFrameTime = null;
       this.setTime(this.sessionTime, 0);
     }
+  }
+
+  triggerLoseScreen() {
+    const event = new CustomEvent(`toScreenResult`, {
+      detail: {
+        "screenId": Screen.RESULT3,
+        "prevScreenId": Screen.GAME,
+      }
+    });
+    document.body.dispatchEvent(event);
   }
 
   setTime(min, sec) {

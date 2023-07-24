@@ -1,8 +1,7 @@
 import * as THREE from "three";
-import { ThemeColor, Objects } from "../../../general/consts";
-import { SceneObjects } from "../objects/scene-objects-config";
+import {ThemeColor, Objects} from "../../../general/consts";
 import DefaultScene from "./default-scene";
-import { easeInOutQuad } from "../../../general/easing";
+import {easeInOutQuad} from "../../../general/easing";
 
 export default class SnowmanScene extends DefaultScene {
   constructor(objectLoader, aspectRatio) {
@@ -27,9 +26,9 @@ export default class SnowmanScene extends DefaultScene {
   compassAnimationFunc(el, progress) {
     const rotation = 5 * Math.sin(Math.PI * easeInOutQuad(progress));
     el.element.children[0].children[0].children[0].rotation.set(
-      0,
-      0,
-      THREE.Math.degToRad(rotation)
+        0,
+        0,
+        THREE.Math.degToRad(rotation)
     );
   }
 }

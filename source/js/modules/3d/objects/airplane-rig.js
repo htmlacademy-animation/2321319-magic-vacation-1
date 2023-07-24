@@ -44,7 +44,9 @@ export default class AirplaneRig extends THREE.Group {
   }
 
   set angleXZMoving(value) {
-    if (this._angleXZMoving === value) return;
+    if (this._angleXZMoving === value) {
+      return;
+    }
 
     this._angleXZMoving = value;
     this._angleXZMovingChanged = true;
@@ -55,7 +57,9 @@ export default class AirplaneRig extends THREE.Group {
   }
 
   set radius(value) {
-    if (this._radius === value) return;
+    if (this._radius === value) {
+      return;
+    }
 
     this._radius = value;
     this._radiusChanged = true;
@@ -66,7 +70,9 @@ export default class AirplaneRig extends THREE.Group {
   }
 
   set yShift(value) {
-    if (this._yShift === value) return;
+    if (this._yShift === value) {
+      return;
+    }
 
     this._yShift = value;
     this._yShiftChanged = true;
@@ -77,7 +83,9 @@ export default class AirplaneRig extends THREE.Group {
   }
 
   set angleZ(value) {
-    if (this._angleZ === value) return;
+    if (this._angleZ === value) {
+      return;
+    }
 
     this._angleZ = value;
     this._angleZChanged = true;
@@ -88,7 +96,9 @@ export default class AirplaneRig extends THREE.Group {
   }
 
   set angleX(value) {
-    if (this._angleX === value) return;
+    if (this._angleX === value) {
+      return;
+    }
 
     this._angleX = value;
     this._angleXChanged = true;
@@ -99,7 +109,9 @@ export default class AirplaneRig extends THREE.Group {
   }
 
   set scaleDiff(value) {
-    if (this._scaleDiff === value) return;
+    if (this._scaleDiff === value) {
+      return;
+    }
 
     this._scaleDiff = value;
     this._scaleDiffChanged = true;
@@ -146,7 +158,7 @@ export default class AirplaneRig extends THREE.Group {
       this._angleXChanged = false;
     }
 
-    if (this._scaleDiffChanged) {
+    if (this._scaleDiffChanged && this._scaleDiff >= 0) {
       this.scale.set(this._scaleDiff, this._scaleDiff, this._scaleDiff);
       this._scaleDiffChanged = false;
     }

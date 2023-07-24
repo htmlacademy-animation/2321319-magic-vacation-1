@@ -10,6 +10,9 @@
   line-height: 3rem;
   color: $c-dark;
   letter-spacing: -0.04em;
+  transition: color $standart-duration ease-in-out;
+
+  @include reduce-motion;
 
   @media (min-width: $stop-scaling) {
     padding: 15px 29px;

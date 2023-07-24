@@ -1,11 +1,9 @@
 import * as THREE from "three";
-import { SceneObjects } from "../objects/scene-objects-config";
 import {
   ThemeColor,
   Objects,
   AnimatedPrimitives,
 } from "../../../general/consts";
-import { easeInOutQuad, easeOutQuad } from "../../../general/easing";
 import DefaultScene from "./default-scene";
 
 export default class DogScene extends DefaultScene {
@@ -31,9 +29,11 @@ export default class DogScene extends DefaultScene {
   initObjects() {
     super.initObjects();
     const chandlier = this.sceneGroup.children.find(
-      (el) => el.name === AnimatedPrimitives.CHANDELIER
+        (el) => el.name === AnimatedPrimitives.CHANDELIER
     );
-    if (chandlier) this.setRotateOfChandlier(chandlier, this.chandlierAngle);
+    if (chandlier) {
+      this.setRotateOfChandlier(chandlier, this.chandlierAngle);
+    }
     this.addSuitcase();
   }
 
@@ -90,10 +90,10 @@ export default class DogScene extends DefaultScene {
     this.setPosition(object, [0, 0, 0], [1, 1, 1], [0, -20, 0]);
     this.suitcase.add(object);
     this.setPosition(
-      this.suitcase,
-      this.suitcaseStartPosition,
-      [0, 0, 0],
-      [0, 0, 0]
+        this.suitcase,
+        this.suitcaseStartPosition,
+        [0, 0, 0],
+        [0, 0, 0]
     );
 
     const modelBoundingBox = new THREE.Box3().setFromObject(object);
@@ -101,12 +101,14 @@ export default class DogScene extends DefaultScene {
   }
 
   suitcaseShowAnimationFunc(_el, _progress) {
-    if (this.isSuitcaseApear) return;
+    if (this.isSuitcaseApear) {
+      return;
+    }
     this.setPosition(
-      this.suitcase,
-      this.suitcaseStartPosition,
-      [1, 1, 1],
-      [0, 0, 0]
+        this.suitcase,
+        this.suitcaseStartPosition,
+        [1, 1, 1],
+        [0, 0, 0]
     );
   }
 
@@ -129,7 +131,7 @@ export default class DogScene extends DefaultScene {
 
     if (progress === 1) {
       this.isSuitcaseApear = true;
-      y = this.isPortrait() ? -757 : -830; //TODO
+      y = this.isPortrait() ? -757 : -830;
     }
 
     this.setPosition(this.suitcase, [-336, y, 750], scale, [0, 0, 0]);
@@ -156,9 +158,9 @@ export default class DogScene extends DefaultScene {
     const tailObj = el.element.children[0].children[0].children[0];
     const currentRotate = tailObj.rotation;
     tailObj.rotation.set(
-      THREE.Math.degToRad(rotate),
-      currentRotate.y,
-      currentRotate.z
+        THREE.Math.degToRad(rotate),
+        currentRotate.y,
+        currentRotate.z
     );
   }
 }

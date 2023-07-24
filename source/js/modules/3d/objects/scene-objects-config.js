@@ -8,12 +8,12 @@ import {
   MaterialType,
   Objects,
 } from "../../../general/consts";
-import { getLathePointsBy } from "./helpers";
+import {getLathePointsBy} from "./helpers";
 import RoadMaterial from "../materials/road-material";
 import RoadMatcapMaterial from "../materials/road-matcap-material";
 import CarpetMaterial from "../materials/carpet-material";
 import CarpetMatcapMaterial from "../materials/carpet-matcap-material";
-import { isMobile } from "../../../general/helpers";
+import {isMobile} from "../../../general/helpers";
 
 export const SceneObjects = {
   [Screen.TOP]: {
@@ -87,7 +87,7 @@ export const SceneObjects = {
         position: [-50, 30, 20],
         scale: [0, 0, 0],
         rotation: [-10, 60, 205],
-        extrudeSettings: { depth: 12, bevelOffset: -2 },
+        extrudeSettings: {depth: 12, bevelOffset: -2},
         materialType: MaterialType.SOFT.id,
         materialProps: {
           color: ObjectColor.LIGHT_DOMINANT_RED.id,
@@ -98,7 +98,7 @@ export const SceneObjects = {
         position: [-40, -20, 20],
         scale: [0, 0, 0],
         rotation: [-20, 70, 200],
-        extrudeSettings: { depth: 11, bevelOffset: -2 },
+        extrudeSettings: {depth: 11, bevelOffset: -2},
         materialType: MaterialType.BASIC.id,
         materialProps: {
           color: ObjectColor.BLUE.id,
@@ -109,7 +109,7 @@ export const SceneObjects = {
         position: [10, -60, 20],
         scale: [0, 0, 0],
         rotation: [-45, 180, 210],
-        extrudeSettings: { depth: 14, bevelOffset: -2 },
+        extrudeSettings: {depth: 14, bevelOffset: -2},
         materialType: MaterialType.BASIC.id,
         materialProps: {
           color: ObjectColor.BLUE.id,
@@ -120,7 +120,7 @@ export const SceneObjects = {
         position: [1000, 1000, 0],
         scale: [1.02, 1.02, 1.02],
         rotation: [0, 0, 180],
-        extrudeSettings: { depth: 20, bevelOffset: -2 },
+        extrudeSettings: {depth: 20, bevelOffset: -2},
         materialType: MaterialType.SOFT.id,
         materialProps: {
           color: ObjectColor.DARK_PURPLE.id,
@@ -131,7 +131,7 @@ export const SceneObjects = {
         position: [7, 40, 20],
         scale: [0, 0, 0],
         rotation: [5, 90, 245],
-        extrudeSettings: { depth: 14, bevelOffset: -2 },
+        extrudeSettings: {depth: 14, bevelOffset: -2},
         materialType: MaterialType.BASIC.id,
         materialProps: {
           color: ObjectColor.GREEN.id,
@@ -288,7 +288,7 @@ export const SceneObjects = {
         position: [-240, -108, 340],
         scale: [0.6, 0.6, 0.6],
         rotation: [180, -45, 0],
-        extrudeSettings: { depth: 4, bevelOffset: -2 },
+        extrudeSettings: {depth: 4, bevelOffset: -2},
         materialType: MaterialType.BASIC.id,
         materialProps: {
           color: ObjectColor.DARK_PURPLE.id,
@@ -591,7 +591,7 @@ export const SceneObjects = {
             primitiveType: `LatheGeometry`,
             primitiveSettings: [
               getLathePointsBy(732, 160, 3).map(
-                (el) => new THREE.Vector2(...el)
+                  (el) => new THREE.Vector2(...el)
               ),
               12,
               THREE.Math.degToRad(0),
@@ -737,7 +737,7 @@ export const SceneObjects = {
             primitiveType: `LatheGeometry`,
             primitiveSettings: [
               getLathePointsBy(763, 180, 3).map(
-                (el) => new THREE.Vector2(...el)
+                  (el) => new THREE.Vector2(...el)
               ),
               12,
               THREE.Math.degToRad(16),
@@ -784,7 +784,7 @@ export const SceneObjects = {
         position: [-240, -108, 340],
         scale: [0.6, 0.6, 0.6],
         rotation: [180, -45, 0],
-        extrudeSettings: { depth: 4, bevelOffset: -2 },
+        extrudeSettings: {depth: 4, bevelOffset: -2},
         materialType: MaterialType.BASIC.id,
         materialProps: {
           color: ObjectColor.SHADOWED_DARK_PURPLE.id,

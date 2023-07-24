@@ -6,6 +6,7 @@
   .swiper-wrapper {
     min-height: 100vh;
     box-sizing: border-box;
+    transition-delay: $middle-duration;
 
     @media (max-width: $tablet) and (orientation: portrait) {
       min-height: calc(var(--vh, 1vh) * 100);
@@ -34,6 +35,16 @@
     display: flex;
     flex-direction: column;
     padding: 5rem 2rem 0 5rem;
+  }
+
+  &.slide-hidden-transitioned {
+    animation: quit-fade-in-left-sm $short-duration ease-out 1 both;
+
+    & + & {
+      animation-delay: $extra-short-duration;
+    }
+
+    @include reduce-motion;
   }
 
   &:nth-child(even) {
@@ -101,6 +112,8 @@
   .swiper-slide-next & {
     animation: fade-in-left $standart-duration ease-out $short-duration 1 both;
     animation-play-state: paused;
+
+    @include reduce-motion;
   }
 
   body.is-dom-loaded .swiper-slide-active &,
@@ -115,6 +128,8 @@
   .swiper-slide-next & {
     animation-duration: $middle-duration;
     animation-delay: 1600ms;
+
+    @include reduce-motion;
   }
 
   .swiper-slide-active &.fade--delayed {
@@ -166,6 +181,9 @@
   justify-content: space-between;
   width: 17rem;
   z-index: 1;
+  transition: color $standart-duration ease-in-out;
+
+  @include reduce-motion;
 
   @media (min-width: $stop-scaling) {
     bottom: 28px;
@@ -192,11 +210,15 @@
   &:first-child {
     animation: rolling_out-left $middle-duration ease-out $long-duration 1 both;
     animation-play-state: paused;
+
+    @include reduce-motion;
   }
 
   &:last-child {
     animation: rolling_out-right $middle-duration ease-out $long-duration 1 both;
     animation-play-state: paused;
+
+    @include reduce-motion;
   }
 
   body.is-dom-loaded .screen.active & {
@@ -223,6 +245,8 @@
     height: 100%;
     transform: translate(-50%, -50%) scale(1);
     transition: transform $long-duration $timing-exscess-before-end;
+
+    @include reduce-motion;
     background-color: $c-light;
     border: 2px solid $c-light;
     border-radius: 50%;
@@ -237,6 +261,8 @@
     pointer-events: none;
     animation: fade-in $standart-duration ease-out $long-duration 1 both;
     animation-play-state: paused;
+
+    @include reduce-motion;
 
     body.is-dom-loaded .screen.active & {
       animation-play-state: running;
@@ -341,6 +367,8 @@
   &-fraction {
     animation: fade-in $standart-duration ease-out $long-duration 1 both;
     animation-play-state: paused;
+
+    @include reduce-motion;
 
     body.is-dom-loaded .screen.active & {
       animation-play-state: running;

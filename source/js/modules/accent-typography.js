@@ -1,14 +1,16 @@
+import {hasReduceMotion} from "../general/helpers";
+
 export default class AccentTypography {
   constructor(
-    element,
-    duration,
-    classForActivate,
-    property,
-    delay = 0,
-    timeOffsetDelta = 20
+      element,
+      duration,
+      classForActivate,
+      property,
+      delay = 0,
+      timeOffsetDelta = 20
   ) {
     this.element = element;
-    this.duration = duration;
+    this.duration = hasReduceMotion() ? 0 : duration;
     this.classForActivate = classForActivate;
     this.property = property;
     this.delay = delay;
@@ -19,7 +21,7 @@ export default class AccentTypography {
 
   createElement(letter, indexOfLetter) {
     const span = document.createElement(`span`);
-    const timeOffset = this.generateTimeOffset(indexOfLetter + 1);
+    const timeOffset = hasReduceMotion() ? 0 : this.generateTimeOffset(indexOfLetter + 1);
 
     span.textContent = letter;
     span.style.transition = this.getTransition(timeOffset);
@@ -44,14 +46,14 @@ export default class AccentTypography {
 
     const text = this.element.textContent.trim().split(` `);
 
-    const { length } = text;
+    const {length} = text;
     const content = text.reduce((fragmentParent, word, index) => {
       const wordElement = Array.from(word).reduce(
-        (fragment, letter, indexOfLetter) => {
-          fragment.appendChild(this.createElement(letter, indexOfLetter));
-          return fragment;
-        },
-        document.createDocumentFragment()
+          (fragment, letter, indexOfLetter) => {
+            fragment.appendChild(this.createElement(letter, indexOfLetter));
+            return fragment;
+          },
+          document.createDocumentFragment()
       );
 
       const wordContainer = document.createElement(`span`);

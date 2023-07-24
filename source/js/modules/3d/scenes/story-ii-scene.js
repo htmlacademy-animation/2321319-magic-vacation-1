@@ -1,8 +1,6 @@
 import * as THREE from "three";
-import { SceneObjects } from "../objects/scene-objects-config";
-import { ThemeColor, Objects } from "../../../general/consts";
+import {ThemeColor, Objects} from "../../../general/consts";
 import DefaultScene from "./default-scene";
-import { easeInOutQuad } from "../../../general/easing";
 
 export default class IIScene extends DefaultScene {
   constructor(objectLoader, aspectRatio) {
@@ -27,23 +25,19 @@ export default class IIScene extends DefaultScene {
   aiAnimationFunc(el, progress) {
     const y = 10 * Math.sin(2 * Math.PI * progress);
     const sonyaObj = el.element.children[0].children[0].children[0];
-    sonyaObj.position.set(
-      0,
-      y,
-      0
-    );
+    sonyaObj.position.set(0, y, 0);
     const rotateY = 2 * Math.sin(6 * progress - 0.5) - 50;
     const currentRotateLeft = sonyaObj.children[1].rotation;
     const currentRotateRight = sonyaObj.children[2].rotation;
     sonyaObj.children[1].rotation.set(
-      currentRotateLeft.x,
-      THREE.Math.degToRad(rotateY),
-      currentRotateLeft.z
+        currentRotateLeft.x,
+        THREE.Math.degToRad(rotateY),
+        currentRotateLeft.z
     );
     sonyaObj.children[2].rotation.set(
-      currentRotateRight.x,
-      THREE.Math.degToRad(-rotateY),
-      currentRotateRight.z
+        currentRotateRight.x,
+        THREE.Math.degToRad(-rotateY),
+        currentRotateRight.z
     );
   }
 }

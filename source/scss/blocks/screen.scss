@@ -1,3 +1,5 @@
+$footerBorderRadius: 0 3.6rem 0 0;
+
 .screen {
   position: relative;
   display: flex;
@@ -13,24 +15,30 @@
   .fade-in {
     animation: fade-in $standart-duration ease-out $standart-duration 1 both;
     animation-play-state: paused;
+
+    @include reduce-motion;
   }
 
   .fade-in-top {
     animation: fade-in-top $extra-long-duration ease-out $standart-duration 1 both;
     animation-play-state: paused;
+
+    @include reduce-motion;
   }
 
   .fade-in-left {
     animation: fade-in-left $standart-duration ease-out $standart-duration 1 both;
     animation-play-state: paused;
+
+    @include reduce-motion;
   }
 
   .fade--delayed {
     animation-delay: $long-duration;
   }
 
- body.is-dom-loaded &.active,
- body.is-dom-loaded &--transitioned {
+  body.is-dom-loaded &.active,
+  body.is-dom-loaded &--transitioned {
     & .fade-in {
       animation-play-state: running;
     }
@@ -44,8 +52,17 @@
     }
   }
 
+  &.screen--hidden-transitioned {
+    .screen__wrapper {
+      animation: quit-fade-scaling-down $middle-duration ease-out 1 both;
+
+      @include reduce-motion;
+    }
+  }
+
   @media (max-width: $tablet) and (orientation: portrait) {
     min-height: calc(var(--vh, 1vh) * 100);
+    max-height: 100vh;
   }
 
   @media (max-width: $tablet - 1) and (orientation: landscape) {
@@ -65,7 +82,7 @@
 }
 
 .screen__disclaimer {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
@@ -73,8 +90,9 @@
   z-index: 1;
   opacity: 0;
   transform: translateY(4rem);
-  transition: opacity $standart-duration $timing-fast-progress,
-              transform $standart-duration $timing-fast-progress;
+  transition: opacity $standart-duration $timing-fast-progress, transform $standart-duration $timing-fast-progress;
+
+  @include reduce-motion;
 
   @media (max-width: $tablet) and (orientation: portrait) {
     background-color: transparent;
@@ -89,7 +107,9 @@
 
     .disclaimer {
       opacity: 0;
-      transition: opacity $standart-duration;
+      transition: opacity $standart-duration ease-out;
+
+      @include reduce-motion;
     }
 
     .screen.active &.no-transform {
@@ -113,7 +133,7 @@
 }
 
 .screen__footer {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
@@ -123,14 +143,17 @@
   opacity: 0;
   overflow: hidden;
   transform: translateY(4rem);
-  transition: opacity $standart-duration $timing-fast-progress,
-              transform $standart-duration $timing-fast-progress;
+  transition: opacity $standart-duration $timing-fast-progress, transform $standart-duration $timing-fast-progress;
+
+  @include reduce-motion;
 
   &.no-transform {
     transform: translateY(0);
 
     .screen__footer-wrapper {
-      transition: opacity $standart-duration;
+      transition: opacity $standart-duration ease-out;
+
+      @include reduce-motion;
       opacity: 1;
     }
 
@@ -158,7 +181,7 @@
   @media (max-width: $tablet) and (orientation: portrait) {
     width: 3.5rem;
     height: 3.5rem;
-    border-radius: 0 3.6rem 0 0;
+    border-radius: $footerBorderRadius;
     background-color: transparent;
 
     &::before {
@@ -169,11 +192,13 @@
       width: 100%;
       height: 100%;
       background-color: $c-light;
-      border-radius: 0 3.6rem 0 0;
+      border-radius: $footerBorderRadius;
       z-index: -1;
-      transform: translate(-100vw, 100vh);
+      transform: translate(-100vh, 50vh);
       transition: transform $middle-duration ease-out;
       transform-origin: left;
+
+      @include reduce-motion;
     }
 
     &.screen__footer--full {
@@ -188,7 +213,7 @@
 
       &-transitioned {
         &::before {
-          transform: translate(-100vw, 100vh);
+          transform: translate(-100vh, 50vh);
           transition-delay: $standart-duration;
         }
       }
@@ -198,7 +223,7 @@
   @media (max-width: $mobile) and (orientation: landscape) {
     width: 3.5rem;
     height: 3.5rem;
-    border-radius: 0 3.6rem 0 0;
+    border-radius: $footerBorderRadius;
     background-color: transparent;
 
     &::before {
@@ -209,11 +234,13 @@
       width: 100%;
       height: 100%;
       background-color: $c-light;
-      border-radius: 0 3.6rem 0 0;
+      border-radius: $footerBorderRadius;
       z-index: -1;
-      transform: translate(-100vw, 100vh);
+      transform: translate(-100vw, 50vh);
       transition: transform $middle-duration ease-out;
       transform-origin: left;
+
+      @include reduce-motion;
     }
 
     &.screen__footer--full {
@@ -228,7 +255,7 @@
 
       &-transitioned {
         &::before {
-          transform: translate(-100vw, 100vh);
+          transform: translate(-100vw, 50vh);
           transition-delay: $standart-duration;
         }
       }
@@ -243,6 +270,8 @@
     opacity: 0;
     transition: opacity $standart-duration ease-out $middle-duration;
 
+    @include reduce-motion;
+
     .screen__footer--full & {
       opacity: 1;
     }
@@ -256,6 +285,8 @@
   @media (max-width: $mobile) and (orientation: landscape) {
     opacity: 0;
     transition: opacity $standart-duration ease-out $middle-duration;
+
+    @include reduce-motion;
 
     .screen__footer--full & {
       opacity: 1;
@@ -282,8 +313,10 @@
 
   @media (max-width: $tablet) and (orientation: portrait) {
     display: block;
-    border-radius: 0 3.6rem 0 0;
+    border-radius: $footerBorderRadius;
     transition: opacity 0.1s ease-out $middle-duration;
+
+    @include reduce-motion;
 
     .screen__footer--full & {
       opacity: 0;
@@ -302,8 +335,10 @@
 
   @media (max-width: $mobile) and (orientation: landscape) {
     display: block;
-    border-radius: 0 3.6rem 0 0;
+    border-radius: $footerBorderRadius;
     transition: opacity 0.1s ease-out $middle-duration;
+
+    @include reduce-motion;
 
     .screen__footer--full & {
       opacity: 0;
@@ -345,6 +380,8 @@
     display: block;
     opacity: 0;
     transition: opacity $standart-duration ease-out $middle-duration;
+
+    @include reduce-motion;
     pointer-events: none;
 
     .screen__footer--full & {
@@ -362,6 +399,8 @@
     display: block;
     opacity: 0;
     transition: opacity $standart-duration ease-out $middle-duration;
+
+    @include reduce-motion;
     pointer-events: none;
 
     .screen__footer--full & {
@@ -501,19 +540,6 @@
   }
 }
 
-// .screen--story {
-//   background-color: $c-dark;
-//   background-image: url("../img/slide1.jpg"), url("../img/slide2.jpg"), url("../img/slide3.jpg"), url("../img/slide4.jpg");
-//   background-repeat: no-repeat;
-//   background-size: cover;
-//   background-position: center;
-
-//   @media (orientation: portrait) {
-//     background-size: auto calc(100vh - 13.8rem), 100% 25rem;
-//     background-position: top center, bottom center;
-//   }
-// }
-
 .screen--prizes {
   background-color: $c-dark;
 }
@@ -522,29 +548,62 @@
   position: relative;
   background-color: $c-dark;
 
-  &::before {
-    content: "";
+  &.screen--hidden-transitioned {
+    .screen__wrapper {
+      animation: none;
+    }
+
+    .game__title {
+      animation: quit-fade-in-left ease-out $short-duration 1 both;
+
+      @include reduce-motion;
+    }
+
+    .game__counter {
+      animation: quit-fade-in-right ease-out $short-duration 1 both;
+
+      @include reduce-motion;
+    }
+
+    .chat__footer {
+      animation: quit-fade-in-bottom ease-out $short-duration 1 both;
+
+      @include reduce-motion;
+    }
+
+    .chat__body {
+      animation: quit-fade-in ease-out $middle-duration 1 both;
+
+      @include reduce-motion;
+    }
+  }
+
+  .game_ai {
     position: absolute;
     right: -8.5rem;
     bottom: 0;
-    width: 32.7rem;
+    width: 32.5rem;
     height: 36.9rem;
-    background-image: url("../img/sonya.png");
-    background-repeat: no-repeat;
-    background-size: contain;
-
-    @include retina {
-      background-image: url("../img/sonya@2x.png");
-    }
+    z-index: -1;
 
     @media (min-width: $stop-scaling) {
       right: -85px;
-      width: 327px;
+      width: 325px;
       height: 369px;
     }
 
     @media (max-width: $tablet) and (orientation: portrait) {
-      opacity: 0;
+      right: -5rem;
+      width: 17.6rem;
+      height: 20rem;
+    }
+  }
+}
+
+.screen--intro {
+  &.screen--hidden-transitioned {
+    .screen__wrapper {
+      animation-name: quit-fade-scaling-up;
     }
   }
 }
@@ -566,6 +625,49 @@
 
 .screen--rules {
   background-color: $c-dark;
+
+  &.screen--hidden-transitioned {
+    .screen__wrapper {
+      animation: none;
+    }
+
+    .rules__title,
+    .rules__lead,
+    .rules__list {
+      animation: quit-fade-scaling-down $middle-duration ease-out 1 both;
+
+      @include reduce-motion;
+    }
+
+    .rules__link {
+      &-text {
+        animation: quit-fade-in $standart-duration ease-out 1 both;
+
+        @include reduce-motion;
+      }
+
+      @media (orientation: portrait) {
+        body.is-dom-loaded &::before {
+          transition-delay: 0s;
+          transform: translateX(101%);
+        }
+      }
+
+      @media (max-width: $tablet) and (orientation: landscape) {
+        body.is-dom-loaded &::before {
+          transition-delay: 0s;
+          transform: translateX(101%);
+        }
+      }
+
+      @media (max-width: $mobile) and (orientation: landscape) {
+        body.is-dom-loaded &::before {
+          transition-delay: 0s;
+          transform: translateX(101%);
+        }
+      }
+    }
+  }
 }
 
 .screen--background {
@@ -581,6 +683,8 @@
   z-index: -1;
   transform: translateY(100vh);
   transition: transform $long-duration ease-in;
+
+  @include reduce-motion;
 
   &-transitioned {
     opacity: 1;

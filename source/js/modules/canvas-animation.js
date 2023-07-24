@@ -1,12 +1,13 @@
-import { AnimationType } from "../general/consts";
+import {AnimationType} from "../general/consts";
 
 export default class CanvasAnimation {
-  constructor(canvasElement, fps, type) {
+  constructor(canvasElement, fps, type, withAlpha = false) {
     this.type = type;
     this.frameInterval = 1000 / fps;
     this.canvas = canvasElement;
     this.ctx = this.canvas.getContext(
-      this.type === AnimationType._2D ? `2d` : `3d`
+        this.type === AnimationType._2D ? `2d` : `3d`,
+        {alpha: withAlpha}
     );
     this.canvasWidth = this.canvasHeight = null;
     this.elements = null;
@@ -61,11 +62,11 @@ export default class CanvasAnimation {
             const progress = el.finites[index]
               ? pastProgress
               : pastProgress - Math.trunc(pastProgress);
-            animations.push({ animationFunction: animation, progress });
+            animations.push({animationFunction: animation, progress});
           }
           if (isAnimationFinished && !animation.hasEndPosition) {
             this.elements[elIndex].animationFunctions[index].hasEndPosition = true;
-            animations.push({ animationFunction: animation, progress: 1 }); // чтобы анимация гарантировано закончилась конечными настройками
+            animations.push({animationFunction: animation, progress: 1}); // чтобы анимация гарантировано закончилась конечными настройками
           }
         });
         this.runAnimationTick(el, animations);
@@ -174,12 +175,21 @@ export default class CanvasAnimation {
     }
   }
 
+  getHeightByWidth(realWidth, realHeight, renderWidth) {
+    const ratio = realWidth / realHeight;
+    return renderWidth / ratio;
+  }
+
+  getScaledTranslate(scale, valueBeforeScale) {
+    const scaled = scale * valueBeforeScale - valueBeforeScale;
+    return -scaled / 2;
+  }
+
   _getElementAbsolutePosition(element) {
     const elementPosition = element.position;
     const width = this.canvasWidth * (elementPosition.width / 100);
-    const ratio = element.image.width / element.image.height;
     const x = this.canvasWidth * (elementPosition.x / 100) - width / 2;
-    const height = width / ratio;
+    const height = this.getHeightByWidth(element.image.width, element.image.height, width);
     const y = this.canvasHeight * (elementPosition.y / 100) - height / 2;
     return [x, y, width, height];
   }
@@ -190,13 +200,13 @@ export default class CanvasAnimation {
 
   rotateElement(element, direction = 1) {
     this.ctx.translate(
-      element.position.curX + element.position.curW / 2,
-      element.position.curY + element.position.curH / 2
+        element.position.curX + element.position.curW / 2,
+        element.position.curY + element.position.curH / 2
     );
     this.ctx.rotate((direction * (element.transforms.rotate * Math.PI)) / 180);
     this.ctx.translate(
-      -element.position.curX - element.position.curW / 2,
-      -element.position.curY - element.position.curH / 2
+        -element.position.curX - element.position.curW / 2,
+        -element.position.curY - element.position.curH / 2
     );
   }
 }

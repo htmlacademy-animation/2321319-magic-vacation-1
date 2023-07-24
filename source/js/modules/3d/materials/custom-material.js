@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import * as THREE from "three";
 
 const vertexShader = require(`../shaders/custom-vertex-shader.glsl`);
@@ -22,6 +23,6 @@ export default class CustomMaterial extends THREE.RawShaderMaterial {
         value: bubbles,
       }
     };
-    super({ uniforms: options, vertexShader, fragmentShader });
+    super({uniforms: options, vertexShader, fragmentShader});
   }
 }

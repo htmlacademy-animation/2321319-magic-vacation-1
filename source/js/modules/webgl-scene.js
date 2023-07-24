@@ -1,9 +1,9 @@
 import * as THREE from "three";
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
-import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer.js";
+import {RenderPass} from "three/examples/jsm/postprocessing/RenderPass.js";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass.js";
 import CustomMaterial from "./3d/materials/custom-material";
-import { Screen, ThemeColor, AnimationType } from "../general/consts";
+import {Screen, ThemeColor, AnimationType} from "../general/consts";
 import ObjectLoader from "./3d/objects/object-loader";
 import PyramidScene from "./3d/scenes/story-pyramid-scene";
 import SnowmanScene from "./3d/scenes/story-snowman-scene";
@@ -12,13 +12,13 @@ import IntroScene from "./3d/scenes/intro-scene";
 import DogScene from "./3d/scenes/story-dog-scene";
 import IIScene from "./3d/scenes/story-ii-scene";
 import CanvasAnimation from "./canvas-animation";
-import { SceneObjects } from "./3d/objects/scene-objects-config";
-import { easeInQuad } from "../general/easing";
-import { isMobile, debounce } from "../general/helpers";
+import {SceneObjects} from "./3d/objects/scene-objects-config";
+import {easeInQuad} from "../general/easing";
+import {isMobile, debounce} from "../general/helpers";
 
 export default class WebGLScene extends CanvasAnimation {
   constructor(canvasElement) {
-    super(canvasElement, 60, AnimationType._3D);
+    super(canvasElement, 60, AnimationType._3D, true);
     this.storyScenes = null;
     this.sceneObjects = {};
     this.alpha = 1;
@@ -28,10 +28,11 @@ export default class WebGLScene extends CanvasAnimation {
     this.previousSceneObject = null;
     this.animationsByScene = {};
 
+    this.mouseMoveHandler = this.mouseMoveHandler.bind(this);
+
     const debouncedFunction = debounce(this.setSizes.bind(this), 200);
     super.removeEventListeners();
     window.addEventListener(`resize`, debouncedFunction);
-    window.addEventListener(`mousemove`, (e) => this.mouseMoveHandler(e));
 
     this.init();
   }
@@ -64,7 +65,7 @@ export default class WebGLScene extends CanvasAnimation {
       this.stopAnimation();
       this.customMaterial.uniforms.canvasSize.value = new THREE.Vector2(this.canvasWidth, this.canvasHeight);
       this.customMaterial.needsUpdate = true;
-      Object.values(ThemeColor).forEach((key, index) => {
+      Object.values(ThemeColor).forEach((key, _index) => {
         this.sceneObjects[key].cameraSettings.x = this.defaultCameraPosition[0];
         this.sceneObjects[key].cameraSettings.angleY = this.getAngleY();
         this.sceneObjects[key].cameraSettings.targetForLookY = this.getTargetY();
@@ -75,12 +76,11 @@ export default class WebGLScene extends CanvasAnimation {
       this.cameraRig.angleY = this.currentSceneObject === Screen.TOP ? 0 : this.getAngleY();
       this.cameraRig.targetForLookY = this.currentSceneObject === Screen.TOP ? 920 : this.getTargetY();
       this.cameraRig.cameraRotationX = this.currentSceneObject === Screen.TOP ? 0 : this.getTargetX();
-     
+
       this.cameraRig.invalidate();
       Object.values(this.sceneObjects).forEach((el) => {
         el.scene.onResizeUpdate(this.aspectRatio);
       });
-      this.render();
       this.updateObjectsOnResize();
       this.startAnimation(true);
     }
@@ -98,10 +98,10 @@ export default class WebGLScene extends CanvasAnimation {
     this.setColor();
 
     const cameraMain = new THREE.PerspectiveCamera(
-      this.fov,
-      this.aspectRatio,
-      this.near,
-      this.far
+        this.fov,
+        this.aspectRatio,
+        this.near,
+        this.far
     );
     this.cameraRig = new CameraRig(cameraMain);
     this.scene.add(this.cameraRig);
@@ -111,10 +111,10 @@ export default class WebGLScene extends CanvasAnimation {
     this.initPass();
     this.cameraRig.position.set(this.defaultCameraPosition[0], this.defaultCameraPosition[1], this.defaultCameraPosition[2]);
 
-    // if (!isMobile()) {
-    //   this.renderer.shadowMap.enabled = true;
-    //   this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    // }
+    if (!isMobile()) {
+      this.renderer.shadowMap.enabled = true;
+      this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    }
 
     await this.initObjects();
     this.initLight();
@@ -124,11 +124,11 @@ export default class WebGLScene extends CanvasAnimation {
   initPass() {
     const renderPass = new RenderPass(this.scene, this.camera);
     this.customMaterial = new CustomMaterial(
-      new THREE.Vector2(this.canvas.width, this.canvas.height),
-      this.scene,
-      THREE.Math.degToRad(0),
-      0,
-      []
+        new THREE.Vector2(this.canvas.width, this.canvas.height),
+        this.scene,
+        THREE.Math.degToRad(0),
+        0,
+        []
     );
     const effectPass = new ShaderPass(this.customMaterial, `map`);
     this.composer.addPass(renderPass);
@@ -136,7 +136,9 @@ export default class WebGLScene extends CanvasAnimation {
   }
 
   initLight() {
-    if (isMobile()) return;
+    if (isMobile()) {
+      return;
+    }
     const lightDirection = new THREE.DirectionalLight(0xffffff, 0.84);
     const directionalLightZ = this.far;
     lightDirection.position.set(0, 0, directionalLightZ);
@@ -274,7 +276,7 @@ export default class WebGLScene extends CanvasAnimation {
     this.cameraAnimation = null;
     const introScene = this.sceneObjects[Screen.TOP] && this.sceneObjects[Screen.TOP].scene;
     const startMouseRelativeAngle = this.cameraRig.additionalAngleY;
-    if (this.currentSceneObject && this.currentSceneObject === Screen.TOP && this.currentSceneObject !== sceneObjectId) {
+    if (this.currentSceneObject !== null && this.currentSceneObject === Screen.TOP && this.currentSceneObject !== sceneObjectId) {
       this.cameraAnimation = {
         element: null,
         status: true,
@@ -288,7 +290,7 @@ export default class WebGLScene extends CanvasAnimation {
           (el, progress) => this.resetAngleForMouseEvents(el, progress, startMouseRelativeAngle)
         ],
       };
-    } else if (this.currentSceneObject && this.currentSceneObject !== Screen.TOP && sceneObjectId !== Screen.TOP && this.currentSceneObject !== sceneObjectId) {
+    } else if (this.currentSceneObject !== null && this.currentSceneObject !== Screen.TOP && sceneObjectId !== Screen.TOP && this.currentSceneObject !== sceneObjectId) {
       this.cameraAnimation = {
         element: null,
         status: true,
@@ -316,7 +318,9 @@ export default class WebGLScene extends CanvasAnimation {
         ],
       };
     } else {
-      if (!this.isLoading) this.setCameraPositionWithoutAnimation(sceneObjectId);
+      if (!this.isLoading) {
+        this.setCameraPositionWithoutAnimation(sceneObjectId);
+      }
     }
     this.previousSceneObject = this.currentSceneObject;
     this.currentSceneObject = sceneObjectId;
@@ -324,7 +328,6 @@ export default class WebGLScene extends CanvasAnimation {
       return;
     }
 
-    this.render();
     this.startAnimation();
   }
 
@@ -387,8 +390,8 @@ export default class WebGLScene extends CanvasAnimation {
   getCoordinateForAnimation(prevCoordinate, currentCoordinate, progress) {
     if (currentCoordinate !== prevCoordinate) {
       return currentCoordinate > prevCoordinate
-      ? prevCoordinate + (currentCoordinate - prevCoordinate) * progress
-      : prevCoordinate - (prevCoordinate - currentCoordinate) * progress;
+        ? prevCoordinate + (currentCoordinate - prevCoordinate) * progress
+        : prevCoordinate - (prevCoordinate - currentCoordinate) * progress;
     }
     return currentCoordinate;
   }
@@ -410,19 +413,26 @@ export default class WebGLScene extends CanvasAnimation {
   }
 
   updateObjectsOnResize() {
+    if (!this.elements) {
+      return;
+    }
     this.elements.forEach((el) => {
       el.animationFunctions.forEach((animation, index) => {
-        if (el.finites[index]) animation(el, 1);
+        if (el.finites[index]) {
+          animation(el, 1);
+        }
       });
     });
-    if (this.currentSceneObject !== ThemeColor.LIGHT_PURPLE) this.sceneObjects[ThemeColor.LIGHT_PURPLE].scene.suitcaseAppearenceAnimationFunc(null, 1);
+    if (this.currentSceneObject !== ThemeColor.LIGHT_PURPLE) {
+      this.sceneObjects[ThemeColor.LIGHT_PURPLE].scene.suitcaseAppearenceAnimationFunc(null, 1);
+    }
   }
 
   startAnimation(withoutCameraAnimation = false) {
     if (!this.animationsByScene[this.currentSceneObject] || this.currentSceneObject === ThemeColor.BLUE) {
       this.initAnimations();
     }
-    const animationsByCurrentScene = this.animationsByScene[this.currentSceneObject];
+    const animationsByCurrentScene = this.animationsByScene[this.currentSceneObject] || [];
     this.elements = animationsByCurrentScene;
     animationsByCurrentScene.forEach((element, indexOfElement) => {
       element.animationFunctions.forEach((f, index) => {
@@ -436,9 +446,13 @@ export default class WebGLScene extends CanvasAnimation {
       this.elements = [...this.elements, this.cameraAnimation];
     }
     super.startAnimation();
+    window.addEventListener(`mousemove`, this.mouseMoveHandler);
   }
 
   initAnimations() {
+    if (this.currentSceneObject === null) {
+      return;
+    }
     const scene = this.sceneObjects[this.currentSceneObject].scene;
     this.animationsByScene[this.currentSceneObject] = [
       ...SceneObjects[this.currentSceneObject].primitives,
@@ -476,18 +490,19 @@ export default class WebGLScene extends CanvasAnimation {
 
   stopAnimation() {
     if (this.runnungAnimation) {
-      if (this.previousSceneObject === ThemeColor.BLUE) {
-        this.sceneObjects[ThemeColor.BLUE].scene.updateUniforms();
-      }
+      this.sceneObjects[ThemeColor.BLUE].scene.updateUniforms();
     }
-    this.elements.forEach((el) => {
-      el.animationFunctions.forEach((animation, index) => {
-        if (el.finites[index]) {
-          el.isStopped = true;
-        }
+    if (this.elements && this.elements.length) {
+      this.elements.forEach((el) => {
+        el.animationFunctions.forEach((animation, index) => {
+          if (el.finites[index]) {
+            el.isStopped = true;
+          }
+        });
       });
-    });
-    super.stopAnimation();
+      super.stopAnimation();
+      window.removeEventListener(`mousemove`, this.mouseMoveHandler);
+    }
   }
 
   clearScene() {}
