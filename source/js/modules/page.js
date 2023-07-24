@@ -89,7 +89,7 @@ export default class Page {
   on3dObjectsLoaded() {
     this.is3dObjectsLoaded = true;
     if (this.isDomLoaded) {
-      this.progress = 99;
+      this.progress = 100;
       this.progressBar.textContent = `${this.progress}%`;
       setTimeout(() => {
         this.progressBar.parentElement.remove();
@@ -121,7 +121,6 @@ export default class Page {
     setTimeout(() => {
       this.runAnimationsForScreen(event);
     }, 200);
-    this.updateTimerStatus(event.detail.screenId);
   }
 
   onSlideChanged(event) {
@@ -210,14 +209,6 @@ export default class Page {
         setTimeout(() => animation.element.startAnimation(), animation.delay);
         animation.element.setContainerWidth();
       });
-    }
-  }
-
-  updateTimerStatus(screenId) {
-    if (screenId === Screen.GAME) {
-      this.gameScreenAnimation.updateTimerStatus();
-    } else {
-      this.gameScreenAnimation.stopTimer();
     }
   }
 

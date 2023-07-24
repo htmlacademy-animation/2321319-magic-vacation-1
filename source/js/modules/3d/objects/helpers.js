@@ -2,8 +2,8 @@ import * as THREE from "three";
 
 export class ExtrudeHelper {
   constructor(objectMap) {
-    this.objectMap = objectMap;
-    this.baseSettings = {
+    this._objectMap = objectMap;
+    this._baseSettings = {
       steps: 4,
       depth: 8,
       bevelSize: 2,
@@ -14,8 +14,7 @@ export class ExtrudeHelper {
   }
 
   extrudeObject(objectName, settings, material) {
-    const paths =
-      (this.objectMap[objectName] && this.objectMap[objectName].object) || [];
+    const paths = (this._objectMap[objectName] && this._objectMap[objectName].object) || [];
     const group = new THREE.Group();
 
     for (const path of paths) {
@@ -23,7 +22,7 @@ export class ExtrudeHelper {
 
       for (const shape of shapes) {
         const geometry = new THREE.ExtrudeGeometry(shape, {
-          ...this.baseSettings,
+          ...this._baseSettings,
           ...settings,
         });
         const mesh = new THREE.Mesh(geometry, material);

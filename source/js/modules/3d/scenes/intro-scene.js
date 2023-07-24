@@ -6,6 +6,8 @@ import {Screen, AnimatedPrimitives, SvgShape, Objects} from "../../../general/co
 import {easeOutQuad, easeInOutQuad, easeInQuad} from "../../../general/easing";
 import DefaultScene from "./default-scene";
 
+const DELAY_FOR_STEAMING_ANIMATION = 2000;
+
 export default class IntroScene extends DefaultScene {
   constructor(objectLoader, aspectRatio) {
     super(objectLoader, aspectRatio);
@@ -20,7 +22,7 @@ export default class IntroScene extends DefaultScene {
   }
 
   initSuitcaseObject() {
-    const suitcaseSettings = SceneObjects[this.sceneId].objects.find((el) => el.id === Objects.SUITCASE.id);
+    const suitcaseSettings = SceneObjects[this.sceneId].objects.find((element) => element.id === Objects.SUITCASE.id);
     if (!suitcaseSettings) {
       return;
     }
@@ -34,7 +36,7 @@ export default class IntroScene extends DefaultScene {
   }
 
   initAirplaneObject() {
-    const airplaneSettings = SceneObjects[this.sceneId].objects.find((el) => el.id === Objects.AIRPLANE.id);
+    const airplaneSettings = SceneObjects[this.sceneId].objects.find((element) => element.id === Objects.AIRPLANE.id);
     if (!airplaneSettings) {
       return;
     }
@@ -48,69 +50,68 @@ export default class IntroScene extends DefaultScene {
   }
 
   initAnimationsSettings() {
-    const delayForAnimation = 2000;
     this.animationObjects = {
       [AnimatedPrimitives.CHANDELIER]: {
         durations: [800, 2500],
         finites: [true, false],
-        delays: [1200, delayForAnimation + 380],
+        delays: [1200, DELAY_FOR_STEAMING_ANIMATION + 380],
         animationFunctions: [
-          (el, progress) => this.chandelierAnimationFunc(el, progress),
-          (el, progress) => this.elementMoveAnimationFunc(el, progress, 1.35),
+          (element, progress) => this.chandelierAnimationFunc(element, progress),
+          (element, progress) => this.elementMoveAnimationFunc(element, progress, 1.35),
         ],
       },
       [SvgShape.FLAMINGO.id]: {
         durations: [800, 2500],
         finites: [true, false],
-        delays: [1200, delayForAnimation + 250],
+        delays: [1200, DELAY_FOR_STEAMING_ANIMATION + 250],
         animationFunctions: [
-          (el, progress) => this.flamingoAnimationFunc(el, progress),
-          (el, progress) => this.elementMoveAnimationFunc(el, progress, 1.2),
+          (element, progress) => this.flamingoAnimationFunc(element, progress),
+          (element, progress) => this.elementMoveAnimationFunc(element, progress, 1.2),
         ],
       },
       [SvgShape.SNOWFLAKE.id]: {
         durations: [800, 2500],
         finites: [true, false],
-        delays: [1200, delayForAnimation + 100],
+        delays: [1200, DELAY_FOR_STEAMING_ANIMATION + 100],
         animationFunctions: [
-          (el, progress) => this.snowflakeAnimationFunc(el, progress),
-          (el, progress) => this.elementMoveAnimationFunc(el, progress, 1.1),
+          (element, progress) => this.snowflakeAnimationFunc(element, progress),
+          (element, progress) => this.elementMoveAnimationFunc(element, progress, 1.1),
         ],
       },
       [SvgShape.QUESTION.id]: {
         durations: [800, 2500],
         finites: [true, false],
-        delays: [1200, delayForAnimation + 400],
+        delays: [1200, DELAY_FOR_STEAMING_ANIMATION + 400],
         animationFunctions: [
-          (el, progress) => this.questionAnimationFunc(el, progress),
-          (el, progress) => this.elementMoveAnimationFunc(el, progress, 1),
+          (element, progress) => this.questionAnimationFunc(element, progress),
+          (element, progress) => this.elementMoveAnimationFunc(element, progress, 1),
         ],
       },
       [SvgShape.LEAF.id]: {
         durations: [800, 2500],
         finites: [true, false],
-        delays: [1200, delayForAnimation + 500],
+        delays: [1200, DELAY_FOR_STEAMING_ANIMATION + 500],
         animationFunctions: [
-          (el, progress) => this.leafAnimationFunc(el, progress),
-          (el, progress) => this.elementMoveAnimationFunc(el, progress, 1.25),
+          (element, progress) => this.leafAnimationFunc(element, progress),
+          (element, progress) => this.elementMoveAnimationFunc(element, progress, 1.25),
         ],
       },
       [Objects.WATERMELON.id]: {
         durations: [800, 2500],
         finites: [true, false],
-        delays: [1200, delayForAnimation + 650],
+        delays: [1200, DELAY_FOR_STEAMING_ANIMATION + 650],
         animationFunctions: [
-          (el, progress) => this.watermelonAnimationFunc(el, progress),
-          (el, progress) => this.elementMoveAnimationFunc(el, progress, 1.3),
+          (element, progress) => this.watermelonAnimationFunc(element, progress),
+          (element, progress) => this.elementMoveAnimationFunc(element, progress, 1.3),
         ],
       },
       [Objects.SUITCASE.id]: {
         durations: [900, 2500],
         finites: [true, false],
-        delays: [1300, delayForAnimation + 550],
+        delays: [1300, DELAY_FOR_STEAMING_ANIMATION + 550],
         animationFunctions: [
-          (el, progress) => this.suitcaseAnimationFunc(el, progress),
-          (el, progress) => this.suitcaseMoveAnimationFunc(el, progress, 0.8),
+          (element, progress) => this.suitcaseAnimationFunc(element, progress),
+          (element, progress) => this.suitcaseMoveAnimationFunc(element, progress, 0.8),
         ],
       },
       [Objects.AIRPLANE.id]: {
@@ -118,25 +119,26 @@ export default class IntroScene extends DefaultScene {
         finites: [true],
         delays: [2000],
         animationFunctions: [
-          (el, progress) => this.airplaneAnimationFunc(el, progress),
+          (element, progress) => this.airplaneAnimationFunc(element, progress),
         ],
       }
     };
+  }
+
+  getAspectRelatedCoefficent() {
+    return Math.min(this.aspectRatio * 0.7, 1);
   }
 
   planeOpacityAnimationFunc(element, progress, isRevert = true) {
     element.material.opacity = isRevert ? 1 - progress : progress;
   }
 
-  suitcaseAnimationFunc(element, progress) {
-    // from 0 0 0 to [0.55, 0.55, 0.55]
+  suitcaseAnimationFunc(_element, progress) {
     const scale = 0.55 * easeOutQuad(progress);
     this.suitcaseRig.scaleDiff = scale;
-    // from 0 0 0 position: [-75, -350, 125],
     const x = -75 * easeOutQuad(progress);
     const y = (progress <= 0.66 ? 195 : 350) * Math.sin(1.5 * Math.PI * progress);
     const z = 125 * easeOutQuad(progress);
-    // from 30 270 120 to [30, 215, 15]
     const yRotate = 270 - 55 * easeInOutQuad(progress);
     const zRotate = 120 - 105 * easeInOutQuad(progress);
     this.suitcaseRig.xShift = x;
@@ -147,11 +149,11 @@ export default class IntroScene extends DefaultScene {
     this.suitcaseRig.invalidate();
   }
 
-  suitcaseMoveAnimationFunc(element, progress, amplitude) {
+  suitcaseMoveAnimationFunc(_element, progress, amplitude) {
     this.elementMoveAnimationFunc({element: this.suitcaseRig}, progress, amplitude);
   }
 
-  airplaneAnimationFunc(element, progress) {
+  airplaneAnimationFunc(_element, progress) {
     this.airplaneRig.angleXZMoving = this.airplaneRig.startAngleXZ - Math.PI * progress;
     this.airplaneRig.radius = 100 + 50 * progress;
     this.airplaneRig.yShift = this.airplaneRig.initialY + 50 * progress;
@@ -162,13 +164,10 @@ export default class IntroScene extends DefaultScene {
   }
 
   chandelierAnimationFunc(element, progress) {
-    // from 5, -20, 25 to 485 -140 105
-    const x = 5 + 480 * easeOutQuad(progress) * Math.min(this.aspectRatio * 0.7, 1);
+    const x = 5 + 480 * easeOutQuad(progress) * this.getAspectRelatedCoefficent();
     const y = -20 - 120 * easeOutQuad(progress);
     const z = 25 + 80 * easeOutQuad(progress);
-    // from 0 0 0 to 0.7, 0.7, 0.7
     const scale = 0.7 * easeOutQuad(progress);
-    // from 10 0 -60 to 10, 0, 15
     const zRotate = -60 + 75 * easeOutQuad(progress);
     this.setPosition(element.element, [x, y, z], [scale, scale, scale], [10, 0, zRotate]);
   }
@@ -181,61 +180,46 @@ export default class IntroScene extends DefaultScene {
   }
 
   flamingoAnimationFunc(element, progress) {
-    // from -50, 30, 20 to -510, 384, 80
-    const x = -50 - 460 * easeOutQuad(progress) * Math.min(this.aspectRatio * 0.7, 1);
+    const x = -50 - 460 * easeOutQuad(progress) * this.getAspectRelatedCoefficent();
     const y = 30 + 354 * easeOutQuad(progress);
     const z = 20 + 60 * easeOutQuad(progress);
-    // from 0 0 0 to 0.8, 0.8, 0.8
     const scale = 0.8 * easeOutQuad(progress);
-    // from -10 60 205 to -10, 30, 205
     const yRotate = 60 - 30 * easeOutQuad(progress);
     this.setPosition(element.element, [x, y, z], [scale, scale, scale], [-10, yRotate, 205]);
   }
 
   snowflakeAnimationFunc(element, progress) {
-    // from -40, -20, 20 to -395, 100, 70
-    const x = -40 - 355 * easeOutQuad(progress) * Math.min(this.aspectRatio * 0.7, 1);
+    const x = -40 - 355 * easeOutQuad(progress) * this.getAspectRelatedCoefficent();
     const y = -20 + 120 * easeOutQuad(progress);
     const z = 20 + 50 * easeOutQuad(progress);
-    // from 0 0 0 to 1.4, 1.4, 1.4
     const scale = 1.4 * easeOutQuad(progress);
-    // from -20 70 200 to -20, 40, 200
     const yRotate = 70 - 30 * easeOutQuad(progress);
     this.setPosition(element.element, [x, y, z], [scale, scale, scale], [-20, yRotate, 200]);
   }
 
   questionAnimationFunc(element, progress) {
-    // from 10, -60, 20 to -115, -345, 65
-    const x = 20 - 135 * easeOutQuad(progress) * Math.min(this.aspectRatio * 0.7, 1);
+    const x = 20 - 135 * easeOutQuad(progress) * this.getAspectRelatedCoefficent();
     const y = -60 - 285 * easeOutQuad(progress);
     const z = 20 + 45 * easeOutQuad(progress);
-    // from 0 0 0 to 1.2, 1.2, 1.2
     const scale = 1.2 * easeOutQuad(progress);
-    // from -45, 180, 210 to -45, 180, 160
     const zRotate = 210 - 50 * easeOutQuad(progress);
     this.setPosition(element.element, [x, y, z], [scale, scale, scale], [-45, 180, zRotate]);
   }
 
   leafAnimationFunc(element, progress) {
-    // from 7, 40, 20 to 600, 360, 145
-    const x = 7 + 593 * easeOutQuad(progress) * Math.min(this.aspectRatio * 0.7, 1);
+    const x = 7 + 593 * easeOutQuad(progress) * this.getAspectRelatedCoefficent();
     const y = 40 + 320 * easeOutQuad(progress);
     const z = 20 + 125 * easeOutQuad(progress);
-    // from 0 0 0 to 1.8, 1.8, 1.8
     const scale = 1.8 * easeOutQuad(progress);
-    // from 5, 90, 245 to 5, 135, 245
     const yRotate = 90 + 45 * easeOutQuad(progress);
     this.setPosition(element.element, [x, y, z], [scale, scale, scale], [5, yRotate, 245]);
   }
 
   watermelonAnimationFunc(element, progress) {
-    // from -60, -70, 20 to -600, -265, 120
-    const x = -60 - 540 * easeOutQuad(progress) * Math.min(this.aspectRatio * 0.7, 1);
+    const x = -60 - 540 * easeOutQuad(progress) * this.getAspectRelatedCoefficent();
     const y = -70 - 195 * easeOutQuad(progress);
     const z = 20 + 100 * easeOutQuad(progress);
-    // from 0 0 0 to 2.5, 2.5, 2.5
     const scale = 2.5 * easeOutQuad(progress);
-    // from 15, -10, 210 to 15, -10, 140
     const zRotate = 210 - 70 * easeOutQuad(progress);
     this.setPosition(element.element, [x, y, z], [scale, scale, scale], [15, -10, zRotate]);
   }

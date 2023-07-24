@@ -1,4 +1,5 @@
 import {hasReduceMotion} from "../general/helpers";
+import {SCREEN_HIDDEN_CLASS} from "../general/consts";
 import Chat from "./chat.js";
 import GameTimer from "./game-timer";
 
@@ -47,13 +48,7 @@ export default class GameScreenAnimation {
   }
 
   updateTimerStatus() {
-    setTimeout(() => {
-      this.gameTimer.startTimer();
-    }, 450); // TODO: уточнить время после завершения работы над экраном
-  }
-
-  stopTimer() {
-    this.gameTimer.stopTimer();
+    this.gameTimer.startTimer();
   }
 
   initAnimation() {
@@ -68,6 +63,7 @@ export default class GameScreenAnimation {
   }
 
   startAnimation() {
+    this.updateTimerStatus();
     if (this.isReversedAnimation) {
       this.showAnimation.reverse();
       this.isReversedAnimation = false;
@@ -109,26 +105,28 @@ export default class GameScreenAnimation {
 
   setBtnWidth() {
     const gameScreenBtn = this.screenElement.querySelector(`.form__button`);
+    const rulesScreen = document.querySelector(`.screen--rules`);
+    const rulesScreenBtn = rulesScreen.querySelector(`.rules__link`);
     if (window.innerWidth / window.innerHeight < 1 || window.innerWidth < 1024) {
-      const isHidden = this.screenElement.classList.contains(`screen--hidden`);
+      rulesScreenBtn.style.width = `auto`;
+      const isHidden = this.screenElement.classList.contains(SCREEN_HIDDEN_CLASS);
       if (isHidden) {
-        this.screenElement.classList.remove(`screen--hidden`);
+        this.screenElement.classList.remove(SCREEN_HIDDEN_CLASS);
       }
       gameScreenBtn.style.width = `${gameScreenBtn.clientHeight}px`;
       if (isHidden) {
-        this.screenElement.classList.add(`screen--hidden`);
+        this.screenElement.classList.add(SCREEN_HIDDEN_CLASS);
       }
     } else {
-      const rulesScreen = document.querySelector(`.screen--rules`);
-      const rulesScreenBtn = rulesScreen.querySelector(`.rules__link`);
-      const isHidden = rulesScreen.classList.contains(`screen--hidden`);
+      const isHidden = rulesScreen.classList.contains(SCREEN_HIDDEN_CLASS);
       if (isHidden) {
-        rulesScreen.classList.remove(`screen--hidden`);
+        rulesScreen.classList.remove(SCREEN_HIDDEN_CLASS);
       }
+      rulesScreenBtn.style.width = `auto`;
       gameScreenBtn.style.width = `${rulesScreenBtn.clientWidth}px`;
       rulesScreenBtn.style.width = `${rulesScreenBtn.clientWidth}px`;
       if (isHidden) {
-        rulesScreen.classList.add(`screen--hidden`);
+        rulesScreen.classList.add(SCREEN_HIDDEN_CLASS);
       }
     }
   }

@@ -17,6 +17,9 @@
   line-height: 1.2;
   opacity: 0;
   pointer-events: none;
+  transition: opacity $middle-duration ease $long-duration;
+
+  @include reduce-motion;
 
   @media (min-width: $stop-scaling) {
     margin-bottom: 12px;
@@ -24,8 +27,10 @@
   }
 
   @media (orientation: portrait) {
-    opacity: 1;
-    pointer-events: auto;
+    .screen--show & {
+      opacity: 1;
+      pointer-events: auto;
+    }
   }
 }
 
@@ -123,6 +128,10 @@
 }
 
 .form__button {
+  body:not(.is-dom-loaded) & {
+    opacity: 0;
+  }
+
   @media (orientation: portrait) {
     position: relative;
     flex: none;

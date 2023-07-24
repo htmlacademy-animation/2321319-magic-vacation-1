@@ -452,14 +452,14 @@ $footerBorderRadius: 0 3.6rem 0 0;
 }
 
 .screen__footer-note {
-  padding: 0.8rem 0;
+  padding: 0.9rem 0 0.7rem;
   text-transform: uppercase;
   text-align: center;
   font-size: 1.2rem;
   line-height: 1.2;
 
   @media (min-width: $stop-scaling) {
-    padding: 8px 0;
+    padding: 9px 0 7px;
     font-size: 12px;
   }
 

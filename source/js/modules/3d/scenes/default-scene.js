@@ -35,10 +35,10 @@ export default class DefaultScene {
   }
 
   initPrimitives() {
-    SceneObjects[this.sceneId].primitives.forEach((el) => {
+    SceneObjects[this.sceneId].primitives.forEach((element) => {
       const group = new THREE.Group();
-      group.name = el.name || el.id;
-      el.children.forEach((object) => {
+      group.name = element.name || element.id;
+      element.children.forEach((object) => {
         if (typeof THREE[object.primitiveType] === `function`) {
           const geometry = new THREE[object.primitiveType](...object.primitiveSettings);
           const material = this.objectLoader.getMaterialByProps(
@@ -62,38 +62,38 @@ export default class DefaultScene {
           group.add(mesh);
         }
       });
-      this.setPosition(group, el.position, el.scale, el.rotation);
+      this.setPosition(group, element.position, element.scale, element.rotation);
       this.sceneGroup.add(group);
     });
   }
 
   initSvgObjects() {
-    SceneObjects[this.sceneId].svgShapes.forEach((el) => {
+    SceneObjects[this.sceneId].svgShapes.forEach((element) => {
       const material = this.objectLoader.getMaterialByProps(
-          el.materialType,
-          el.materialProps
+          element.materialType,
+          element.materialProps
       );
       const object = this.objectLoader.extrudeObject(
-          el.id,
-          el.extrudeSettings,
+          element.id,
+          element.extrudeSettings,
           (material && material.object) || this.baseMaterial
       );
       object.castShadow = true;
       object.receiveShadow = true;
-      this.createGroupWrapper(object, el);
+      this.createGroupWrapper(object, element);
     });
   }
 
   initPreparedObjects() {
-    SceneObjects[this.sceneId].objects.forEach((el) => {
-      if (el.isRiggingObject) {
+    SceneObjects[this.sceneId].objects.forEach((element) => {
+      if (element.isRiggingObject) {
         return;
       }
       const object = this.objectLoader
-        .getPreparedObjectWithMateral(el.id, el.materialType, el.materialProps)
+        .getPreparedObjectWithMateral(element.id, element.materialType, element.materialProps)
         .clone();
-      object.name = el.name || el.id;
-      this.createGroupWrapper(object, el);
+      object.name = element.name || element.id;
+      this.createGroupWrapper(object, element);
     });
   }
 

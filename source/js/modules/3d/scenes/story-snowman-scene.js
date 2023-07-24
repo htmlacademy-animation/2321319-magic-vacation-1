@@ -17,15 +17,15 @@ export default class SnowmanScene extends DefaultScene {
         finites: [false],
         delays: [400],
         animationFunctions: [
-          (el, progress) => this.compassAnimationFunc(el, progress),
+          (element, progress) => this.compassAnimationFunc(element, progress),
         ],
       }
     };
   }
 
-  compassAnimationFunc(el, progress) {
+  compassAnimationFunc(element, progress) {
     const rotation = 5 * Math.sin(Math.PI * easeInOutQuad(progress));
-    el.element.children[0].children[0].children[0].rotation.set(
+    element.element.getObjectByName(`ArrowCenter`).rotation.set(
         0,
         0,
         THREE.Math.degToRad(rotation)

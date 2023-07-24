@@ -19,8 +19,7 @@ export default class ResultAnimation extends CanvasAnimation {
     if (!this.elements) {
       return;
     }
-    const fetches = this.elements
-      .map((el) => this.loadImage(el));
+    const fetches = this.elements.map((el) => this.loadImage(el));
     Promise.allSettled(fetches)
       .then((results) => {
         results.forEach((result, index) => {

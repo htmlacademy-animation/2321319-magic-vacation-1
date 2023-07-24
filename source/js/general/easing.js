@@ -17,7 +17,6 @@ export function easeOutElastic(x) {
     return 0;
   } else if (x === 1) {
     return 1;
-  } else {
-    return Math.pow(2, -10 * x) * Math.sin((x * 10 - 0.75) * c4) + 1;
   }
+  return Math.pow(2, -10 * x) * Math.sin((x * 10 - 0.75) * c4) + 1;
 }

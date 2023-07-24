@@ -30,9 +30,7 @@ export default class AccentTypography {
   }
 
   getTransition(timeOffset) {
-    return `${this.property} ${this.duration}ms ease ${
-      this.delay + timeOffset
-    }ms`;
+    return `${this.property} ${this.duration}ms ease ${this.delay + timeOffset}ms`;
   }
 
   generateTimeOffset(index) {
