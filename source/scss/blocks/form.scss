@@ -128,6 +128,10 @@
 }
 
 .form__button {
+  body:not(.is-dom-loaded) & {
+    opacity: 0;
+  }
+
   @media (orientation: portrait) {
     position: relative;
     flex: none;

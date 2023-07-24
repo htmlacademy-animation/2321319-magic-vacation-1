@@ -18,25 +18,25 @@ export default class ObjectLoader {
   constructor() {
     this._objectMap = {};
     this._materialMap = {};
+    this._objectsCount = 0;
+    this._preparedObjectsCount = 0;
   }
 
   async initObjects() {
-    this._triggerLoadEvent(3);
-    await this._initImages();
-    this._triggerLoadEvent(10);
-    await this._initMaterial();
-    this._triggerLoadEvent(17);
-    await this._initPreparedObjects();
-    this._triggerLoadEvent(68);
-    await this._initSvgObjects();
-    this._triggerLoadEvent(90);
+    await Promise.allSettled([
+      this._initImages(),
+      this._initMaterial(),
+      this._initPreparedObjects(),
+      this._initSvgObjects()
+    ]);
     this.extrudeHelper = new ExtrudeHelper(this._objectMap);
   }
 
-  _triggerLoadEvent(progress) {
+  _triggerLoadEvent() {
+    this._preparedObjectsCount += 1;
     const event = new CustomEvent(`3dObjectsLoadProgress`, {
       detail: {
-        progress
+        progress: Math.floor(this._preparedObjectsCount / this._objectsCount * 100)
       }
     });
 
@@ -52,6 +52,7 @@ export default class ObjectLoader {
         textureLoader.load(sceneConfig.backgroundImage, resolve, reject);
       });
     });
+    this._objectsCount += fetches.length;
     await Promise.allSettled(fetches).then((results) => {
       results.forEach((result, i) => {
         if (result.status === `fulfilled`) {
@@ -60,6 +61,7 @@ export default class ObjectLoader {
               result.value,
               Object.keys(SceneObjects)[i]
           );
+          this._triggerLoadEvent();
         }
       });
     });
@@ -77,6 +79,7 @@ export default class ObjectLoader {
         textureLoader.load(material.matcapImg, resolve, reject);
       });
     });
+    this._objectsCount += fetches.length;
     await Promise.allSettled(fetches).then((results) => {
       results.forEach((result, i) => {
         if (result.status === `fulfilled`) {
@@ -85,6 +88,7 @@ export default class ObjectLoader {
               result.value,
               Object.keys(MaterialType)[i]
           );
+          this._triggerLoadEvent();
         }
       });
     });
@@ -106,6 +110,7 @@ export default class ObjectLoader {
         }
       });
     });
+    this._objectsCount += fetches.length;
     await Promise.allSettled(fetches).then((results) => {
       results.forEach((result, i) => {
         if (result.status === `fulfilled`) {
@@ -114,6 +119,7 @@ export default class ObjectLoader {
               result.value,
               Object.values(Objects)[i].id
           );
+          this._triggerLoadEvent();
         }
       });
     });
@@ -128,6 +134,7 @@ export default class ObjectLoader {
         });
       });
     });
+    this._objectsCount += fetches.length;
     await Promise.allSettled(fetches).then((results) => {
       results.forEach((result, i) => {
         if (result.status === `fulfilled`) {
@@ -136,6 +143,7 @@ export default class ObjectLoader {
               result.value,
               Object.values(SvgShape)[i].id
           );
+          this._triggerLoadEvent();
         }
       });
     });

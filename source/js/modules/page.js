@@ -89,7 +89,7 @@ export default class Page {
   on3dObjectsLoaded() {
     this.is3dObjectsLoaded = true;
     if (this.isDomLoaded) {
-      this.progress = 99;
+      this.progress = 100;
       this.progressBar.textContent = `${this.progress}%`;
       setTimeout(() => {
         this.progressBar.parentElement.remove();
