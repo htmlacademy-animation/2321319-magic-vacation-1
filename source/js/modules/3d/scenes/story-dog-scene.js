@@ -40,7 +40,7 @@ export default class DogScene extends DefaultScene {
   }
 
   removeObjectsForMobile() {
-    if (!isMobile) {
+    if (!isMobile()) {
       return;
     }
     const surfboard = this.sceneGroup.getObjectByName(`surfobj`);

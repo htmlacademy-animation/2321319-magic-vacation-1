@@ -18,7 +18,7 @@ export default class PyramidScene extends DefaultScene {
   }
 
   removeObjectsForMobile() {
-    if (!isMobile) {
+    if (!isMobile()) {
       return;
     }
     const flashlight = this.sceneGroup.getObjectByName(`flashlight`);
