@@ -48,28 +48,27 @@ export default class CanvasAnimation {
     this.lastFrameTime = now - (elapsed % this.frameInterval);
     this.clearScene();
 
-    this.elements.forEach((el, elIndex) => {
-      if (el.status) {
+    this.elements.forEach((element, elementIndex) => {
+      if (element.status) {
         let animations = [];
-        el.animationFunctions.forEach((animation, index) => {
-          const isAnimationDelayed = now < this.startTime + el.delays[index];
-          const isAnimationFinished = el.finites[index]
-            ? now > this.startTime + el.delays[index] + el.durations[index]
+        element.animationFunctions.forEach((animation, index) => {
+          const isAnimationDelayed = now < this.startTime + element.delays[index];
+          const isAnimationFinished = element.finites[index]
+            ? now > this.startTime + element.delays[index] + element.durations[index]
             : false;
           if (!isAnimationDelayed && !isAnimationFinished) {
-            const pastProgress =
-              (now - this.startTime - el.delays[index]) / el.durations[index];
-            const progress = el.finites[index]
+            const pastProgress = (now - this.startTime - element.delays[index]) / element.durations[index];
+            const progress = element.finites[index]
               ? pastProgress
               : pastProgress - Math.trunc(pastProgress);
             animations.push({animationFunction: animation, progress});
           }
           if (isAnimationFinished && !animation.hasEndPosition) {
-            this.elements[elIndex].animationFunctions[index].hasEndPosition = true;
+            this.elements[elementIndex].animationFunctions[index].hasEndPosition = true;
             animations.push({animationFunction: animation, progress: 1}); // чтобы анимация гарантировано закончилась конечными настройками
           }
         });
-        this.runAnimationTick(el, animations);
+        this.runAnimationTick(element, animations);
       }
     });
   }

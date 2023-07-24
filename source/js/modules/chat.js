@@ -1,9 +1,11 @@
 import {Screen} from "../general/consts";
 import {hasReduceMotion} from "../general/helpers";
 
+const CHAT_MESSAGE_CLASS = `chat__message`;
+const CHAT_PLACEHOLDER_CLASS = `chat__placeholder`;
+
 export default class Chat {
   constructor() {
-    this.chatBody = document.querySelector(`.js-chat`);
     this.messageForm = document.getElementById(`message-form`);
     this.messageField = document.getElementById(`message-field`);
     this.messageList = document.getElementById(`messages`);
@@ -15,7 +17,7 @@ export default class Chat {
       e.preventDefault();
       this.postQuestion();
     });
-    this.chatBody.addEventListener(`wheel`, (event) => {
+    this.chatBlock.addEventListener(`wheel`, (event) => {
       event.stopPropagation();
     }, false);
   }
@@ -23,23 +25,23 @@ export default class Chat {
   postQuestion() {
     this.currentQuestion = this.messageField.value;
     if (this.currentQuestion) {
-      const messageEl = this.createQuestionElement(this.currentQuestion);
+      const messageElement = this.createQuestionElement(this.currentQuestion);
       this.messageField.value = ``;
       this.messageField.setAttribute(`disabled`, `true`);
-      this.setVisibility(messageEl);
-      messageEl.style.position = `absolute`;
+      this.setVisibility(messageElement);
+      messageElement.style.position = `absolute`;
 
-      this.messageList.appendChild(messageEl);
+      this.messageList.appendChild(messageElement);
       this.setMessagesOffset(this.postQuestionAnimationCallback.bind(this));
     }
   }
 
   getAnswer() {
-    const answerEl = this.createAnswerElement();
-    this.setVisibility(answerEl);
-    answerEl.style.position = `absolute`;
+    const answerElement = this.createAnswerElement();
+    this.setVisibility(answerElement);
+    answerElement.style.position = `absolute`;
 
-    this.messageList.appendChild(answerEl);
+    this.messageList.appendChild(answerElement);
     this.setMessagesOffset(this.postAnswerAnimationCallback.bind(this));
   }
 
@@ -77,28 +79,28 @@ export default class Chat {
   }
 
   createQuestionElement(question) {
-    let questionEl = document.createElement(`li`);
-    questionEl.classList.add(`chat__message`);
-    let text = document.createElement(`p`);
+    const questionEl = document.createElement(`li`);
+    questionEl.classList.add(`${CHAT_MESSAGE_CLASS}`);
+    const text = document.createElement(`p`);
     text.innerText = question;
     questionEl.appendChild(text);
-    questionEl.classList.add(`chat__message--outcoming`);
+    questionEl.classList.add(`${CHAT_MESSAGE_CLASS}--outcoming`);
     return questionEl;
   }
 
   createAnswerElement() {
-    let answerEl = document.createElement(`li`);
-    let placeholder = document.createElement(`div`);
-    let textEl = document.createElement(`p`);
-    placeholder.classList.add(`chat__placeholder`);
+    const answerEl = document.createElement(`li`);
+    const placeholder = document.createElement(`div`);
+    const textEl = document.createElement(`p`);
+    placeholder.classList.add(`${CHAT_PLACEHOLDER_CLASS}`);
     for (let i = 0; i < 3; i++) {
-      let dot = document.createElement(`span`);
+      const dot = document.createElement(`span`);
       placeholder.appendChild(dot);
     }
     answerEl.appendChild(placeholder);
-    answerEl.classList.add(`chat__message`);
-    answerEl.classList.add(`chat__message--incoming`);
-    answerEl.classList.add(`chat__message--last`);
+    answerEl.classList.add(`${CHAT_MESSAGE_CLASS}`);
+    answerEl.classList.add(`${CHAT_MESSAGE_CLASS}--incoming`);
+    answerEl.classList.add(`${CHAT_MESSAGE_CLASS}--last`);
 
     const answerText = this.getAnswerText();
     textEl.innerText = answerText;
@@ -107,7 +109,7 @@ export default class Chat {
   }
 
   getAnswerText() {
-    let answer = Math.floor(Math.random() * 2);
+    const answer = Math.floor(Math.random() * 2);
     let answerText;
 
     if (answer || this.currentQuestion.toLowerCase().includes(`антарктида?`)) {
@@ -120,25 +122,25 @@ export default class Chat {
   }
 
   showAnswerText() {
-    let lastMessage = document.querySelector(`.chat__message--last`);
+    let lastMessage = document.querySelector(`.${CHAT_MESSAGE_CLASS}--last`);
     if (lastMessage) {
       let lastMessagePlaceholder =
-        lastMessage.querySelector(`.chat__placeholder`);
+        lastMessage.querySelector(`.${CHAT_PLACEHOLDER_CLASS}`);
       let lastMessageText = lastMessage.querySelector(`p`);
       lastMessageText.classList.add(`showed`);
-      lastMessagePlaceholder.classList.add(`chat__placeholder--hidden`);
+      lastMessagePlaceholder.classList.add(`${CHAT_PLACEHOLDER_CLASS}--hidden`);
       setTimeout(() => {
         lastMessagePlaceholder.remove();
         this.messageField.removeAttribute(`disabled`);
         this.messageField.focus();
       }, 400);
-      lastMessage.classList.remove(`chat__message--last`);
+      lastMessage.classList.remove(`${CHAT_MESSAGE_CLASS}--last`);
     }
   }
 
   setMessagesOffset(callback) {
     const offset = this.getMessageOffset();
-    const messages = this.messageList.querySelectorAll(`.chat__message`);
+    const messages = this.messageList.querySelectorAll(`.${CHAT_MESSAGE_CLASS}`);
     const shiftedMessages = [...messages].slice(0, -1);
 
     shiftedMessages.forEach((message, index) => {
@@ -155,7 +157,7 @@ export default class Chat {
   }
 
   onFinishAnimation(callback) {
-    const messages = this.messageList.querySelectorAll(`.chat__message`);
+    const messages = this.messageList.querySelectorAll(`.${CHAT_MESSAGE_CLASS}`);
     const lastQuestion = messages[messages.length - 1];
     lastQuestion.style.position = `static`;
 
@@ -183,7 +185,7 @@ export default class Chat {
   }
 
   getMessageOffset() {
-    const messages = this.messageList.querySelectorAll(`.chat__message`);
+    const messages = this.messageList.querySelectorAll(`.${CHAT_MESSAGE_CLASS}`);
     const lastQuestion = messages[messages.length - 1];
     const lastQuestionHeight = lastQuestion.offsetHeight;
     const marginBottom = parseFloat(window.getComputedStyle(lastQuestion).marginBottom);

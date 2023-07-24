@@ -4,6 +4,7 @@ import {
   Objects,
   AnimatedPrimitives,
 } from "../../../general/consts";
+import {isMobile} from "../../../general/helpers";
 import DefaultScene from "./default-scene";
 
 export default class DogScene extends DefaultScene {
@@ -28,13 +29,24 @@ export default class DogScene extends DefaultScene {
 
   initObjects() {
     super.initObjects();
+    this.removeObjectsForMobile();
     const chandlier = this.sceneGroup.children.find(
-        (el) => el.name === AnimatedPrimitives.CHANDELIER
+        (element) => element.name === AnimatedPrimitives.CHANDELIER
     );
     if (chandlier) {
       this.setRotateOfChandlier(chandlier, this.chandlierAngle);
     }
     this.addSuitcase();
+  }
+
+  removeObjectsForMobile() {
+    if (!isMobile) {
+      return;
+    }
+    const surfboard = this.sceneGroup.getObjectByName(`surfobj`);
+    const skis = this.sceneGroup.getObjectByName(`Skis`);
+    surfboard.parent.remove(surfboard);
+    skis.parent.remove(skis);
   }
 
   initAnimationsSettings() {
@@ -44,8 +56,8 @@ export default class DogScene extends DefaultScene {
         finites: [true, true],
         delays: [400, 500],
         animationFunctions: [
-          (el, progress) => this.suitcaseShowAnimationFunc(el, progress),
-          (el, progress) => this.suitcaseAppearenceAnimationFunc(el, progress),
+          (element, progress) => this.suitcaseShowAnimationFunc(element, progress),
+          (element, progress) => this.suitcaseAppearenceAnimationFunc(element, progress),
         ],
       },
       [Objects.DOG.id]: {
@@ -53,7 +65,7 @@ export default class DogScene extends DefaultScene {
         finites: [false],
         delays: [500],
         animationFunctions: [
-          (el, progress) => this.dogTailMoveAnimationFunc(el, progress),
+          (element, progress) => this.dogTailMoveAnimationFunc(element, progress),
         ],
       },
       [AnimatedPrimitives.CHANDELIER]: {
@@ -61,7 +73,7 @@ export default class DogScene extends DefaultScene {
         finites: [false],
         delays: [400],
         animationFunctions: [
-          (el, progress) => this.chandlierMoveAnimationFunc(el, progress),
+          (element, progress) => this.chandlierMoveAnimationFunc(element, progress),
         ],
       },
     };
@@ -100,7 +112,7 @@ export default class DogScene extends DefaultScene {
     this.suitcaseYSize = modelBoundingBox.max.y - modelBoundingBox.min.y;
   }
 
-  suitcaseShowAnimationFunc(_el, _progress) {
+  suitcaseShowAnimationFunc(_element, _progress) {
     if (this.isSuitcaseApear) {
       return;
     }
@@ -112,7 +124,7 @@ export default class DogScene extends DefaultScene {
     );
   }
 
-  suitcaseAppearenceAnimationFunc(_el, progress) {
+  suitcaseAppearenceAnimationFunc(_element, progress) {
     let y = this.suitcase.position.y;
     let scale = [1, 1, 1];
 
@@ -137,28 +149,28 @@ export default class DogScene extends DefaultScene {
     this.setPosition(this.suitcase, [-336, y, 750], scale, [0, 0, 0]);
   }
 
-  chandlierMoveAnimationFunc(el, progress) {
+  chandlierMoveAnimationFunc(element, progress) {
     const rotation = this.chandlierAngle * Math.sin(6.3 * progress + Math.PI / 2);
-    this.setRotateOfChandlier(el.element, rotation);
-    const childRotatedObj = el.element.children.find((child) => child.name === `chandelierLathe`);
+    this.setRotateOfChandlier(element.element, rotation);
+    const childRotatedObj = element.element.children.find((child) => child.name === `chandelierLathe`);
     const childRotation = 18 + 4 * Math.sin(6.3 * progress + 2 * Math.PI);
     childRotatedObj.rotation.set(0, 0, THREE.Math.degToRad(childRotation));
   }
 
-  dogTailMoveAnimationFunc(el, progress) {
-    let rotate;
+  dogTailMoveAnimationFunc(element, progress) {
+    let rotation;
     if (progress <= 0.2) {
-      rotate = 8 * Math.sin(Math.PI * 5 * progress + Math.PI);
+      rotation = 8 * Math.sin(Math.PI * 5 * progress + Math.PI);
     } else if (progress > 0.2 && progress <= 0.3) {
-      rotate = 15 * Math.sin(31.4 * progress);
+      rotation = 15 * Math.sin(31.4 * progress);
     } else {
       const randomAmp = Math.floor(Math.random() * (12 - 9) + 9);
-      rotate = randomAmp * Math.sin(Math.PI * 10 * progress);
+      rotation = randomAmp * Math.sin(Math.PI * 10 * progress);
     }
-    const tailObj = el.element.children[0].children[0].children[0];
+    const tailObj = element.element.getObjectByName(`Tail`);
     const currentRotate = tailObj.rotation;
     tailObj.rotation.set(
-        THREE.Math.degToRad(rotate),
+        THREE.Math.degToRad(rotation),
         currentRotate.y,
         currentRotate.z
     );

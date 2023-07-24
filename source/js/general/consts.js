@@ -1,3 +1,5 @@
+export const SCREEN_HIDDEN_CLASS = `screen--hidden`;
+
 export const ThemeColor = {
   LIGHT_PURPLE: `light-purple`,
   BLUE: `blue`,

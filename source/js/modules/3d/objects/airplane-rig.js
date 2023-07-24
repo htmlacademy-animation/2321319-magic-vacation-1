@@ -5,8 +5,8 @@ export default class AirplaneRig extends THREE.Group {
     super();
     this.constructChildren(object);
 
-    this._initialX = 0; // x координата центра окружности
-    this._initialZ = 0; // z координата центра окружности
+    this._initialX = 0;
+    this._initialZ = 0;
     this._initialY = 0;
     this._startAngleXZ = (5 * Math.PI) / 4;
 
@@ -57,7 +57,7 @@ export default class AirplaneRig extends THREE.Group {
   }
 
   set radius(value) {
-    if (this._radius === value) {
+    if (this._radius === value || value < 0) {
       return;
     }
 
@@ -135,10 +135,8 @@ export default class AirplaneRig extends THREE.Group {
 
   invalidate() {
     if (this._angleXZMovingChanged) {
-      const vx = Math.cos(this._angleXZMoving) * this.radius;
-      const vz = Math.sin(this._angleXZMoving) * this.radius;
-      this._groupRotation.position.x = this._initialX + vx;
-      this._groupRotation.position.z = this._initialZ + vz;
+      this._groupRotation.position.x = this._initialX + Math.cos(this._angleXZMoving) * this.radius;
+      this._groupRotation.position.z = this._initialZ + Math.sin(this._angleXZMoving) * this.radius;
       this._groupRotation.rotation.y = Math.PI - this._angleXZMoving;
       this._angleXZMovingChanged = false;
     }

@@ -1,17 +1,20 @@
+const FOOTER_CLASS = `screen__footer--full`;
+const FOOTER_TRANSITIONED_CLASS = `${FOOTER_CLASS}-transitioned`;
+
 export default () => {
-  let footerTogglers = document.querySelectorAll(`.js-footer-toggler`);
+  const footerTogglers = document.querySelectorAll(`.js-footer-toggler`);
   if (footerTogglers.length) {
     for (let i = 0; i < footerTogglers.length; i++) {
       footerTogglers[i].addEventListener(`click`, function () {
         let footer = footerTogglers[i].parentNode;
-        if (footer.classList.contains(`screen__footer--full`)) {
-          footer.classList.add(`screen__footer--full-transitioned`);
+        if (footer.classList.contains(`${FOOTER_CLASS}`)) {
+          footer.classList.add(`${FOOTER_TRANSITIONED_CLASS}`);
           setTimeout(() => {
-            footer.classList.remove(`screen__footer--full-transitioned`);
-            footer.classList.remove(`screen__footer--full`);
+            footer.classList.remove(`${FOOTER_TRANSITIONED_CLASS}`);
+            footer.classList.remove(`${FOOTER_CLASS}`);
           }, 700);
         } else {
-          footer.classList.add(`screen__footer--full`);
+          footer.classList.add(`${FOOTER_CLASS}`);
         }
       });
     }

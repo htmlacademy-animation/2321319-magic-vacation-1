@@ -121,7 +121,6 @@ export default class Page {
     setTimeout(() => {
       this.runAnimationsForScreen(event);
     }, 200);
-    this.updateTimerStatus(event.detail.screenId);
   }
 
   onSlideChanged(event) {
@@ -210,14 +209,6 @@ export default class Page {
         setTimeout(() => animation.element.startAnimation(), animation.delay);
         animation.element.setContainerWidth();
       });
-    }
-  }
-
-  updateTimerStatus(screenId) {
-    if (screenId === Screen.GAME) {
-      this.gameScreenAnimation.updateTimerStatus();
-    } else {
-      this.gameScreenAnimation.stopTimer();
     }
   }
 

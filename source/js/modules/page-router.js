@@ -1,11 +1,11 @@
 import throttle from "lodash/throttle";
-import {Screen} from "../general/consts";
+import {Screen, SCREEN_HIDDEN_CLASS} from "../general/consts";
 
-const cssTransitionClass = `screen--background-transitioned`;
+const SCREEN_BACKGROUND_TRANSITION_CLASS = `screen--background-transitioned`;
+const THROTTLE_TIMEOUT = 1000;
 
 export default class PageRouter {
   constructor(screens) {
-    this.THROTTLE_TIMEOUT = 1000;
     this.scrollFlag = true;
     this.timeout = null;
 
@@ -21,7 +21,7 @@ export default class PageRouter {
   }
 
   init() {
-    document.addEventListener(`wheel`, throttle(this.onScrollHandler, this.THROTTLE_TIMEOUT, {trailing: true}));
+    document.addEventListener(`wheel`, throttle(this.onScrollHandler, THROTTLE_TIMEOUT, {trailing: true}));
     window.addEventListener(`popstate`, this.onUrlHashChengedHandler);
     document.body.addEventListener(`toScreenResult`, this.toScreenResultHandler.bind(this));
     document.body.addEventListener(`fromScreenResult`, this.fromScreenResultHandler.bind(this));
@@ -35,9 +35,6 @@ export default class PageRouter {
       this.reCalculateActiveScreenPosition(evt.deltaY);
       if (currentPosition !== this.activeScreen) {
         this.prevScreen = currentPosition;
-        if (this.isResultScreen(this.prevScreen)) {
-          this.resetResultScreen(this.screenElements[this.prevScreen]);
-        }
         this.changePageDisplay();
       }
     }
@@ -48,16 +45,13 @@ export default class PageRouter {
     this.timeout = setTimeout(() => {
       this.timeout = null;
       this.scrollFlag = true;
-    }, this.THROTTLE_TIMEOUT);
+    }, THROTTLE_TIMEOUT);
   }
 
   onUrlHashChanged() {
     const newIndex = Array.from(this.screenElements).findIndex((screen) => location.hash.slice(1) === screen.id);
     this.prevScreen = this.activeScreen;
     this.activeScreen = (newIndex < 0) ? 0 : newIndex;
-    if (this.isResultScreen(this.prevScreen)) {
-      this.resetResultScreen(this.screenElements[this.prevScreen]);
-    }
     this.changePageDisplay();
   }
 
@@ -69,22 +63,21 @@ export default class PageRouter {
     }
     this.activeScreen = nextScreenId;
     this.runHiddenScreenTransition()
-    .then(() => {
-      this.showScreenResult(this.screenElements[this.activeScreen]);
-      const event = new CustomEvent(`screenResultChanged`, {
-        detail: {
-          "screenId": nextScreenId,
-          "prevScreenId": e.detail.prevScreenId,
-        }
+      .then(() => {
+        this.showScreenResult(this.screenElements[this.activeScreen]);
+        const event = new CustomEvent(`screenResultChanged`, {
+          detail: {
+            "screenId": nextScreenId,
+            "prevScreenId": e.detail.prevScreenId,
+          }
+        });
+        document.body.dispatchEvent(event);
       });
-      document.body.dispatchEvent(event);
-    });
   }
 
   fromScreenResultHandler(e) {
     const nextScreenId = e.detail.screenId;
     this.prevScreen = this.activeScreen;
-    this.resetResultScreen(this.screenElements[this.prevScreen]);
     this.activeScreen = nextScreenId;
     this.changePageDisplay();
   }
@@ -96,18 +89,19 @@ export default class PageRouter {
   resetResultScreen(screen) {
     screen.classList.remove(`screen--show`);
     screen.classList.remove(`screen--transitioned`);
-    screen.classList.add(`screen--hidden`);
+    screen.classList.add(SCREEN_HIDDEN_CLASS);
   }
 
   showScreenResult(screen) {
     screen.classList.add(`screen--show`);
-    screen.classList.remove(`screen--hidden`);
+    screen.classList.remove(SCREEN_HIDDEN_CLASS);
     setTimeout(function () {
       screen.classList.add(`screen--transitioned`);
     }, 150);
   }
 
   changePageDisplay() {
+    this.scrollFlag = false;
     this.changeActiveMenuItem();
     this.replaceTransitionsForDisclaimer();
     this.runHiddenScreenTransition()
@@ -115,6 +109,10 @@ export default class PageRouter {
     .then(() => {
       this.emitChangeDisplayEvent();
       this.changeVisibilityDisplay();
+      if (this.isResultScreen(this.prevScreen)) {
+        this.resetResultScreen(this.screenElements[this.prevScreen]);
+      }
+      this.scrollFlag = true;
     });
   }
 
@@ -126,7 +124,7 @@ export default class PageRouter {
       this.screenElements[this.prevScreen].classList.add(`screen--hidden-transitioned`);
       this.emitChangeDisplayEvent(`beforeScreenChanged`);
       setTimeout(() => {
-        this.screenElements[this.prevScreen].classList.add(`screen--hidden`);
+        this.screenElements[this.prevScreen].classList.add(SCREEN_HIDDEN_CLASS);
         this.screenElements[this.prevScreen].classList.remove(`screen--hidden-transitioned`);
         resolve();
       }, this.prevScreen === Screen.TOP ? 100 : 400);
@@ -135,12 +133,13 @@ export default class PageRouter {
 
   showTransitionedBackground() {
     return new Promise((resolve, _reject) => {
-      const isShowBackground = [Screen.PRIZES, Screen.RULES, Screen.GAME].indexOf(this.activeScreen) !== -1
-                              && [Screen.TOP, Screen.STORY].indexOf(this.prevScreen) !== -1;
+      const hasTargetBackground = [Screen.PRIZES, Screen.RULES, Screen.GAME].indexOf(this.activeScreen) !== -1;
+      const hasPrevBackground = [Screen.TOP, Screen.STORY].indexOf(this.prevScreen) !== -1;
+      const isShowBackground = hasTargetBackground && hasPrevBackground;
       if (this.transitionedBackground && isShowBackground) {
-        this.transitionedBackground.classList.add(cssTransitionClass);
+        this.transitionedBackground.classList.add(SCREEN_BACKGROUND_TRANSITION_CLASS);
         setTimeout(() => {
-          this.transitionedBackground.classList.remove(cssTransitionClass);
+          this.transitionedBackground.classList.remove(SCREEN_BACKGROUND_TRANSITION_CLASS);
           resolve();
         }, 500);
       } else {
@@ -151,10 +150,10 @@ export default class PageRouter {
 
   changeVisibilityDisplay() {
     this.screenElements.forEach((screen) => {
-      screen.classList.add(`screen--hidden`);
+      screen.classList.add(SCREEN_HIDDEN_CLASS);
       screen.classList.remove(`active`);
     });
-    this.screenElements[this.activeScreen].classList.remove(`screen--hidden`);
+    this.screenElements[this.activeScreen].classList.remove(SCREEN_HIDDEN_CLASS);
     setTimeout(() => {
       this.screenElements[this.activeScreen].classList.add(`active`);
     }, 100);

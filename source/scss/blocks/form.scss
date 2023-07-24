@@ -17,6 +17,9 @@
   line-height: 1.2;
   opacity: 0;
   pointer-events: none;
+  transition: opacity $middle-duration ease $long-duration;
+
+  @include reduce-motion;
 
   @media (min-width: $stop-scaling) {
     margin-bottom: 12px;
@@ -24,8 +27,10 @@
   }
 
   @media (orientation: portrait) {
-    opacity: 1;
-    pointer-events: auto;
+    .screen--show & {
+      opacity: 1;
+      pointer-events: auto;
+    }
   }
 }
 

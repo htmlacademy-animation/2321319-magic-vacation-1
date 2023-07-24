@@ -16,8 +16,8 @@ import {ExtrudeHelper} from "./helpers";
 
 export default class ObjectLoader {
   constructor() {
-    this.objectMap = {};
-    this.materialMap = {};
+    this._objectMap = {};
+    this._materialMap = {};
   }
 
   async initObjects() {
@@ -30,7 +30,7 @@ export default class ObjectLoader {
     this._triggerLoadEvent(68);
     await this._initSvgObjects();
     this._triggerLoadEvent(90);
-    this.extrudeHelper = new ExtrudeHelper(this.objectMap);
+    this.extrudeHelper = new ExtrudeHelper(this._objectMap);
   }
 
   _triggerLoadEvent(progress) {
@@ -93,14 +93,14 @@ export default class ObjectLoader {
   async _initPreparedObjects() {
     const objLoader = new OBJLoader();
     const gLTFLoader = new GLTFLoader();
-    const fetches = Object.values(Objects).map((el) => {
+    const fetches = Object.values(Objects).map((element) => {
       return new Promise((resolve, _reject) => {
-        if (el.type === ObjectLoadType.OBJ) {
-          objLoader.load(el.path, (result) => {
+        if (element.type === ObjectLoadType.OBJ) {
+          objLoader.load(element.path, (result) => {
             resolve(result);
           });
         } else {
-          gLTFLoader.load(el.path, (result) => {
+          gLTFLoader.load(element.path, (result) => {
             resolve(result.scene);
           });
         }
@@ -142,18 +142,18 @@ export default class ObjectLoader {
   }
 
   _addObject(objectType, data, key) {
-    this.objectMap[key] = {
+    this._objectMap[key] = {
       type: objectType,
       object: data,
     };
   }
 
   getObjectsMap() {
-    return this.objectMap;
+    return this._objectMap;
   }
 
   getObjectByName(objectName) {
-    return this.objectMap[objectName];
+    return this._objectMap[objectName];
   }
 
   extrudeObject(objectName, settings, material) {
@@ -184,7 +184,7 @@ export default class ObjectLoader {
   }
 
   getMaterialMap() {
-    return this.materialMap;
+    return this._materialMap;
   }
 
   getMatcapForType(type) {
@@ -200,14 +200,14 @@ export default class ObjectLoader {
     const key = isCustomMatrial
       ? `${materialType.toUpperCase()}_${materialProps.mainColor}-${materialProps.secondaryColor}`
       : `${materialType.toUpperCase()}_${isNotInConfigColor ? materialProps.color.getHexString() : materialProps.color.toUpperCase()}`;
-    const materialFromMap = this.materialMap[key];
+    const materialFromMap = this._materialMap[key];
     if (materialFromMap) {
       return materialFromMap;
     }
 
     if (materialType === MaterialType.CUSTOM.id) {
       if (!isMobile()) {
-        this.materialMap[key] = {
+        this._materialMap[key] = {
           type: materialType,
           color: `${materialProps.mainColor}-${materialProps.secondaryColor}`,
           object: new materialProps[`materialConstructor`](
@@ -222,9 +222,9 @@ export default class ObjectLoader {
               MaterialType.SOFT.roughness,
           ),
         };
-        return this.materialMap[key];
+        return this._materialMap[key];
       }
-      this.materialMap[key] = {
+      this._materialMap[key] = {
         type: materialType,
         color: `${materialProps.mainColor}-${materialProps.secondaryColor}`,
         object: new materialProps[`materialConstructor`](
@@ -238,10 +238,10 @@ export default class ObjectLoader {
             this.getMatcapForType(MaterialType.SOFT.id)
         ),
       };
-      return this.materialMap[key];
+      return this._materialMap[key];
     } else {
       if (!isMobile()) {
-        this.materialMap[key] = {
+        this._materialMap[key] = {
           type: materialType,
           color: materialProps.color,
           object: new THREE.MeshStandardMaterial({
@@ -254,20 +254,20 @@ export default class ObjectLoader {
             side: materialProps.side || THREE.FrontSide
           }),
         };
-        return this.materialMap[key];
+        return this._materialMap[key];
       }
-      this.materialMap[key] = {
-        type: materialType,
-        color: materialProps.color,
-        object: new THREE.MeshMatcapMaterial({
-          color: new THREE.Color(
-              isNotInConfigColor ? materialProps.color : ObjectColor[materialProps.color].value
-          ),
-          matcap: this.getMatcapForType(materialType),
-          side: materialProps.side || THREE.FrontSide
-        }),
-      };
-      return this.materialMap[key];
     }
+    this._materialMap[key] = {
+      type: materialType,
+      color: materialProps.color,
+      object: new THREE.MeshMatcapMaterial({
+        color: new THREE.Color(
+            isNotInConfigColor ? materialProps.color : ObjectColor[materialProps.color].value
+        ),
+        matcap: this.getMatcapForType(materialType),
+        side: materialProps.side || THREE.FrontSide
+      }),
+    };
+    return this._materialMap[key];
   }
 }

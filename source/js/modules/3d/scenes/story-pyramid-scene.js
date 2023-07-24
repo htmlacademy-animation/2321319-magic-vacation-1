@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import {ThemeColor, SvgShape} from "../../../general/consts";
+import {isMobile} from "../../../general/helpers";
 import DefaultScene from "./default-scene";
 import {easeOutQuad} from "../../../general/easing";
 
@@ -11,13 +12,30 @@ export default class PyramidScene extends DefaultScene {
     this.initAnimationsSettings();
   }
 
+  initObjects() {
+    super.initObjects();
+    this.removeObjectsForMobile();
+  }
+
+  removeObjectsForMobile() {
+    if (!isMobile) {
+      return;
+    }
+    const flashlight = this.sceneGroup.getObjectByName(`flashlight`);
+    const star = this.sceneGroup.getObjectByName(`Starfish_Null`);
+    const table = this.sceneGroup.getObjectByName(`Table`);
+    flashlight.parent.remove(flashlight);
+    star.parent.remove(star);
+    table.parent.remove(table);
+  }
+
   updateUniforms() {
-    const bubblesSetting = this.getInitialBubblesPosition();
-    this.customMaterial.uniforms.hasBubbles.value = bubblesSetting.length;
-    bubblesSetting.forEach((el, index) => {
+    const bubblesSettings = this.getInitialBubblesPosition();
+    this.customMaterial.uniforms.hasBubbles.value = bubblesSettings.length;
+    bubblesSettings.forEach((element, index) => {
       this.customMaterial.uniforms.bubbles.value[index] = {
-        center: new THREE.Vector2(el.center.x, el.center.y),
-        radius: el.radius,
+        center: new THREE.Vector2(element.center.x, element.center.y),
+        radius: element.radius,
       };
     });
     this.customMaterial.hue = 0.0;
@@ -47,10 +65,10 @@ export default class PyramidScene extends DefaultScene {
       finites: [false, true, true, true],
       delays: [0, 1800, 2300, 2500],
       animationFunctions: [
-        (_el, progress) => this.hueBlinkAnimationFunc(progress),
-        (_el, progress) => this.bubbleMoveAnimation(0, progress),
-        (_el, progress) => this.bubbleMoveAnimation(1, progress),
-        (_el, progress) => this.bubbleMoveAnimation(2, progress),
+        (_element, progress) => this.hueBlinkAnimationFunc(progress),
+        (_element, progress) => this.bubbleMoveAnimation(0, progress),
+        (_element, progress) => this.bubbleMoveAnimation(1, progress),
+        (_element, progress) => this.bubbleMoveAnimation(2, progress),
       ],
     };
   }
@@ -62,7 +80,7 @@ export default class PyramidScene extends DefaultScene {
         finites: [false],
         delays: [400],
         animationFunctions: [
-          (el, progress) => this.firstLeafMoveAnimationFunc(el, progress),
+          (element, progress) => this.firstLeafMoveAnimationFunc(element, progress),
         ],
       },
       [`${SvgShape.LEAF.id}-2`]: {
@@ -70,13 +88,13 @@ export default class PyramidScene extends DefaultScene {
         finites: [false],
         delays: [400],
         animationFunctions: [
-          (el, progress) => this.secondLeafMoveAnimationFunc(el, progress),
+          (element, progress) => this.secondLeafMoveAnimationFunc(element, progress),
         ],
       },
     };
   }
 
-  firstLeafMoveAnimationFunc(el, progress) {
+  firstLeafMoveAnimationFunc(element, progress) {
     if (progress < 0.05) {
       return;
     }
@@ -84,20 +102,19 @@ export default class PyramidScene extends DefaultScene {
     const rotation =
       (5 * Math.sin(Math.PI * 5 * progressWithEasing + 12.5)) /
       ((progressWithEasing + 1) * (progressWithEasing + 1));
-    el.element.children[0].rotation.set(0, 0, THREE.Math.degToRad(rotation));
+    element.element.getObjectByName(`internalGroup`).rotation.set(0, 0, THREE.Math.degToRad(rotation));
   }
 
-  secondLeafMoveAnimationFunc(el, progress) {
+  secondLeafMoveAnimationFunc(element, progress) {
     const progressWithEasing = easeOutQuad(progress);
     const rotation =
       (5 * Math.sin(Math.PI * 5 * progressWithEasing + 12.5)) /
       ((progressWithEasing + 1) * (progressWithEasing + 1));
-    el.element.children[0].rotation.set(0, 0, THREE.Math.degToRad(rotation));
+    element.element.getObjectByName(`internalGroup`).rotation.set(0, 0, THREE.Math.degToRad(rotation));
   }
 
   hueBlinkAnimationFunc(progress) {
-    const hueForProgress =
-      6 * Math.sin(6.3 * progress + 1.6) - 6 + Math.random();
+    const hueForProgress = 6 * Math.sin(6.3 * progress + 1.6) - 6 + Math.random();
     const hueRad = THREE.Math.degToRad(hueForProgress);
     this.customMaterial.uniforms.hue.value = hueRad;
     this.customMaterial.needsUpdate = true;
@@ -116,38 +133,25 @@ export default class PyramidScene extends DefaultScene {
         [x, y] = this.thirdBubbleMoveAnimationFunc(progress);
         break;
     }
-    this.customMaterial.uniforms.bubbles.value[index].center =
-      new THREE.Vector2(x, y);
+    this.customMaterial.uniforms.bubbles.value[index].center = new THREE.Vector2(x, y);
     this.customMaterial.needsUpdate = true;
   }
 
   firstBubbleMoveAnimationFunc(progress) {
-    const newY = this.getProgressedValue(
-        progress,
-        2 * this.getInitialBubblesPosition()[0].radius
-    );
-    const newX =
-      0.035 * Math.sin(15 * progress + 1.5) * Math.exp(-0.8 * progress);
+    const newY = this.getProgressedValue(progress, 2 * this.getInitialBubblesPosition()[0].radius);
+    const newX = 0.035 * Math.sin(15 * progress + 1.5) * Math.exp(-0.8 * progress);
     return this.getBubbleMoveAnimation(0, newX, newY);
   }
 
   secondBubbleMoveAnimationFunc(progress) {
-    const newY = this.getProgressedValue(
-        progress,
-        2 * this.getInitialBubblesPosition()[1].radius
-    );
-    const newX =
-      0.025 * Math.sin(18 * progress + 1.5) * Math.exp(-0.8 * progress);
+    const newY = this.getProgressedValue(progress, 2 * this.getInitialBubblesPosition()[1].radius);
+    const newX = 0.025 * Math.sin(18 * progress + 1.5) * Math.exp(-0.8 * progress);
     return this.getBubbleMoveAnimation(1, newX, newY);
   }
 
   thirdBubbleMoveAnimationFunc(progress) {
-    const newY = this.getProgressedValue(
-        progress,
-        2 * this.getInitialBubblesPosition()[2].radius
-    );
-    const newX =
-      0.02 * Math.sin(18 * progress + 1.5) * Math.exp(-0.8 * progress);
+    const newY = this.getProgressedValue(progress, 2 * this.getInitialBubblesPosition()[2].radius);
+    const newX = 0.02 * Math.sin(18 * progress + 1.5) * Math.exp(-0.8 * progress);
     return this.getBubbleMoveAnimation(2, newX, newY);
   }
 
@@ -155,11 +159,11 @@ export default class PyramidScene extends DefaultScene {
     return progress + diameter + diameter * progress;
   }
 
-  getBubbleMoveAnimation(index, curX, curY) {
+  getBubbleMoveAnimation(index, currentX, currentY) {
     const bubblePosition = this.getInitialBubblesPosition()[index];
     let [x, y] = [bubblePosition.center.x, bubblePosition.center.y];
-    y += curY;
-    x += curX;
+    y += currentY;
+    x += currentX;
 
     return [x, y];
   }
